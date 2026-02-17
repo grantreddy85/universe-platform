@@ -42,11 +42,10 @@ export default function ValidationTab({ project }) {
   const [showNew, setShowNew] = useState(false);
   const [form, setForm] = useState({ title: "", type: "in_silico" });
   const [selectedValidation, setSelectedValidation] = useState(null);
-  const [editingResults, setEditingResults] = useState(false);
   const [editingApprovers, setEditingApprovers] = useState(false);
-  const [resultsText, setResultsText] = useState("");
   const [approverEmail, setApproverEmail] = useState("");
   const [showHistory, setShowHistory] = useState(false);
+  const [reviewingNote, setReviewingNote] = useState(false);
   const queryClient = useQueryClient();
 
   const { data: validations = [], isLoading } = useQuery({
