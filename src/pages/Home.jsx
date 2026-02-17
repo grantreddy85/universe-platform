@@ -10,7 +10,9 @@ import {
   Coins,
   Plus,
   ArrowRight,
-  Sparkles
+  Sparkles,
+  TrendingUp,
+  Users
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import StatsCard from "../components/home/StatsCard";
@@ -41,8 +43,36 @@ export default function Home() {
 
   const { data: activities = [] } = useQuery({
     queryKey: ["activities"],
-    queryFn: () => base44.entities.Activity.list("-created_date", 8),
+    queryFn: () => base44.entities.Activity.list("-created_date", 4),
   });
+
+  // Mock marketplace feed data (placeholder until Marketplace is implemented)
+  const marketplaceFeed = [
+    {
+      id: 1,
+      projectTitle: "Neural Pathway Mapping in C. elegans",
+      amount: "$2.5M",
+      investors: 12,
+      date: "2026-02-15",
+      category: "Neuroscience",
+    },
+    {
+      id: 2,
+      projectTitle: "CRISPR-Based Gene Therapy for Rare Diseases",
+      amount: "$4.8M",
+      investors: 23,
+      date: "2026-02-14",
+      category: "Gene Therapy",
+    },
+    {
+      id: 3,
+      projectTitle: "Microbiome Analysis for Personalized Medicine",
+      amount: "$1.9M",
+      investors: 8,
+      date: "2026-02-13",
+      category: "Precision Health",
+    },
+  ];
 
   const activeValidations = validations.filter(
     (v) => v.status === "in_review" || v.status === "running"
@@ -115,22 +145,57 @@ export default function Home() {
         </div>
 
         {/* Activity */}
-        <div>
-          <h2 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-5">
-            Recent Activity
-          </h2>
-          <div className="bg-white rounded-xl border border-gray-100 p-5">
-            {activities.length === 0 ? (
-              <p className="text-xs text-gray-400 text-center py-8">
-                No recent activity yet.
+        <div className="space-y-6">
+          {/* Recent Activity */}
+          <div>
+            <h2 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-5">
+              Recent Activity
+            </h2>
+            <div className="bg-white rounded-xl border border-gray-100 p-5">
+              {activities.length === 0 ? (
+                <p className="text-xs text-gray-400 text-center py-8">
+                  No recent activity yet.
+                </p>
+              ) : (
+                <div className="divide-y divide-gray-50">
+                  {activities.map((activity) => (
+                    <ActivityItem key={activity.id} activity={activity} />
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Marketplace Feed */}
+          <div>
+            <h2 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-5">
+              Marketplace Highlights
+            </h2>
+            <div className="bg-white rounded-xl border border-gray-100 p-5 space-y-4">
+              {marketplaceFeed.map((item) => (
+                <div key={item.id} className="flex items-start gap-3 pb-4 border-b border-gray-50 last:border-0 last:pb-0">
+                  <div className="w-8 h-8 rounded-lg bg-green-50 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <TrendingUp className="w-4 h-4 text-green-600" strokeWidth={1.8} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h4 className="text-xs font-semibold text-gray-900 mb-1 line-clamp-1">
+                      {item.projectTitle}
+                    </h4>
+                    <p className="text-[11px] text-gray-400 mb-2">{item.category}</p>
+                    <div className="flex items-center gap-3 text-[11px]">
+                      <span className="font-semibold text-green-600">{item.amount}</span>
+                      <span className="flex items-center gap-1 text-gray-400">
+                        <Users className="w-3 h-3" />
+                        {item.investors} investors
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+              <p className="text-[10px] text-gray-300 text-center pt-2 italic">
+                Coming Soon: Live marketplace feed
               </p>
-            ) : (
-              <div className="divide-y divide-gray-50">
-                {activities.map((activity) => (
-                  <ActivityItem key={activity.id} activity={activity} />
-                ))}
-              </div>
-            )}
+            </div>
           </div>
         </div>
       </div>
