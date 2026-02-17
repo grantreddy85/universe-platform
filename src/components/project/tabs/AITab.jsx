@@ -419,20 +419,41 @@ export default function AITab({ project }) {
       {/* Chat */}
       <div className="flex-1 flex flex-col">
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-4">
-          {messages.length === 0 && (
-            <div className="flex flex-col items-center justify-center h-full text-center">
-              <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center mb-4">
-                <Sparkles className="w-5 h-5 text-blue-500" />
+          <div className="flex-1 overflow-y-auto p-6 space-y-4">
+            {messages.length === 0 && !activeConversation && (
+              <div className="flex flex-col items-center justify-center h-full text-center">
+                <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center mb-4">
+                  <Sparkles className="w-5 h-5 text-blue-500" />
+                </div>
+                <h3 className="text-sm font-semibold text-gray-900 mb-1">
+                  AI Research Co-Pilot
+                </h3>
+                <p className="text-xs text-gray-400 max-w-sm">
+                  Ask me to generate hypotheses, analyse your vault documents, design cohorts, or explore research directions for this project.
+                </p>
               </div>
-              <h3 className="text-sm font-semibold text-gray-900 mb-1">
-                AI Research Co-Pilot
-              </h3>
-              <p className="text-xs text-gray-400 max-w-sm">
-                Ask me to generate hypotheses, analyse your vault documents, design cohorts, or explore research directions for this project.
-              </p>
-            </div>
-          )}
+            )}
+            {messages.length === 0 && activeConversation && (
+              <div className="flex flex-col h-full">
+                <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-4">Previous Conversations</p>
+                <div className="grid grid-cols-2 gap-2 flex-1 overflow-y-auto">
+                  {conversations.slice(1).map((convo) => (
+                    <button
+                      key={convo.id}
+                      onClick={() => switchConversation(convo)}
+                      className="p-3 rounded-lg border border-gray-100 bg-white hover:border-blue-400 hover:bg-blue-50 text-left transition-all"
+                    >
+                      <p className="text-xs font-medium text-gray-800 truncate">
+                        {convo.metadata?.name || "Session"}
+                      </p>
+                      <p className="text-[10px] text-gray-400 mt-1.5">
+                        {convo.messages?.length || 0} messages
+                      </p>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
           {messages
             .filter((m) => m.role !== "system")
             .map((msg, idx) => (
