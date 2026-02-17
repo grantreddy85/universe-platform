@@ -387,6 +387,11 @@ export default function ValidationTab({ project }) {
             validation={selectedValidation} 
             note={selectedNote}
             onClose={() => setReviewingNote(false)}
+            onEditNote={() => {
+              setReviewingNote(false);
+              // Navigate to Notes tab and select the note for editing
+              // This assumes a parent component handles tab switching
+            }}
           />
         </div>
       )}
