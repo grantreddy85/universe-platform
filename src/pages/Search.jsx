@@ -403,94 +403,142 @@ ${selectedMessages}`;
 
       {/* Summarize Dialog */}
       <Dialog open={showSummarizeDialog} onOpenChange={setShowSummarizeDialog}>
-        <DialogContent className="sm:max-w-lg">
+        <DialogContent className="sm:max-w-xl">
           <DialogHeader>
-            <DialogTitle className="text-lg font-semibold">Summarize AI Sessions</DialogTitle>
+            <DialogTitle className="text-base font-semibold">Summarize AI Sessions into a Note</DialogTitle>
+            <p className="text-xs text-gray-400 mt-0.5">Select sessions, choose a format, and generate an editable research note saved to your project.</p>
           </DialogHeader>
-          <div className="space-y-4 mt-2">
-            <div className="space-y-1.5">
-              <Label className="text-xs font-medium text-gray-500">Select Sessions to Include</Label>
-              <div className="space-y-2 max-h-48 overflow-y-auto border border-gray-200 rounded-lg p-3">
-                {tabs.map((tab) => (
-                  <label key={tab.id} className="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={selectedTabs.includes(tab.id)}
-                      onChange={() => toggleTabSelection(tab.id)}
-                      className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                    />
-                    <span className="text-sm text-gray-700">{tab.name}</span>
-                    <span className="text-xs text-gray-400 ml-auto">
-                      {tab.messages.length} messages
-                    </span>
-                  </label>
-                ))}
+          <div className="space-y-5 mt-2">
+            {/* Session selection */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <Label className="text-xs font-medium text-gray-500 uppercase tracking-wide">Sessions to Include</Label>
+                <button
+                  className="text-xs text-blue-600 hover:underline"
+                  onClick={() =>
+                    setSelectedTabs(
+                      selectedTabs.length === tabs.length ? [] : tabs.map((t) => t.id)
+                    )
+                  }
+                >
+                  {selectedTabs.length === tabs.length ? "Deselect All" : "Select All"}
+                </button>
+              </div>
+              <div className="space-y-1.5 max-h-44 overflow-y-auto border border-gray-100 rounded-xl p-2 bg-gray-50">
+                {tabs.map((tab) => {
+                  const isSelected = selectedTabs.includes(tab.id);
+                  return (
+                    <button
+                      key={tab.id}
+                      onClick={() => toggleTabSelection(tab.id)}
+                      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all ${
+                        isSelected
+                          ? "bg-blue-50 border border-blue-200 text-blue-800"
+                          : "bg-white border border-gray-200 text-gray-600 hover:border-gray-300"
+                      }`}
+                    >
+                      {isSelected ? (
+                        <CheckSquare className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                      ) : (
+                        <Square className="w-4 h-4 text-gray-300 flex-shrink-0" />
+                      )}
+                      <span className="flex-1 text-left font-medium">{tab.name}</span>
+                      <span className="text-xs text-gray-400">{tab.messages.length} messages</span>
+                    </button>
+                  );
+                })}
+              </div>
+              {selectedTabs.length === 0 && (
+                <p className="text-xs text-amber-600">Select at least one session to continue.</p>
+              )}
+            </div>
+
+            {/* Format selection */}
+            <div className="space-y-2">
+              <Label className="text-xs font-medium text-gray-500 uppercase tracking-wide">Output Format</Label>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  onClick={() => setSummarizeFormat("research_paper")}
+                  className={`flex items-start gap-3 p-3 rounded-xl border text-left transition-all ${
+                    summarizeFormat === "research_paper"
+                      ? "border-blue-400 bg-blue-50"
+                      : "border-gray-200 bg-white hover:border-gray-300"
+                  }`}
+                >
+                  <BookOpen className={`w-4 h-4 mt-0.5 flex-shrink-0 ${summarizeFormat === "research_paper" ? "text-blue-600" : "text-gray-400"}`} />
+                  <div>
+                    <p className={`text-xs font-semibold ${summarizeFormat === "research_paper" ? "text-blue-800" : "text-gray-700"}`}>Research Paper</p>
+                    <p className="text-[10px] text-gray-400 mt-0.5">Intro · Methodology · Results · Discussion · Conclusion</p>
+                  </div>
+                </button>
+                <button
+                  onClick={() => setSummarizeFormat("simple_summary")}
+                  className={`flex items-start gap-3 p-3 rounded-xl border text-left transition-all ${
+                    summarizeFormat === "simple_summary"
+                      ? "border-blue-400 bg-blue-50"
+                      : "border-gray-200 bg-white hover:border-gray-300"
+                  }`}
+                >
+                  <AlignLeft className={`w-4 h-4 mt-0.5 flex-shrink-0 ${summarizeFormat === "simple_summary" ? "text-blue-600" : "text-gray-400"}`} />
+                  <div>
+                    <p className={`text-xs font-semibold ${summarizeFormat === "simple_summary" ? "text-blue-800" : "text-gray-700"}`}>Simple Summary</p>
+                    <p className="text-[10px] text-gray-400 mt-0.5">Key insights and findings in plain format</p>
+                  </div>
+                </button>
               </div>
             </div>
-            <div className="space-y-1.5">
-              <Label className="text-xs font-medium text-gray-500">Output Format</Label>
-              <Select value={summarizeFormat} onValueChange={setSummarizeFormat}>
-                <SelectTrigger className="text-sm">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="research_paper">Research Paper Format</SelectItem>
-                  <SelectItem value="simple_summary">Simple Summary</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-1.5">
-              <Label className="text-xs font-medium text-gray-500">Save to Project *</Label>
-              <Select
-                value={saveForm.projectId}
-                onValueChange={(v) => setSaveForm({ ...saveForm, projectId: v })}
-              >
-                <SelectTrigger className="text-sm">
-                  <SelectValue placeholder="Select project" />
-                </SelectTrigger>
-                <SelectContent>
-                  {projects.map((p) => (
-                    <SelectItem key={p.id} value={p.id}>
-                      {p.title}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+
+            {/* Project + Title */}
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <Label className="text-xs font-medium text-gray-500 uppercase tracking-wide">Save to Project *</Label>
+                <Select value={saveForm.projectId} onValueChange={(v) => setSaveForm({ ...saveForm, projectId: v })}>
+                  <SelectTrigger className="text-sm">
+                    <SelectValue placeholder="Select project" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {projects.map((p) => (
+                      <SelectItem key={p.id} value={p.id}>{p.title}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-1.5">
+                <Label className="text-xs font-medium text-gray-500 uppercase tracking-wide">Note Title *</Label>
+                <Input
+                  value={saveForm.title}
+                  onChange={(e) => setSaveForm({ ...saveForm, title: e.target.value })}
+                  placeholder="e.g. MRSA Resistance Review"
+                  className="text-sm"
+                />
+              </div>
             </div>
           </div>
           <DialogFooter className="pt-2">
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              onClick={() => setShowSummarizeDialog(false)}
-            >
+            <Button type="button" variant="ghost" size="sm" onClick={() => setShowSummarizeDialog(false)}>
               Cancel
             </Button>
             <Button
               onClick={generateSummary}
               size="sm"
               className="bg-blue-600 hover:bg-blue-700 text-xs"
-              disabled={selectedTabs.length === 0 || !saveForm.projectId || summarizing}
+              disabled={selectedTabs.length === 0 || !saveForm.projectId || !saveForm.title.trim() || summarizing}
             >
               {summarizing ? (
-                <>
-                  <Loader2 className="w-3 h-3 mr-1.5 animate-spin" />
-                  Generating...
-                </>
+                <><Loader2 className="w-3 h-3 mr-1.5 animate-spin" />Generating...</>
               ) : (
-                "Generate Summary"
+                <><Sparkles className="w-3 h-3 mr-1.5" />Generate & Save to Notes</>
               )}
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
-      {/* Save Dialog */}
+      {/* Save single message Dialog */}
       <Dialog open={showSaveDialog} onOpenChange={setShowSaveDialog}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle className="text-lg font-semibold">Save to Project</DialogTitle>
+            <DialogTitle className="text-base font-semibold">Save to Project Notes</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 mt-2">
             <div className="space-y-1.5">
@@ -501,9 +549,7 @@ ${selectedMessages}`;
                 </SelectTrigger>
                 <SelectContent>
                   {projects.map((p) => (
-                    <SelectItem key={p.id} value={p.id}>
-                      {p.title}
-                    </SelectItem>
+                    <SelectItem key={p.id} value={p.id}>{p.title}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
