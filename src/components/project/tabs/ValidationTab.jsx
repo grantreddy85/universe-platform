@@ -4,7 +4,6 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus, Shield, MoreHorizontal, Trash2, X, Mail, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import DocumentReview from "@/components/validation/DocumentReview";
 import {
   Dialog,
   DialogContent,
