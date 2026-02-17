@@ -112,28 +112,13 @@ export default function DocumentReview({ validation, note, onClose }) {
           </div>
         )}
 
-        {isEditing ? (
-          <div>
-            <label className="text-xs font-semibold text-gray-700 uppercase block mb-2">
-              Edit Document
-            </label>
-            <Textarea
-              value={editedContent}
-              onChange={(e) => setEditedContent(e.target.value)}
-              className="h-96 text-base"
-              placeholder="Edit the document content..."
-            />
-          </div>
-        ) : (
-          <div>
-            <label className="text-xs font-semibold text-gray-700 uppercase block mb-2">
-              Document Content
-            </label>
-            <div className="bg-gray-50 rounded-lg border border-gray-200 p-6 text-base text-gray-700 whitespace-pre-wrap overflow-y-auto" style={{ minHeight: '500px' }}>
-              {note.content}
-            </div>
-          </div>
-        )}
+        <Textarea
+          value={editedContent}
+          onChange={(e) => setEditedContent(e.target.value)}
+          className="w-full text-base leading-relaxed resize-none focus:outline-none border-0 p-0 bg-transparent"
+          placeholder="Start typing..."
+          style={{ minHeight: '600px' }}
+        />
       </div>
 
       {/* Footer */}
