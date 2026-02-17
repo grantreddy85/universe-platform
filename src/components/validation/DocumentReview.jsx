@@ -53,12 +53,12 @@ export default function DocumentReview({ validation, note, onClose }) {
   }
 
   return (
-    <div className="h-full flex flex-col bg-white">
+    <div className="h-screen flex flex-col bg-white">
       {/* Header */}
-      <div className="border-b border-gray-100 p-4 flex items-center justify-between">
+      <div className="border-b border-gray-200 px-8 py-6 flex items-center justify-between bg-white">
         <div className="flex-1">
-          <h3 className="text-sm font-semibold text-gray-900">{note.title}</h3>
-          <p className="text-xs text-gray-500 mt-1">Review & Track Changes</p>
+          <h3 className="text-2xl font-bold text-gray-900">{note.title}</h3>
+          <p className="text-sm text-gray-500 mt-1">Review & Track Changes</p>
         </div>
         <div className="flex gap-2">
           {validation.edit_history?.length > 0 && (
