@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, Shield, MoreHorizontal, Trash2, X, Mail, Loader2 } from "lucide-react";
+import { Plus, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import {
   Dialog,
   DialogContent,
@@ -13,37 +12,10 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Progress } from "@/components/ui/progress";
-
-const statusStyles = {
-  pending: "bg-gray-100 text-gray-600",
-  in_review: "bg-amber-50 text-amber-600",
-  running: "bg-blue-50 text-blue-600",
-  approved: "bg-emerald-50 text-emerald-600",
-  rejected: "bg-red-50 text-red-600",
-};
 
 export default function ValidationTab({ project }) {
   const [showNew, setShowNew] = useState(false);
   const [form, setForm] = useState({ title: "", type: "in_silico" });
-  const [selectedValidation, setSelectedValidation] = useState(null);
-  const [editingApprovers, setEditingApprovers] = useState(false);
-  const [approverEmail, setApproverEmail] = useState("");
-  const [showHistory, setShowHistory] = useState(false);
-  const [reviewingNote, setReviewingNote] = useState(false);
   const queryClient = useQueryClient();
 
   const { data: validations = [], isLoading } = useQuery({
@@ -52,16 +24,6 @@ export default function ValidationTab({ project }) {
       base44.entities.ValidationRequest.filter({ project_id: project.id }, "-created_date", 100),
   });
 
-  const { data: projectNotes = [] } = useQuery({
-    queryKey: ["project-notes", project.id],
-    queryFn: () => base44.entities.Note.filter({ project_id: project.id }, "-updated_date"),
-    initialData: [],
-  });
-
-  const selectedNote = selectedValidation?.note_id 
-    ? projectNotes.find(n => n.id === selectedValidation.note_id)
-    : null;
-
   const createMutation = useMutation({
     mutationFn: (data) =>
       base44.entities.ValidationRequest.create({ ...data, project_id: project.id }),
@@ -69,33 +31,6 @@ export default function ValidationTab({ project }) {
       queryClient.invalidateQueries({ queryKey: ["project-validations", project.id] });
       setShowNew(false);
       setForm({ title: "", type: "in_silico" });
-    },
-  });
-
-  const deleteMutation = useMutation({
-    mutationFn: (id) => base44.entities.ValidationRequest.delete(id),
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: ["project-validations", project.id] }),
-  });
-
-  const addApproverMutation = useMutation({
-    mutationFn: (data) => {
-      const updated = [...(data.validation.approvers || []), data.email];
-      return base44.entities.ValidationRequest.update(data.validation.id, { approvers: updated });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["project-validations", project.id] });
-      setApproverEmail("");
-    },
-  });
-
-  const removeApproverMutation = useMutation({
-    mutationFn: (data) => {
-      const updated = (data.validation.approvers || []).filter((e) => e !== data.email);
-      return base44.entities.ValidationRequest.update(data.validation.id, { approvers: updated });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["project-validations", project.id] });
     },
   });
 
@@ -109,241 +44,34 @@ export default function ValidationTab({ project }) {
           className="bg-blue-600 hover:bg-blue-700 text-xs"
         >
           <Plus className="w-3.5 h-3.5 mr-1.5" />
-          Submit Validation
+          New Validation
         </Button>
       </div>
 
       {isLoading ? (
-        <div className="space-y-3">
-          {[1, 2].map((i) => (
-            <div key={i} className="bg-white rounded-lg border border-gray-100 p-5 animate-pulse">
-              <div className="h-4 w-40 bg-gray-100 rounded" />
-            </div>
-          ))}
+        <div className="text-center py-16">
+          <p className="text-sm text-gray-400">Loading...</p>
         </div>
       ) : validations.length === 0 ? (
         <div className="text-center py-16 bg-white rounded-xl border border-dashed border-gray-200">
           <Shield className="w-8 h-8 text-gray-200 mx-auto mb-3" />
-          <p className="text-sm text-gray-400">No validation requests yet.</p>
+          <p className="text-sm text-gray-400">No validations yet.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-4 gap-6">
-          {/* Validation List */}
-          <div className="col-span-1 space-y-3">
-            {validations.map((v) => (
-             <button
-               key={v.id}
-               onClick={() => {
-                    setSelectedValidation(v);
-                  }}
-                className={`w-full text-left bg-white rounded-lg border p-5 hover:border-gray-300 transition-all ${
-                  selectedValidation?.id === v.id ? "border-blue-300 ring-1 ring-blue-100 bg-blue-50" : "border-gray-100"
-                }`}
-              >
-                <div className="flex items-start justify-between mb-3">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <h3 className="text-sm font-semibold text-gray-900">{v.title}</h3>
-                      <Badge
-                        variant="secondary"
-                        className={`text-[10px] uppercase ${statusStyles[v.status] || statusStyles.pending}`}
-                      >
-                        {(v.status || "pending").replace(/_/g, " ")}
-                      </Badge>
-                    </div>
-                    <p className="text-xs text-gray-400">
-                      {v.type === "in_silico" ? "In-Silico Validation" : "Lab Submission"}
-                    </p>
-                  </div>
-                  <DropdownMenu onClick={(e) => e.stopPropagation()}>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon" className="h-7 w-7 text-gray-400">
-                        <MoreHorizontal className="w-4 h-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem
-                        className="text-red-600"
-                        onClick={() => deleteMutation.mutate(v.id)}
-                      >
-                        <Trash2 className="w-3.5 h-3.5 mr-2" />
-                        Delete
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
-                {(v.reproducibility_score != null || v.confidence_index != null) && (
-                  <div className="grid grid-cols-2 gap-4 mt-3">
-                    {v.reproducibility_score != null && (
-                      <div>
-                        <p className="text-[11px] text-gray-400 mb-1">Reproducibility</p>
-                        <Progress value={v.reproducibility_score} className="h-1.5" />
-                        <p className="text-xs text-gray-600 mt-1">{v.reproducibility_score}%</p>
-                      </div>
-                    )}
-                    {v.confidence_index != null && (
-                      <div>
-                        <p className="text-[11px] text-gray-400 mb-1">Confidence</p>
-                        <Progress value={v.confidence_index} className="h-1.5" />
-                        <p className="text-xs text-gray-600 mt-1">{v.confidence_index}%</p>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </button>
-            ))}
-          </div>
-
-          {/* Details/Note Review Panel */}
-          {selectedValidation && !reviewingNote && (
-            <div className="col-span-3 bg-white rounded-xl border border-gray-100 p-8 flex flex-col space-y-6">
-              {selectedValidation.note_id && selectedNote && (
-                <div>
-                  <h4 className="text-sm font-semibold text-gray-900 mb-4">Linked Note for Review</h4>
-                  <div className="bg-gray-50 rounded-lg border border-gray-200 p-6 mb-4">
-                    <h3 className="text-base font-semibold text-gray-900 mb-2">{selectedNote.title}</h3>
-                    <p className="text-xs text-gray-500 mb-3">Created {new Date(selectedNote.created_date).toLocaleDateString()}</p>
-                    <div className="text-sm text-gray-700 whitespace-pre-wrap max-h-80 overflow-y-auto">
-                      {selectedNote.content}
-                    </div>
-                  </div>
-                  <Button
-                    onClick={() => setReviewingNote(true)}
-                    className="bg-blue-600 hover:bg-blue-700 text-xs w-full"
-                  >
-                    Open in Full View
-                  </Button>
-                </div>
-              )}
-
-              {!selectedValidation.note_id && (
-                <div>
-                  <h4 className="text-sm font-semibold text-gray-900 mb-3">Link a Note for Review</h4>
-                  {projectNotes.length > 0 ? (
-                    <Select 
-                      onValueChange={(noteId) => {
-                        const mutation = useMutation({
-                          mutationFn: (data) => base44.entities.ValidationRequest.update(data.id, { note_id: data.note_id }),
-                          onSuccess: () => queryClient.invalidateQueries({ queryKey: ["project-validations", project.id] }),
-                        });
-                        mutation.mutate({ id: selectedValidation.id, note_id: noteId });
-                      }}
-                    >
-                      <SelectTrigger className="text-sm">
-                        <SelectValue placeholder="Select a note..." />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {projectNotes.map(n => (
-                          <SelectItem key={n.id} value={n.id}>
-                            {n.title}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  ) : (
-                    <p className="text-xs text-gray-400 italic">No notes available for this project</p>
-                  )}
-                </div>
-              )}
-
-              <div className="pt-6">
-                <h4 className="text-xs font-semibold text-gray-500 uppercase mb-3">Approvers</h4>
-                {editingApprovers ? (
-                  <div className="space-y-2">
-                    <Input
-                      value={approverEmail}
-                      onChange={(e) => setApproverEmail(e.target.value)}
-                      placeholder="approver@example.com"
-                      type="email"
-                      className="text-xs h-8"
-                    />
-                    <div className="flex gap-2">
-                      <Button
-                        size="sm"
-                        className="bg-blue-600 hover:bg-blue-700 text-xs flex-1"
-                        onClick={() => {
-                          if (approverEmail.trim() && !selectedValidation.approvers?.includes(approverEmail)) {
-                            addApproverMutation.mutate({ validation: selectedValidation, email: approverEmail.trim() });
-                          }
-                        }}
-                        disabled={!approverEmail.trim() || addApproverMutation.isPending}
-                      >
-                        {addApproverMutation.isPending ? <Loader2 className="w-3 h-3 mr-1 animate-spin" /> : <Mail className="w-3 h-3 mr-1" />}
-                        Add
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => setEditingApprovers(false)}
-                        className="text-xs"
-                      >
-                        Done
-                      </Button>
-                    </div>
-                  </div>
-                ) : (
-                  <div>
-                    {selectedValidation.approvers?.length > 0 ? (
-                      <div className="space-y-1.5 mb-2">
-                        {selectedValidation.approvers.map((email) => (
-                          <div key={email} className="flex items-center justify-between bg-blue-50 rounded-lg p-2 border border-blue-200 text-xs">
-                            <span className="text-gray-700">{email}</span>
-                            <button
-                              onClick={() => removeApproverMutation.mutate({ validation: selectedValidation, email })}
-                              className="text-gray-400 hover:text-red-500 transition-colors"
-                            >
-                              <X className="w-3.5 h-3.5" />
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <p className="text-xs text-gray-400 italic mb-2">No approvers assigned</p>
-                    )}
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={() => setEditingApprovers(true)}
-                      className="text-xs text-blue-600 hover:bg-blue-50 w-full justify-start"
-                    >
-                      <Mail className="w-3 h-3 mr-1.5" />
-                      Add Approver
-                    </Button>
-                  </div>
-                )}
-              </div>
+        <div className="space-y-3">
+          {validations.map((v) => (
+            <div key={v.id} className="bg-white rounded-lg border border-gray-100 p-4">
+              <h3 className="text-sm font-semibold text-gray-900">{v.title}</h3>
+              <p className="text-xs text-gray-500 mt-1">{v.type}</p>
             </div>
-          )}
+          ))}
         </div>
-      )}
-
-      {reviewingNote && selectedValidation.note_id && selectedNote && (
-       <div className="fixed inset-0 z-50 bg-white flex flex-col">
-         <div className="flex items-center justify-between p-6 border-b border-gray-100">
-           <h2 className="text-lg font-semibold text-gray-900">{selectedNote.title}</h2>
-           <Button
-             variant="ghost"
-             size="icon"
-             onClick={() => setReviewingNote(false)}
-             className="text-gray-400 hover:text-gray-600"
-           >
-             <X className="w-5 h-5" />
-           </Button>
-         </div>
-         <div className="flex-1 overflow-y-auto p-6 lg:p-8">
-           <div className="max-w-4xl mx-auto">
-             <div className="whitespace-pre-wrap text-gray-700 leading-relaxed">
-               {selectedNote.content}
-             </div>
-           </div>
-         </div>
-       </div>
       )}
 
       <Dialog open={showNew} onOpenChange={setShowNew}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle className="text-lg font-semibold">Submit Validation</DialogTitle>
+            <DialogTitle className="text-lg font-semibold">New Validation</DialogTitle>
           </DialogHeader>
           <form
             onSubmit={(e) => {
@@ -358,21 +86,9 @@ export default function ValidationTab({ project }) {
               <Input
                 value={form.title}
                 onChange={(e) => setForm({ ...form, title: e.target.value })}
-                placeholder="Validation request title"
+                placeholder="Validation title"
                 className="text-sm"
               />
-            </div>
-            <div className="space-y-1.5">
-              <Label className="text-xs font-medium text-gray-500">Pathway</Label>
-              <Select value={form.type} onValueChange={(v) => setForm({ ...form, type: v })}>
-                <SelectTrigger className="text-sm">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="in_silico">In-Silico Validation</SelectItem>
-                  <SelectItem value="lab_submission">Submit to UniVerse Labs</SelectItem>
-                </SelectContent>
-              </Select>
             </div>
             <DialogFooter className="pt-2">
               <Button type="button" variant="ghost" size="sm" onClick={() => setShowNew(false)}>
@@ -384,7 +100,7 @@ export default function ValidationTab({ project }) {
                 className="bg-blue-600 hover:bg-blue-700 text-xs"
                 disabled={!form.title.trim() || createMutation.isPending}
               >
-                {createMutation.isPending ? "Submitting..." : "Submit"}
+                {createMutation.isPending ? "Creating..." : "Create"}
               </Button>
             </DialogFooter>
           </form>
