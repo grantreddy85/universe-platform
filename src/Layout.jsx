@@ -13,12 +13,14 @@ import {
   ChevronLeft,
   ChevronRight,
   LogOut,
-  Atom
+  Atom,
+  Search
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 const navItems = [
+  { name: "Research", icon: Search, page: "Search" },
   { name: "Home", icon: Home, page: "Home" },
   { name: "Projects", icon: FolderKanban, page: "Projects" },
   { name: "Workspace", icon: Briefcase, page: "Workspace" },
