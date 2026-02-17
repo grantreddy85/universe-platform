@@ -209,9 +209,9 @@ export default function ValidationTab({ project }) {
             ))}
           </div>
 
-          {/* Details Panel */}
+          {/* Details/Note Review Panel */}
           {selectedValidation && (
-            <div className="col-span-1 bg-white rounded-xl border border-gray-100 p-5 space-y-5 max-h-[600px] overflow-y-auto">
+            <div className="col-span-3 bg-white rounded-xl border border-gray-100 p-8 flex flex-col space-y-6">
               <div>
                 <h4 className="text-xs font-semibold text-gray-500 uppercase mb-3">Results</h4>
                 {editingResults ? (
