@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, X, RotateCcw, Send, Loader2, Sparkles, Save } from "lucide-react";
+import { Plus, X, RotateCcw, Send, Loader2, Sparkles, Save, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import ReactMarkdown from "react-markdown";
@@ -39,6 +39,10 @@ export default function Search() {
   const [loading, setLoading] = useState(false);
   const [showSaveDialog, setShowSaveDialog] = useState(false);
   const [saveForm, setSaveForm] = useState({ projectId: "", title: "", content: "" });
+  const [showSummarizeDialog, setShowSummarizeDialog] = useState(false);
+  const [selectedTabs, setSelectedTabs] = useState([]);
+  const [summarizeFormat, setSummarizeFormat] = useState("research_paper");
+  const [summarizing, setSummarizing] = useState(false);
   const messagesEndRef = useRef(null);
   const queryClient = useQueryClient();
 
@@ -137,6 +141,62 @@ export default function Search() {
     queryClient.invalidateQueries({ queryKey: ["project-notes", saveForm.projectId] });
     setShowSaveDialog(false);
     setSaveForm({ projectId: "", title: "", content: "" });
+  };
+
+  const openSummarizeDialog = () => {
+    setSelectedTabs(tabs.map((t) => t.id));
+    setShowSummarizeDialog(true);
+  };
+
+  const toggleTabSelection = (tabId) => {
+    setSelectedTabs((prev) =>
+      prev.includes(tabId) ? prev.filter((id) => id !== tabId) : [...prev, tabId]
+    );
+  };
+
+  const generateSummary = async () => {
+    if (selectedTabs.length === 0 || !saveForm.projectId) return;
+    setSummarizing(true);
+
+    try {
+      const selectedMessages = tabs
+        .filter((t) => selectedTabs.includes(t.id))
+        .flatMap((t) =>
+          t.messages.map((m) => `${m.role === "user" ? "User" : "AI"}: ${m.content}`)
+        )
+        .join("\n\n");
+
+      const prompt =
+        summarizeFormat === "research_paper"
+          ? `You are a scientific research assistant. Analyze the following AI research chat sessions and create a structured research paper summary with the following sections:
+
+**Introduction**: Provide context and background for the research topic discussed.
+**Methodology**: Describe the research approach, methods, or frameworks mentioned.
+**Results**: Summarize key findings, data, or insights discovered.
+**Discussion**: Interpret the results, discuss implications, and address limitations.
+**Conclusion**: Provide a concise summary of the research outcomes and potential future directions.
+
+Format the output in Markdown with clear section headings. Be detailed, scientific, and objective.
+
+Chat Sessions:
+${selectedMessages}`
+          : `Summarize the following AI research chat sessions into a clear, concise, and well-structured note. Highlight key insights, findings, and important information discussed.
+
+Chat Sessions:
+${selectedMessages}`;
+
+      const summary = await base44.integrations.Core.InvokeLLM({
+        prompt,
+        add_context_from_internet: false,
+      });
+
+      setSaveForm({ ...saveForm, content: summary });
+      setShowSummarizeDialog(false);
+      setShowSaveDialog(true);
+    } catch (error) {
+      console.error("Failed to generate summary:", error);
+    }
+    setSummarizing(false);
   };
 
   const hasStarted = tabs.length > 0;
@@ -242,8 +302,15 @@ export default function Search() {
             New Chat
           </button>
           <button
+            onClick={openSummarizeDialog}
+            className="ml-auto flex items-center gap-1.5 px-3 py-2 text-sm text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+          >
+            <FileText className="w-3.5 h-3.5" />
+            Summarize Sessions
+          </button>
+          <button
             onClick={resetAll}
-            className="ml-auto flex items-center gap-1.5 px-3 py-2 text-sm text-gray-400 hover:text-gray-600 rounded-lg transition-colors"
+            className="flex items-center gap-1.5 px-3 py-2 text-sm text-gray-400 hover:text-gray-600 rounded-lg transition-colors"
           >
             <RotateCcw className="w-3.5 h-3.5" />
             Reset All
@@ -333,6 +400,91 @@ export default function Search() {
           </form>
         </div>
       </div>
+
+      {/* Summarize Dialog */}
+      <Dialog open={showSummarizeDialog} onOpenChange={setShowSummarizeDialog}>
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle className="text-lg font-semibold">Summarize AI Sessions</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 mt-2">
+            <div className="space-y-1.5">
+              <Label className="text-xs font-medium text-gray-500">Select Sessions to Include</Label>
+              <div className="space-y-2 max-h-48 overflow-y-auto border border-gray-200 rounded-lg p-3">
+                {tabs.map((tab) => (
+                  <label key={tab.id} className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={selectedTabs.includes(tab.id)}
+                      onChange={() => toggleTabSelection(tab.id)}
+                      className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                    />
+                    <span className="text-sm text-gray-700">{tab.name}</span>
+                    <span className="text-xs text-gray-400 ml-auto">
+                      {tab.messages.length} messages
+                    </span>
+                  </label>
+                ))}
+              </div>
+            </div>
+            <div className="space-y-1.5">
+              <Label className="text-xs font-medium text-gray-500">Output Format</Label>
+              <Select value={summarizeFormat} onValueChange={setSummarizeFormat}>
+                <SelectTrigger className="text-sm">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="research_paper">Research Paper Format</SelectItem>
+                  <SelectItem value="simple_summary">Simple Summary</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-1.5">
+              <Label className="text-xs font-medium text-gray-500">Save to Project *</Label>
+              <Select
+                value={saveForm.projectId}
+                onValueChange={(v) => setSaveForm({ ...saveForm, projectId: v })}
+              >
+                <SelectTrigger className="text-sm">
+                  <SelectValue placeholder="Select project" />
+                </SelectTrigger>
+                <SelectContent>
+                  {projects.map((p) => (
+                    <SelectItem key={p.id} value={p.id}>
+                      {p.title}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <DialogFooter className="pt-2">
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={() => setShowSummarizeDialog(false)}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={generateSummary}
+              size="sm"
+              className="bg-blue-600 hover:bg-blue-700 text-xs"
+              disabled={selectedTabs.length === 0 || !saveForm.projectId || summarizing}
+            >
+              {summarizing ? (
+                <>
+                  <Loader2 className="w-3 h-3 mr-1.5 animate-spin" />
+                  Generating...
+                </>
+              ) : (
+                "Generate Summary"
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Save Dialog */}
       <Dialog open={showSaveDialog} onOpenChange={setShowSaveDialog}>

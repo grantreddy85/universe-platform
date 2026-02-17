@@ -51,11 +51,11 @@ import Home from './pages/Home';
 import Profile from './pages/Profile';
 import ProjectDetail from './pages/ProjectDetail';
 import Projects from './pages/Projects';
-import Search from './pages/Search';
 import Tokenisation from './pages/Tokenisation';
 import ValidatedAssets from './pages/ValidatedAssets';
 import Validations from './pages/Validations';
 import Workspace from './pages/Workspace';
+import Search from './pages/Search';
 import __Layout from './Layout.jsx';
 
 
@@ -64,11 +64,11 @@ export const PAGES = {
     "Profile": Profile,
     "ProjectDetail": ProjectDetail,
     "Projects": Projects,
-    "Search": Search,
     "Tokenisation": Tokenisation,
     "ValidatedAssets": ValidatedAssets,
     "Validations": Validations,
     "Workspace": Workspace,
+    "Search": Search,
 }
 
 export const pagesConfig = {
