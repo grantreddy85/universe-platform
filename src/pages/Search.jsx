@@ -108,6 +108,7 @@ export default function Search() {
     setActiveTab(tabId);
     const tab = tabs.find((t) => t.id === tabId);
     setMessages(tab?.messages || []);
+    localStorage.setItem("search_drafts", JSON.stringify(tabs));
   };
 
   const saveConversationToHistory = (tabName, tabMessages) => {
