@@ -586,17 +586,17 @@ export default function Search() {
               Cancel
             </Button>
             <Button
-              onClick={generateSummary}
-              size="sm"
-              className="bg-blue-600 hover:bg-blue-700 text-xs"
-              disabled={selectedTabs.length === 0 || !saveForm.projectId || !saveForm.title.trim() || summarizing}
-            >
-              {summarizing ? (
-                <><Loader2 className="w-3 h-3 mr-1.5 animate-spin" />Generating...</>
-              ) : (
-                <><Sparkles className="w-3 h-3 mr-1.5" />Generate & Save to Notes</>
-              )}
-            </Button>
+               onClick={generateSummary}
+               size="sm"
+               className="bg-blue-600 hover:bg-blue-700 text-xs"
+               disabled={selectedTabs.length === 0 || !saveForm.title.trim() || !saveDestination || (saveDestination === "new_project" && !newProjectName.trim()) || summarizing}
+             >
+               {summarizing ? (
+                 <><Loader2 className="w-3 h-3 mr-1.5 animate-spin" />Generating...</>
+               ) : (
+                 <><Sparkles className="w-3 h-3 mr-1.5" />Generate & Save to Notes</>
+               )}
+             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
