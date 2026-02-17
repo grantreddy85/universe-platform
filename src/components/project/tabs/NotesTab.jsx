@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, StickyNote, MoreHorizontal, Trash2, Edit3 } from "lucide-react";
+import { Plus, StickyNote, MoreHorizontal, Trash2, Edit3, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -65,6 +65,21 @@ export default function NotesTab({ project }) {
   const deleteMutation = useMutation({
     mutationFn: (id) => base44.entities.Note.delete(id),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["project-notes", project.id] }),
+  });
+
+  const sendForValidationMutation = useMutation({
+    mutationFn: async (note) => {
+      return await base44.entities.ValidationRequest.create({
+        project_id: project.id,
+        title: `Validation: ${note.title}`,
+        type: "in_silico",
+        status: "pending",
+        results: `Publication draft based on note: ${note.title}\n\n${note.content}`
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["validations", project.id] });
+    },
   });
 
   return (
@@ -140,6 +155,13 @@ export default function NotesTab({ project }) {
                     >
                       <Edit3 className="w-3.5 h-3.5 mr-2" />
                       Edit
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => sendForValidationMutation.mutate(note)}
+                      className="text-blue-600"
+                    >
+                      <Send className="w-3.5 h-3.5 mr-2" />
+                      Send for Validation
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       className="text-red-600"
