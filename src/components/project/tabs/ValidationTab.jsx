@@ -80,16 +80,6 @@ export default function ValidationTab({ project }) {
       queryClient.invalidateQueries({ queryKey: ["project-validations", project.id] }),
   });
 
-  const updateResultsMutation = useMutation({
-    mutationFn: (data) =>
-      base44.entities.ValidationRequest.update(data.id, { results: data.results }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["project-validations", project.id] });
-      setEditingResults(false);
-      setSelectedValidation(null);
-    },
-  });
-
   const addApproverMutation = useMutation({
     mutationFn: (data) => {
       const updated = [...(data.validation.approvers || []), data.email];
