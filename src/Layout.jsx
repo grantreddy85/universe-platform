@@ -93,6 +93,11 @@ export default function Layout({ children, currentPageName }) {
                   <TooltipTrigger asChild>
                     <Link
                       to={createPageUrl(item.page)}
+                      onClick={() => {
+                        if (item.name === "Research") {
+                          localStorage.setItem("search_reset_trigger", Date.now().toString());
+                        }
+                      }}
                       className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-150 ${
                         collapsed ? "justify-center" : ""
                       } ${
