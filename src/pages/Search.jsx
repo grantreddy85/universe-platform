@@ -89,6 +89,13 @@ export default function Search() {
     setMessages(tab?.messages || []);
   };
 
+  const saveConversationToHistory = (tabName, tabMessages) => {
+    const conversations = localStorage.getItem("search_conversations");
+    const parsed = conversations ? JSON.parse(conversations) : [];
+    const updated = [{ name: tabName, messages: tabMessages }, ...parsed.slice(0, 9)];
+    localStorage.setItem("search_conversations", JSON.stringify(updated));
+  };
+
   const sendMessage = async () => {
     if (!input.trim() || loading) return;
     const text = input.trim();
