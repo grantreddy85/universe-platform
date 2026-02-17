@@ -39,6 +39,7 @@ export default function Search() {
   const [loading, setLoading] = useState(false);
   const [showSaveDialog, setShowSaveDialog] = useState(false);
   const [saveForm, setSaveForm] = useState({ projectId: "", title: "", content: "" });
+  const [summarizing, setSummarizing] = useState(false);
   const messagesEndRef = useRef(null);
   const queryClient = useQueryClient();
 
@@ -137,6 +138,48 @@ export default function Search() {
     queryClient.invalidateQueries({ queryKey: ["project-notes", saveForm.projectId] });
     setShowSaveDialog(false);
     setSaveForm({ projectId: "", title: "", content: "" });
+  };
+
+  const summarizeAllChats = async () => {
+    if (tabs.length === 0) return;
+    setSummarizing(true);
+
+    try {
+      // Gather all messages from all tabs
+      const allMessages = tabs.flatMap((tab) => tab.messages);
+      const conversationText = allMessages
+        .map((msg) => `${msg.role === "user" ? "User" : "AI"}: ${msg.content}`)
+        .join("\n\n");
+
+      // Generate structured publication summary
+      const response = await base44.integrations.Core.InvokeLLM({
+        prompt: `You are a scientific research assistant. Analyze the following research conversation(s) and create a structured scientific publication format.
+
+Conversation content:
+${conversationText}
+
+Please structure the output as a scientific mini-publication with the following sections:
+- **Introduction**: Brief background and context
+- **Methodology**: Research approach and methods discussed
+- **Results**: Key findings and insights discovered
+- **Conclusion**: Summary of outcomes and implications
+- **References**: Any data sources or references mentioned
+
+Format the output in clear markdown with appropriate headers.`,
+        add_context_from_internet: false,
+      });
+
+      // Open save dialog with the structured content
+      setSaveForm({
+        projectId: "",
+        title: "Research Publication Summary",
+        content: response,
+      });
+      setShowSaveDialog(true);
+    } catch (error) {
+      console.error("Error summarizing chats:", error);
+    }
+    setSummarizing(false);
   };
 
   const hasStarted = tabs.length > 0;
@@ -242,8 +285,25 @@ export default function Search() {
             New Chat
           </button>
           <button
+            onClick={summarizeAllChats}
+            disabled={summarizing || tabs.length === 0}
+            className="ml-auto flex items-center gap-1.5 px-3 py-2 text-sm text-blue-600 hover:bg-blue-50 rounded-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+          >
+            {summarizing ? (
+              <>
+                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                Summarizing...
+              </>
+            ) : (
+              <>
+                <Sparkles className="w-3.5 h-3.5" />
+                Summarize & Create Publication
+              </>
+            )}
+          </button>
+          <button
             onClick={resetAll}
-            className="ml-auto flex items-center gap-1.5 px-3 py-2 text-sm text-gray-400 hover:text-gray-600 rounded-lg transition-colors"
+            className="flex items-center gap-1.5 px-3 py-2 text-sm text-gray-400 hover:text-gray-600 rounded-lg transition-colors"
           >
             <RotateCcw className="w-3.5 h-3.5" />
             Reset All
