@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, Shield, MoreHorizontal, Trash2 } from "lucide-react";
+import { Plus, Shield, MoreHorizontal, Trash2, X, Check, Edit2, Mail, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -27,6 +27,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Progress } from "@/components/ui/progress";
+import { Textarea } from "@/components/ui/textarea";
 
 const statusStyles = {
   pending: "bg-gray-100 text-gray-600",
