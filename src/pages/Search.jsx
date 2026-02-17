@@ -152,6 +152,7 @@ export default function Search() {
         if (currentTab) {
           saveConversationToHistory(currentTab.name, finalMessages);
         }
+        localStorage.setItem("search_drafts", JSON.stringify(updated));
         return updated;
       });
     } catch (error) {
