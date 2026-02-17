@@ -563,41 +563,23 @@ export default function AITab({ project }) {
               </div>
             </div>
 
-            {/* Save Destination */}
-             <div className="space-y-2">
-               <Label className="text-xs font-medium text-gray-500 uppercase tracking-wide">Save To *</Label>
-               <div className="grid grid-cols-3 gap-2">
-                 <button
-                   onClick={() => setSaveDestination("current")}
-                   className={`px-3 py-2.5 rounded-lg text-xs border font-medium transition-all ${
-                     saveDestination === "current"
-                       ? "bg-blue-50 border-blue-400 text-blue-700"
-                       : "bg-white border-gray-200 text-gray-600 hover:border-gray-300"
-                   }`}
-                 >
-                   This Project
-                 </button>
-                 <button
-                   onClick={() => setSaveDestination("workspace")}
-                   className={`px-3 py-2.5 rounded-lg text-xs border font-medium transition-all ${
-                     saveDestination === "workspace"
-                       ? "bg-blue-50 border-blue-400 text-blue-700"
-                       : "bg-white border-gray-200 text-gray-600 hover:border-gray-300"
-                   }`}
-                 >
-                   Workspace
-                 </button>
-                 <button
-                   onClick={() => setSaveDestination("new_project")}
-                   className={`px-3 py-2.5 rounded-lg text-xs border font-medium transition-all ${
-                     saveDestination === "new_project"
-                       ? "bg-blue-50 border-blue-400 text-blue-700"
-                       : "bg-white border-gray-200 text-gray-600 hover:border-gray-300"
-                   }`}
-                 >
-                   New Project
-                 </button>
-               </div>
+            {/* Save to Project */}
+             <div className="space-y-1.5">
+               <Label className="text-xs font-medium text-gray-500 uppercase tracking-wide">Save to Project *</Label>
+               <select
+                 value={saveDestination}
+                 onChange={(e) => setSaveDestination(e.target.value)}
+                 className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-400/30 focus:border-blue-400 bg-white"
+               >
+                 <option value="">Select project</option>
+                 {allProjects.map((proj) => (
+                   <option key={proj.id} value={`project_${proj.id}`}>
+                     {proj.title}
+                   </option>
+                 ))}
+                 <option value="workspace">Workspace</option>
+                 <option value="new_project">+ Create New Project</option>
+               </select>
              </div>
 
              {/* New Project Name */}
