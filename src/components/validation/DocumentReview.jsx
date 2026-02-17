@@ -120,7 +120,7 @@ export default function DocumentReview({ validation, note, onClose }) {
             <Textarea
               value={editedContent}
               onChange={(e) => setEditedContent(e.target.value)}
-              className="h-96 text-sm"
+              className="h-96 text-base"
               placeholder="Edit the document content..."
             />
           </div>
