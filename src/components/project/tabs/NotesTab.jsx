@@ -10,12 +10,15 @@ import {
   X,
   FileText,
   Loader2,
+  ChevronRight,
+  Sparkles,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { format } from "date-fns";
+import NotesAssistant from "./NotesAssistant";
 
 const sourceStyles = {
   manual: "bg-gray-100 text-gray-600",
