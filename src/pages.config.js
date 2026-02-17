@@ -53,6 +53,7 @@ import ProjectDetail from './pages/ProjectDetail';
 import Workspace from './pages/Workspace';
 import Tokenisation from './pages/Tokenisation';
 import Profile from './pages/Profile';
+import Search from './pages/Search';
 import __Layout from './Layout.jsx';
 
 
@@ -63,6 +64,7 @@ export const PAGES = {
     "Workspace": Workspace,
     "Tokenisation": Tokenisation,
     "Profile": Profile,
+    "Search": Search,
 }
 
 export const pagesConfig = {
