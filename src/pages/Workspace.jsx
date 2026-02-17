@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, FileText, MoreHorizontal, Trash2, FolderInput, Lightbulb, Upload, StickyNote } from "lucide-react";
+import { Plus, FileText, MoreHorizontal, Trash2, FolderInput, Lightbulb, Upload, StickyNote, Edit3 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -45,6 +45,7 @@ const typeStyles = {
 
 export default function Workspace() {
   const [showNew, setShowNew] = useState(false);
+  const [editingItem, setEditingItem] = useState(null);
   const [form, setForm] = useState({ title: "", type: "note", content: "" });
   const queryClient = useQueryClient();
 
@@ -63,6 +64,15 @@ export default function Workspace() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["workspace-items"] });
       setShowNew(false);
+      setForm({ title: "", type: "note", content: "" });
+    },
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: ({ id, data }) => base44.entities.WorkspaceItem.update(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["workspace-items"] });
+      setEditingItem(null);
       setForm({ title: "", type: "note", content: "" });
     },
   });
@@ -158,6 +168,15 @@ export default function Workspace() {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
+                      <DropdownMenuItem
+                        onClick={() => {
+                          setEditingItem(item);
+                          setForm({ title: item.title, type: item.type, content: item.content || "" });
+                        }}
+                      >
+                        <Edit3 className="w-3.5 h-3.5 mr-2" />
+                        Edit
+                      </DropdownMenuItem>
                       {projects.length > 0 && (
                         <>
                           {projects.slice(0, 5).map((p) => (
@@ -187,16 +206,28 @@ export default function Workspace() {
         </div>
       )}
 
-      <Dialog open={showNew} onOpenChange={setShowNew}>
+      <Dialog open={showNew || editingItem} onOpenChange={(open) => {
+        if (!open) {
+          setShowNew(false);
+          setEditingItem(null);
+          setForm({ title: "", type: "note", content: "" });
+        }
+      }}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle className="text-lg font-semibold">New Workspace Item</DialogTitle>
+            <DialogTitle className="text-lg font-semibold">
+              {editingItem ? "Edit Item" : "New Workspace Item"}
+            </DialogTitle>
           </DialogHeader>
           <form
             onSubmit={(e) => {
               e.preventDefault();
               if (!form.title.trim()) return;
-              createMutation.mutate(form);
+              if (editingItem) {
+                updateMutation.mutate({ id: editingItem.id, data: form });
+              } else {
+                createMutation.mutate(form);
+              }
             }}
             className="space-y-4 mt-2"
           >
@@ -233,16 +264,20 @@ export default function Workspace() {
               />
             </div>
             <DialogFooter className="pt-2">
-              <Button type="button" variant="ghost" size="sm" onClick={() => setShowNew(false)}>
+              <Button type="button" variant="ghost" size="sm" onClick={() => {
+                setShowNew(false);
+                setEditingItem(null);
+                setForm({ title: "", type: "note", content: "" });
+              }}>
                 Cancel
               </Button>
               <Button
                 type="submit"
                 size="sm"
                 className="bg-blue-600 hover:bg-blue-700 text-xs"
-                disabled={!form.title.trim() || createMutation.isPending}
+                disabled={!form.title.trim() || createMutation.isPending || updateMutation.isPending}
               >
-                {createMutation.isPending ? "Saving..." : "Save"}
+                {(createMutation.isPending || updateMutation.isPending) ? "Saving..." : editingItem ? "Update" : "Save"}
               </Button>
             </DialogFooter>
           </form>
