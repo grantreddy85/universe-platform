@@ -263,6 +263,51 @@ export default function ValidationTab({ project }) {
               </div>
 
               <div className="border-t border-gray-100 pt-4">
+                <h4 className="text-xs font-semibold text-gray-500 uppercase mb-3">Document Review</h4>
+                {projectNotes.length > 0 ? (
+                  <div className="space-y-2">
+                    {selectedValidation.note_id ? (
+                      <div className="bg-blue-50 rounded-lg p-3 border border-blue-200">
+                        <p className="text-xs text-blue-900 font-medium mb-2">Linked Note</p>
+                        <p className="text-xs text-blue-700 mb-3">{selectedNote?.title}</p>
+                        <Button
+                          size="sm"
+                          className="bg-blue-600 hover:bg-blue-700 text-xs w-full"
+                          onClick={() => setReviewingNote(true)}
+                        >
+                          <FileText className="w-3.5 h-3.5 mr-1.5" />
+                          Review & Track Changes
+                        </Button>
+                      </div>
+                    ) : (
+                      <Select 
+                        onValueChange={(noteId) => {
+                          const mutation = useMutation({
+                            mutationFn: (data) => base44.entities.ValidationRequest.update(data.id, { note_id: data.note_id }),
+                            onSuccess: () => queryClient.invalidateQueries({ queryKey: ["project-validations", project.id] }),
+                          });
+                          mutation.mutate({ id: selectedValidation.id, note_id: noteId });
+                        }}
+                      >
+                        <SelectTrigger className="text-xs h-8">
+                          <SelectValue placeholder="Select note to review..." />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {projectNotes.map(n => (
+                            <SelectItem key={n.id} value={n.id}>
+                              {n.title}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    )}
+                  </div>
+                ) : (
+                  <p className="text-xs text-gray-400 italic">No notes available for this project</p>
+                )}
+              </div>
+
+              <div className="border-t border-gray-100 pt-4">
                 <h4 className="text-xs font-semibold text-gray-500 uppercase mb-3">Approvers</h4>
                 {editingApprovers ? (
                   <div className="space-y-2">
