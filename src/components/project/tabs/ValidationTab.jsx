@@ -262,50 +262,82 @@ export default function ValidationTab({ project }) {
                 )}
               </div>
 
-              <div className="border-t border-gray-100 pt-4">
-                <h4 className="text-xs font-semibold text-gray-500 uppercase mb-3">Document Review</h4>
-                {projectNotes.length > 0 ? (
-                  <div className="space-y-2">
-                    {selectedValidation.note_id ? (
-                      <div className="bg-blue-50 rounded-lg p-3 border border-blue-200">
-                        <p className="text-xs text-blue-900 font-medium mb-2">Linked Note</p>
-                        <p className="text-xs text-blue-700 mb-3">{selectedNote?.title}</p>
+              {selectedValidation.note_id && selectedNote && (
+                <div className="border-t border-gray-100 pt-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <h4 className="text-sm font-semibold text-gray-900">Linked Note Review</h4>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="text-xs"
+                      onClick={() => setShowHistory(!showHistory)}
+                    >
+                      {showHistory ? "Hide History" : "View History"}
+                    </Button>
+                  </div>
+
+                  {!showHistory ? (
+                    <div className="space-y-4">
+                      <div>
+                        <h3 className="text-base font-semibold text-gray-900 mb-2">{selectedNote.title}</h3>
+                        <div className="bg-gray-50 rounded-lg border border-gray-200 p-6 text-sm text-gray-700 whitespace-pre-wrap overflow-y-auto" style={{ maxHeight: '400px' }}>
+                          {selectedNote.content}
+                        </div>
+                      </div>
+                      <div className="flex gap-2">
                         <Button
-                          size="sm"
-                          className="bg-blue-600 hover:bg-blue-700 text-xs w-full"
-                          onClick={() => setReviewingNote(true)}
+                          className="bg-blue-600 hover:bg-blue-700 text-xs"
                         >
-                          <FileText className="w-3.5 h-3.5 mr-1.5" />
-                          Review & Track Changes
+                          Edit Note
                         </Button>
                       </div>
-                    ) : (
-                      <Select 
-                        onValueChange={(noteId) => {
-                          const mutation = useMutation({
-                            mutationFn: (data) => base44.entities.ValidationRequest.update(data.id, { note_id: data.note_id }),
-                            onSuccess: () => queryClient.invalidateQueries({ queryKey: ["project-validations", project.id] }),
-                          });
-                          mutation.mutate({ id: selectedValidation.id, note_id: noteId });
-                        }}
-                      >
-                        <SelectTrigger className="text-xs h-8">
-                          <SelectValue placeholder="Select note to review..." />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {projectNotes.map(n => (
-                            <SelectItem key={n.id} value={n.id}>
-                              {n.title}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    )}
-                  </div>
-                ) : (
-                  <p className="text-xs text-gray-400 italic">No notes available for this project</p>
-                )}
-              </div>
+                    </div>
+                  ) : (
+                    <div className="bg-gray-50 rounded-lg border border-gray-200 p-4 space-y-4">
+                      {selectedValidation.edit_history?.length > 0 ? (
+                        selectedValidation.edit_history.map((edit, idx) => (
+                          <div key={idx} className="border-l-2 border-blue-300 pl-4 py-2">
+                            <p className="text-xs font-medium text-gray-900">{edit.change_summary}</p>
+                            <p className="text-xs text-gray-500">{edit.editor_email} • {new Date(edit.timestamp).toLocaleString()}</p>
+                          </div>
+                        ))
+                      ) : (
+                        <p className="text-xs text-gray-400 italic">No edit history</p>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {!selectedValidation.note_id && (
+                <div className="border-t border-gray-100 pt-6">
+                  <h4 className="text-sm font-semibold text-gray-900 mb-3">Link a Note for Review</h4>
+                  {projectNotes.length > 0 ? (
+                    <Select 
+                      onValueChange={(noteId) => {
+                        const mutation = useMutation({
+                          mutationFn: (data) => base44.entities.ValidationRequest.update(data.id, { note_id: data.note_id }),
+                          onSuccess: () => queryClient.invalidateQueries({ queryKey: ["project-validations", project.id] }),
+                        });
+                        mutation.mutate({ id: selectedValidation.id, note_id: noteId });
+                      }}
+                    >
+                      <SelectTrigger className="text-sm">
+                        <SelectValue placeholder="Select a note..." />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {projectNotes.map(n => (
+                          <SelectItem key={n.id} value={n.id}>
+                            {n.title}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  ) : (
+                    <p className="text-xs text-gray-400 italic">No notes available for this project</p>
+                  )}
+                </div>
+              )}
 
               <div className="border-t border-gray-100 pt-4">
                 <h4 className="text-xs font-semibold text-gray-500 uppercase mb-3">Approvers</h4>
