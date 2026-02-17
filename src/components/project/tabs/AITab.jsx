@@ -129,7 +129,7 @@ export default function AITab({ project }) {
   };
 
   const generateSummary = async () => {
-     if (selectedConvos.length === 0 || !summarizeTitle.trim()) return;
+     if (selectedConvos.length === 0 || !summarizeTitle.trim() || !saveDestination) return;
      if (saveDestination === "new_project" && !newProjectName.trim()) return;
      setSummarizing(true);
 
@@ -173,20 +173,21 @@ export default function AITab({ project }) {
          source: "ai_copilot",
        });
        queryClient.invalidateQueries({ queryKey: ["projects"] });
-     } else {
-       // Save to current project
+     } else if (saveDestination.startsWith("project_")) {
+       // Save to selected project
+       const projectId = saveDestination.split("_")[1];
        await base44.entities.Note.create({
-         project_id: project.id,
+         project_id: projectId,
          title: summarizeTitle,
          content: summary,
          source: "ai_copilot",
        });
-       queryClient.invalidateQueries({ queryKey: ["project-notes", project.id] });
+       queryClient.invalidateQueries({ queryKey: ["project-notes", projectId] });
      }
 
      setShowSummarizeDialog(false);
      setSummarizing(false);
-     setSaveDestination("current");
+     setSaveDestination("");
      setNewProjectName("");
    };
 
