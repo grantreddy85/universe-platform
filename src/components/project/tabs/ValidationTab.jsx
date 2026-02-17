@@ -101,8 +101,8 @@ export default function ValidationTab({ project }) {
           <ValidationAssistant
             validation={selectedValidation}
             linkedNote={expandedNote}
-            isOpen={assistantOpen}
-            onToggle={() => setAssistantOpen(!assistantOpen)}
+            isOpen={isAssistantVisible}
+            onToggle={() => setAssistantOpen(!isAssistantVisible)}
           />
         </div>
       </div>
