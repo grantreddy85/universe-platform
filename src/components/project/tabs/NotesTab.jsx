@@ -128,16 +128,27 @@ export default function NotesTab({ project }) {
         }`}
       >
         <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
-          <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Notes</span>
-          <Button
-            onClick={openNew}
-            size="sm"
-            className="bg-blue-600 hover:bg-blue-700 text-xs h-7 px-2.5"
-          >
-            <Plus className="w-3.5 h-3.5 mr-1" />
-            New
-          </Button>
-        </div>
+           <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Notes</span>
+           <div className="flex items-center gap-1.5">
+             <Button
+               variant="ghost"
+               size="sm"
+               onClick={() => setAssistantOpen(!assistantOpen)}
+               className="text-xs text-gray-500 hover:text-blue-600 h-7 px-2"
+               title="Open notes guide"
+             >
+               <Sparkles className="w-3.5 h-3.5" />
+             </Button>
+             <Button
+               onClick={openNew}
+               size="sm"
+               className="bg-blue-600 hover:bg-blue-700 text-xs h-7 px-2.5"
+             >
+               <Plus className="w-3.5 h-3.5 mr-1" />
+               New
+             </Button>
+           </div>
+         </div>
 
         <div className="flex-1 overflow-y-auto">
           {isLoading ? (
