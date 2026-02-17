@@ -5,6 +5,7 @@ import { Loader2 } from "lucide-react";
 import ProjectHeader from "../components/project/ProjectHeader";
 import ProjectTabs from "../components/project/ProjectTabs";
 import AITab from "../components/project/tabs/AITab";
+import NotesTab from "../components/project/tabs/NotesTab";
 import VaultTab from "../components/project/tabs/VaultTab";
 import CohortsTab from "../components/project/tabs/CohortsTab";
 import WorkflowsTab from "../components/project/tabs/WorkflowsTab";
@@ -36,6 +37,7 @@ export default function ProjectDetail() {
 
   const tabComponents = {
     ai: AITab,
+    notes: NotesTab,
     vault: VaultTab,
     cohorts: CohortsTab,
     workflows: WorkflowsTab,

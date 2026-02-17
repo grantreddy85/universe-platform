@@ -6,11 +6,13 @@ import {
   GitBranch,
   Shield,
   Box,
-  Coins
+  Coins,
+  StickyNote
 } from "lucide-react";
 
 const tabs = [
   { id: "ai", label: "AI", icon: Sparkles },
+  { id: "notes", label: "Notes", icon: StickyNote },
   { id: "vault", label: "Vault", icon: Archive },
   { id: "cohorts", label: "Cohorts", icon: FlaskConical },
   { id: "workflows", label: "Workflows", icon: GitBranch },
