@@ -45,6 +45,7 @@ export default function Search() {
   const [summarizing, setSummarizing] = useState(false);
   const [saveDestination, setSaveDestination] = useState("");
   const [newProjectName, setNewProjectName] = useState("");
+  const [showHistoryModal, setShowHistoryModal] = useState(false);
   const messagesEndRef = useRef(null);
   const queryClient = useQueryClient();
 
