@@ -20,6 +20,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
+import UniVerseLogo from "@/components/UniVerseLogo";
 
 const suggestions = [
   "Generate hypothesis about treatment of Haemachromatosis",
@@ -146,9 +147,7 @@ export default function Search() {
         <div className="w-full max-w-3xl">
           <div className="text-center mb-12">
             <div className="inline-flex items-center gap-3 mb-3">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
-                <Sparkles className="w-6 h-6 text-white" strokeWidth={1.8} />
-              </div>
+              <UniVerseLogo className="w-12 h-12" />
               <h1 className="text-4xl font-semibold tracking-tight text-gray-900">UniVerse</h1>
             </div>
             <p className="text-sm text-gray-400">Research Infrastructure Operating System</p>
@@ -209,6 +208,10 @@ export default function Search() {
       {/* Tabs */}
       <div className="bg-white border-b border-gray-200 px-6 py-3">
         <div className="flex items-center gap-2 overflow-x-auto">
+          <div className="flex items-center gap-2 mr-4 pr-4 border-r border-gray-200">
+            <UniVerseLogo className="w-6 h-6" />
+            <span className="text-sm font-semibold text-gray-900">UniVerse</span>
+          </div>
           {tabs.map((tab) => (
             <button
               key={tab.id}
