@@ -68,6 +68,7 @@ export default function NotesTab({ project }) {
   });
 
   const sendForValidation = async (note) => {
+    // Create a validation request linked to this note
     await base44.entities.ValidationRequest.create({
       project_id: project.id,
       title: `Validation: ${note.title}`,
@@ -152,10 +153,14 @@ export default function NotesTab({ project }) {
                       <Edit3 className="w-3.5 h-3.5 mr-2" />
                       Edit
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => sendForValidation(note)}>
-                      <Send className="w-3.5 h-3.5 mr-2" />
-                      Send for Validation
-                    </DropdownMenuItem>
+                    {note.source === "research_chat" && (
+                      <DropdownMenuItem
+                        onClick={() => sendForValidation(note)}
+                      >
+                        <Send className="w-3.5 h-3.5 mr-2" />
+                        Send for Validation
+                      </DropdownMenuItem>
+                    )}
                     <DropdownMenuItem
                       className="text-red-600"
                       onClick={() => deleteMutation.mutate(note.id)}

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, X, RotateCcw, Send, Loader2, Sparkles, Save } from "lucide-react";
+import { Plus, X, RotateCcw, Send, Loader2, Sparkles, Save, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import ReactMarkdown from "react-markdown";
@@ -140,44 +140,64 @@ export default function Search() {
     setSaveForm({ projectId: "", title: "", content: "" });
   };
 
-  const summarizeAllChats = async () => {
-    if (tabs.length === 0) return;
+  const summarizeAndCreateNote = async () => {
+    if (tabs.length === 0 || summarizing) return;
+    
     setSummarizing(true);
-
     try {
       // Gather all messages from all tabs
-      const allMessages = tabs.flatMap((tab) => tab.messages);
+      const allMessages = tabs.flatMap(tab => tab.messages || []);
+      
+      if (allMessages.length === 0) {
+        setSummarizing(false);
+        return;
+      }
+
+      // Create a conversation string
       const conversationText = allMessages
-        .map((msg) => `${msg.role === "user" ? "User" : "AI"}: ${msg.content}`)
+        .map(msg => `${msg.role === "user" ? "User" : "Assistant"}: ${msg.content}`)
         .join("\n\n");
 
-      // Generate structured publication summary
-      const response = await base44.integrations.Core.InvokeLLM({
-        prompt: `You are a scientific research assistant. Analyze the following research conversation(s) and create a structured scientific publication format.
+      // Use InvokeLLM to generate structured summary
+      const summary = await base44.integrations.Core.InvokeLLM({
+        prompt: `You are a scientific research assistant. Based on the following conversation(s) from research chat sessions, create a structured scientific publication draft.
 
-Conversation content:
+Format your response with the following sections:
+# Introduction
+[Provide context and background]
+
+# Methodology
+[Describe approaches and methods discussed]
+
+# Results
+[Summarize key findings and outcomes]
+
+# Discussion
+[Analysis and interpretation]
+
+# Conclusion
+[Summary and future directions]
+
+# References
+[List any sources or citations mentioned]
+
+Here is the conversation:
+
 ${conversationText}
 
-Please structure the output as a scientific mini-publication with the following sections:
-- **Introduction**: Brief background and context
-- **Methodology**: Research approach and methods discussed
-- **Results**: Key findings and insights discovered
-- **Conclusion**: Summary of outcomes and implications
-- **References**: Any data sources or references mentioned
-
-Format the output in clear markdown with appropriate headers.`,
+Create a comprehensive, well-structured scientific publication draft based on this research discussion.`,
         add_context_from_internet: false,
       });
 
-      // Open save dialog with the structured content
+      // Open save dialog with the structured summary
       setSaveForm({
         projectId: "",
-        title: "Research Publication Summary",
-        content: response,
+        title: "Research Publication Draft",
+        content: summary,
       });
       setShowSaveDialog(true);
     } catch (error) {
-      console.error("Error summarizing chats:", error);
+      console.error("Error generating summary:", error);
     }
     setSummarizing(false);
   };
@@ -285,19 +305,19 @@ Format the output in clear markdown with appropriate headers.`,
             New Chat
           </button>
           <button
-            onClick={summarizeAllChats}
+            onClick={summarizeAndCreateNote}
             disabled={summarizing || tabs.length === 0}
-            className="ml-auto flex items-center gap-1.5 px-3 py-2 text-sm text-blue-600 hover:bg-blue-50 rounded-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            className="ml-auto flex items-center gap-1.5 px-3 py-2 text-sm text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {summarizing ? (
               <>
                 <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                Summarizing...
+                Generating...
               </>
             ) : (
               <>
-                <Sparkles className="w-3.5 h-3.5" />
-                Summarize & Create Publication
+                <FileText className="w-3.5 h-3.5" />
+                Create Publication
               </>
             )}
           </button>
