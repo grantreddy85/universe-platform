@@ -248,7 +248,7 @@ export default function ValidationTab({ project }) {
                 </div>
               )}
 
-              <div className="border-t border-gray-100 pt-4">
+              <div className="pt-6">
                 <h4 className="text-xs font-semibold text-gray-500 uppercase mb-3">Approvers</h4>
                 {editingApprovers ? (
                   <div className="space-y-2">
