@@ -219,7 +219,7 @@ export default function ValidationTab({ project }) {
               )}
 
               {!selectedValidation.note_id && (
-                <div className="border-t border-gray-100 pt-6">
+                <div>
                   <h4 className="text-sm font-semibold text-gray-900 mb-3">Link a Note for Review</h4>
                   {projectNotes.length > 0 ? (
                     <Select 
