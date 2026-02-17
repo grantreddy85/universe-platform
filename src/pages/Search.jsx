@@ -80,9 +80,11 @@ export default function Search() {
       name: `Chat ${tabs.length + 1}`,
       messages: [],
     };
-    setTabs([...tabs, newTab]);
+    const updated = [...tabs, newTab];
+    setTabs(updated);
     setActiveTab(newTab.id);
     setMessages([]);
+    localStorage.setItem("search_drafts", JSON.stringify(updated));
   };
 
   const closeTab = (tabId) => {
