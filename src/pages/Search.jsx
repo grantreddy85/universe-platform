@@ -90,6 +90,7 @@ export default function Search() {
   const closeTab = (tabId) => {
     const filtered = tabs.filter((t) => t.id !== tabId);
     setTabs(filtered);
+    localStorage.setItem("search_drafts", JSON.stringify(filtered));
     if (activeTab === tabId) {
       setActiveTab(filtered.length > 0 ? filtered[0].id : null);
       setMessages(filtered.length > 0 ? filtered[0].messages : []);
