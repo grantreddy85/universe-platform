@@ -137,7 +137,7 @@ export default function DocumentReview({ validation, note, onClose }) {
       </div>
 
       {/* Footer */}
-      <div className="border-t border-gray-100 p-4 flex gap-2">
+      <div className="border-t border-gray-200 px-8 py-6 flex gap-2 bg-gray-50">
         {isEditing ? (
           <>
             <Button
