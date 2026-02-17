@@ -285,8 +285,17 @@ export default function NotesTab({ project }) {
               style={{ minHeight: "calc(100vh - 280px)" }}
             />
           </div>
-        </div>
-      )}
-    </div>
-  );
-}
+          </div>
+          )}
+
+          {/* Notes Assistant */}
+          {isEditorOpen && (
+          <NotesAssistant
+          allNotes={notes}
+          isOpen={assistantOpen}
+          onToggle={() => setAssistantOpen(!assistantOpen)}
+          />
+          )}
+          </div>
+          );
+          }
