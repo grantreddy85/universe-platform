@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, X, RotateCcw, Send, Loader2, Sparkles, Save, FileText, CheckSquare, Square, BookOpen, AlignLeft } from "lucide-react";
+import { Plus, X, RotateCcw, Send, Loader2, Sparkles, Save, FileText, CheckSquare, Square, BookOpen, AlignLeft, History } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import ReactMarkdown from "react-markdown";
