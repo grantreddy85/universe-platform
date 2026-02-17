@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, Shield } from "lucide-react";
+import { Plus, Shield, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -16,12 +16,19 @@ import { Label } from "@/components/ui/label";
 export default function ValidationTab({ project }) {
   const [showNew, setShowNew] = useState(false);
   const [form, setForm] = useState({ title: "", type: "in_silico" });
+  const [expandedNote, setExpandedNote] = useState(null);
   const queryClient = useQueryClient();
 
   const { data: validations = [], isLoading } = useQuery({
     queryKey: ["project-validations", project.id],
     queryFn: () =>
       base44.entities.ValidationRequest.filter({ project_id: project.id }, "-created_date", 100),
+  });
+
+  const { data: projectNotes = [] } = useQuery({
+    queryKey: ["project-notes", project.id],
+    queryFn: () => base44.entities.Note.filter({ project_id: project.id }, "-updated_date"),
+    initialData: [],
   });
 
   const createMutation = useMutation({
@@ -33,6 +40,39 @@ export default function ValidationTab({ project }) {
       setForm({ title: "", type: "in_silico" });
     },
   });
+
+  const getLinkedNote = (validation) => {
+    if (!validation.results) return null;
+    return projectNotes.find(n => n.content === validation.results);
+  };
+
+  if (expandedNote) {
+    return (
+      <div className="fixed inset-0 z-50 bg-white flex flex-col">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-white">
+          <h2 className="text-lg font-semibold text-gray-900">{expandedNote.title}</h2>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setExpandedNote(null)}
+            className="text-gray-400 hover:text-gray-600"
+          >
+            <X className="w-5 h-5" />
+          </Button>
+        </div>
+        <div className="flex-1 overflow-y-auto p-8">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-sm text-gray-600 mb-6">
+              Created {new Date(expandedNote.created_date).toLocaleDateString()}
+            </div>
+            <div className="whitespace-pre-wrap text-gray-700 leading-relaxed text-sm">
+              {expandedNote.content}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 lg:p-8">
@@ -59,12 +99,23 @@ export default function ValidationTab({ project }) {
         </div>
       ) : (
         <div className="space-y-3">
-          {validations.map((v) => (
-            <div key={v.id} className="bg-white rounded-lg border border-gray-100 p-4">
-              <h3 className="text-sm font-semibold text-gray-900">{v.title}</h3>
-              <p className="text-xs text-gray-500 mt-1">{v.type}</p>
-            </div>
-          ))}
+          {validations.map((v) => {
+            const linkedNote = getLinkedNote(v);
+            return (
+              <div key={v.id} className="bg-white rounded-lg border border-gray-100 p-4">
+                <h3 className="text-sm font-semibold text-gray-900">{v.title}</h3>
+                <p className="text-xs text-gray-500 mt-1">{v.type}</p>
+                {linkedNote && (
+                  <button
+                    onClick={() => setExpandedNote(linkedNote)}
+                    className="mt-3 text-xs text-blue-600 hover:text-blue-700 hover:underline"
+                  >
+                    View Note →
+                  </button>
+                )}
+              </div>
+            );
+          })}
         </div>
       )}
 
