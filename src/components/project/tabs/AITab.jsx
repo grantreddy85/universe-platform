@@ -260,7 +260,7 @@ export default function AITab({ project }) {
     <div className="flex h-[calc(100vh-220px)]">
       {/* Sidebar - Conversations */}
       <div className="w-56 border-r border-gray-100 flex flex-col bg-gray-50/50">
-        <div className="p-3 border-b border-gray-100">
+        <div className="p-3 border-b border-gray-100 space-y-1.5">
           <Button
             onClick={() => setShowNewSessionDialog(true)}
             variant="outline"
@@ -270,6 +270,17 @@ export default function AITab({ project }) {
             <Plus className="w-3 h-3 mr-1.5" />
             New Session
           </Button>
+          {conversations.length > 0 && (
+            <Button
+              onClick={openSummarizeDialog}
+              variant="ghost"
+              size="sm"
+              className="w-full text-xs text-blue-600 hover:bg-blue-50"
+            >
+              <FileText className="w-3 h-3 mr-1.5" />
+              Summarize Sessions
+            </Button>
+          )}
         </div>
         <div className="flex-1 overflow-y-auto p-2 space-y-0.5">
           {conversations.map((convo) => (
