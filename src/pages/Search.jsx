@@ -57,7 +57,20 @@ export default function Search() {
 
   // Reset to landing page when Research tab is clicked
   useEffect(() => {
-    resetAll();
+    const handleStorageChange = () => {
+      resetAll();
+    };
+    
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, []);
+
+  useEffect(() => {
+    const trigger = localStorage.getItem("search_reset_trigger");
+    if (trigger) {
+      resetAll();
+      localStorage.removeItem("search_reset_trigger");
+    }
   }, [location.pathname]);
 
   // Load drafts from localStorage on mount
