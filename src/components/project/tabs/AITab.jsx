@@ -442,6 +442,101 @@ export default function AITab({ project }) {
         </div>
       </div>
 
+      {/* Summarize Dialog */}
+      <Dialog open={showSummarizeDialog} onOpenChange={setShowSummarizeDialog}>
+        <DialogContent className="sm:max-w-xl">
+          <DialogHeader>
+            <DialogTitle className="text-base font-semibold">Summarize AI Sessions into a Note</DialogTitle>
+            <p className="text-xs text-gray-400 mt-0.5">Select sessions, choose a format, and generate a research note saved to this project's Notes tab.</p>
+          </DialogHeader>
+          <div className="space-y-5 mt-2">
+            {/* Session selection */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <Label className="text-xs font-medium text-gray-500 uppercase tracking-wide">Sessions to Include</Label>
+                <button
+                  className="text-xs text-blue-600 hover:underline"
+                  onClick={() => setSelectedConvos(selectedConvos.length === conversations.length ? [] : conversations.map((c) => c.id))}
+                >
+                  {selectedConvos.length === conversations.length ? "Deselect All" : "Select All"}
+                </button>
+              </div>
+              <div className="space-y-1.5 max-h-44 overflow-y-auto border border-gray-100 rounded-xl p-2 bg-gray-50">
+                {conversations.map((convo) => {
+                  const isSelected = selectedConvos.includes(convo.id);
+                  return (
+                    <button
+                      key={convo.id}
+                      onClick={() => toggleConvoSelection(convo.id)}
+                      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all ${
+                        isSelected ? "bg-blue-50 border border-blue-200 text-blue-800" : "bg-white border border-gray-200 text-gray-600 hover:border-gray-300"
+                      }`}
+                    >
+                      {isSelected ? <CheckSquare className="w-4 h-4 text-blue-600 flex-shrink-0" /> : <Square className="w-4 h-4 text-gray-300 flex-shrink-0" />}
+                      <span className="flex-1 text-left font-medium truncate">{convo.metadata?.name || "Session"}</span>
+                    </button>
+                  );
+                })}
+              </div>
+              {selectedConvos.length === 0 && <p className="text-xs text-amber-600">Select at least one session to continue.</p>}
+            </div>
+
+            {/* Format selection */}
+            <div className="space-y-2">
+              <Label className="text-xs font-medium text-gray-500 uppercase tracking-wide">Output Format</Label>
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  onClick={() => setSummarizeFormat("research_paper")}
+                  className={`flex items-start gap-3 p-3 rounded-xl border text-left transition-all ${summarizeFormat === "research_paper" ? "border-blue-400 bg-blue-50" : "border-gray-200 bg-white hover:border-gray-300"}`}
+                >
+                  <BookOpen className={`w-4 h-4 mt-0.5 flex-shrink-0 ${summarizeFormat === "research_paper" ? "text-blue-600" : "text-gray-400"}`} />
+                  <div>
+                    <p className={`text-xs font-semibold ${summarizeFormat === "research_paper" ? "text-blue-800" : "text-gray-700"}`}>Research Paper</p>
+                    <p className="text-[10px] text-gray-400 mt-0.5">Intro · Methodology · Results · Discussion · Conclusion</p>
+                  </div>
+                </button>
+                <button
+                  onClick={() => setSummarizeFormat("simple_summary")}
+                  className={`flex items-start gap-3 p-3 rounded-xl border text-left transition-all ${summarizeFormat === "simple_summary" ? "border-blue-400 bg-blue-50" : "border-gray-200 bg-white hover:border-gray-300"}`}
+                >
+                  <AlignLeft className={`w-4 h-4 mt-0.5 flex-shrink-0 ${summarizeFormat === "simple_summary" ? "text-blue-600" : "text-gray-400"}`} />
+                  <div>
+                    <p className={`text-xs font-semibold ${summarizeFormat === "simple_summary" ? "text-blue-800" : "text-gray-700"}`}>Simple Summary</p>
+                    <p className="text-[10px] text-gray-400 mt-0.5">Key insights and findings in plain format</p>
+                  </div>
+                </button>
+              </div>
+            </div>
+
+            {/* Note Title */}
+            <div className="space-y-1.5">
+              <Label className="text-xs font-medium text-gray-500 uppercase tracking-wide">Note Title *</Label>
+              <input
+                value={summarizeTitle}
+                onChange={(e) => setSummarizeTitle(e.target.value)}
+                placeholder="e.g. Project Research Summary"
+                className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400/30 focus:border-blue-400"
+              />
+            </div>
+          </div>
+          <DialogFooter className="pt-2">
+            <Button type="button" variant="ghost" size="sm" onClick={() => setShowSummarizeDialog(false)}>Cancel</Button>
+            <Button
+              onClick={generateSummary}
+              size="sm"
+              className="bg-blue-600 hover:bg-blue-700 text-xs"
+              disabled={selectedConvos.length === 0 || !summarizeTitle.trim() || summarizing}
+            >
+              {summarizing ? (
+                <><Loader2 className="w-3 h-3 mr-1.5 animate-spin" />Generating...</>
+              ) : (
+                <><Sparkles className="w-3 h-3 mr-1.5" />Generate & Save to Notes</>
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       {/* New Session Dialog */}
       <Dialog open={showNewSessionDialog} onOpenChange={setShowNewSessionDialog}>
         <DialogContent className="sm:max-w-md">
