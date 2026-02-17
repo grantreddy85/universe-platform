@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { X, Save, History, Loader2, Check } from "lucide-react";
 
 export default function DocumentReview({ validation, note, onClose }) {
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(true);
   const [editedContent, setEditedContent] = useState(note?.content || "");
   const [showHistory, setShowHistory] = useState(false);
   const queryClient = useQueryClient();
