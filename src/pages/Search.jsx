@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, X, RotateCcw, Send, Loader2, Sparkles, Save } from "lucide-react";
+import { Plus, X, RotateCcw, Send, Loader2, Sparkles, Save, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import ReactMarkdown from "react-markdown";
@@ -139,6 +139,49 @@ export default function Search() {
     setSaveForm({ projectId: "", title: "", content: "" });
   };
 
+  const summarizeAllSessions = async () => {
+    if (tabs.length === 0 || loading) return;
+    
+    setLoading(true);
+    
+    try {
+      // Gather all messages from all tabs
+      const allMessages = tabs.flatMap(tab => 
+        tab.messages.map(msg => `${msg.role === 'user' ? 'User' : 'Assistant'}: ${msg.content}`)
+      ).join('\n\n');
+
+      // Generate structured publication summary
+      const summary = await base44.integrations.Core.InvokeLLM({
+        prompt: `You are a scientific research assistant. Based on the following research conversation sessions, create a structured scientific publication summary.
+
+Research Conversations:
+${allMessages}
+
+Please structure your response as a mini scientific publication with the following sections:
+1. **Introduction** - Brief overview of the research topic and objectives
+2. **Methodology** - Research approach and methods discussed
+3. **Results** - Key findings and insights from the conversations
+4. **Conclusion** - Summary of main conclusions and implications
+5. **References** - Any key studies, papers, or resources mentioned
+
+Format this as a clear, professional scientific document ready for review and validation.`,
+        add_context_from_internet: false,
+      });
+
+      // Open save dialog with the structured content
+      setSaveForm({
+        projectId: "",
+        title: "Research Summary - " + new Date().toLocaleDateString(),
+        content: summary,
+      });
+      setShowSaveDialog(true);
+    } catch (error) {
+      console.error(error);
+    }
+    
+    setLoading(false);
+  };
+
   const hasStarted = tabs.length > 0;
 
   if (!hasStarted) {
@@ -242,8 +285,16 @@ export default function Search() {
             New Chat
           </button>
           <button
+            onClick={summarizeAllSessions}
+            className="ml-auto flex items-center gap-1.5 px-3 py-2 text-sm text-blue-600 hover:bg-blue-50 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={tabs.length === 0 || loading}
+          >
+            <FileText className="w-3.5 h-3.5" />
+            Summarize All Sessions
+          </button>
+          <button
             onClick={resetAll}
-            className="ml-auto flex items-center gap-1.5 px-3 py-2 text-sm text-gray-400 hover:text-gray-600 rounded-lg transition-colors"
+            className="flex items-center gap-1.5 px-3 py-2 text-sm text-gray-400 hover:text-gray-600 rounded-lg transition-colors"
           >
             <RotateCcw className="w-3.5 h-3.5" />
             Reset All
