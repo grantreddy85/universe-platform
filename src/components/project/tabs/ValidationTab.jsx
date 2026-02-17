@@ -54,24 +54,55 @@ export default function ValidationTab({ project }) {
       <div className="fixed inset-0 z-50 bg-white flex flex-col">
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-white">
           <h2 className="text-lg font-semibold text-gray-900">{expandedNote.title}</h2>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setExpandedNote(null)}
-            className="text-gray-400 hover:text-gray-600"
-          >
-            <X className="w-5 h-5" />
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => {
+                setSelectedValidation(validations.find(v => getLinkedNote(v)?.id === expandedNote.id));
+                setAssistantOpen(!assistantOpen);
+              }}
+              className="text-xs text-gray-500 hover:text-blue-600"
+            >
+              {assistantOpen ? (
+                <>
+                  <X className="w-3.5 h-3.5 mr-1.5" />
+                  Close Assistant
+                </>
+              ) : (
+                <>
+                  <ChevronRight className="w-3.5 h-3.5 mr-1.5" />
+                  Guide
+                </>
+              )}
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setExpandedNote(null)}
+              className="text-gray-400 hover:text-gray-600"
+            >
+              <X className="w-5 h-5" />
+            </Button>
+          </div>
         </div>
-        <div className="flex-1 overflow-y-auto p-8">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-sm text-gray-600 mb-6">
-              Created {new Date(expandedNote.created_date).toLocaleDateString()}
-            </div>
-            <div className="whitespace-pre-wrap text-gray-700 leading-relaxed text-sm">
-              {expandedNote.content}
+        <div className="flex flex-1 overflow-hidden">
+          <div className="flex-1 overflow-y-auto p-8">
+            <div className="max-w-4xl mx-auto">
+              <div className="text-sm text-gray-600 mb-6">
+                Created {new Date(expandedNote.created_date).toLocaleDateString()}
+              </div>
+              <div className="whitespace-pre-wrap text-gray-700 leading-relaxed text-sm">
+                {expandedNote.content}
+              </div>
             </div>
           </div>
+          <ValidationAssistant
+            validation={selectedValidation}
+            linkedNote={expandedNote}
+            isOpen={assistantOpen}
+            onToggle={() => setAssistantOpen(!assistantOpen)}
+          />
         </div>
       </div>
     );
