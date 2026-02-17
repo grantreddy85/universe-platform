@@ -129,7 +129,7 @@ export default function DocumentReview({ validation, note, onClose }) {
             <label className="text-xs font-semibold text-gray-700 uppercase block mb-2">
               Document Content
             </label>
-            <div className="bg-gray-50 rounded-lg border border-gray-200 p-4 text-sm text-gray-700 whitespace-pre-wrap max-h-96 overflow-y-auto">
+            <div className="bg-gray-50 rounded-lg border border-gray-200 p-6 text-base text-gray-700 whitespace-pre-wrap overflow-y-auto" style={{ minHeight: '500px' }}>
               {note.content}
             </div>
           </div>
