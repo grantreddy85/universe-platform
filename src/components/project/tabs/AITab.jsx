@@ -32,12 +32,19 @@ export default function AITab({ project }) {
   const [summarizing, setSummarizing] = useState(false);
   const [saveDestination, setSaveDestination] = useState("current");
   const [newProjectName, setNewProjectName] = useState("");
+  const [allProjects, setAllProjects] = useState([]);
   const messagesEndRef = useRef(null);
   const queryClient = useQueryClient();
 
   useEffect(() => {
     loadConversations();
+    loadProjects();
   }, [project.id]);
+
+  const loadProjects = async () => {
+    const projects = await base44.entities.Project.list("-updated_date", 100);
+    setAllProjects(projects);
+  };
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
