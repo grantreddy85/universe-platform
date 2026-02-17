@@ -43,6 +43,8 @@ export default function Search() {
   const [selectedTabs, setSelectedTabs] = useState([]);
   const [summarizeFormat, setSummarizeFormat] = useState("research_paper");
   const [summarizing, setSummarizing] = useState(false);
+  const [saveDestination, setSaveDestination] = useState("");
+  const [newProjectName, setNewProjectName] = useState("");
   const messagesEndRef = useRef(null);
   const queryClient = useQueryClient();
 
