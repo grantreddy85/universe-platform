@@ -556,17 +556,67 @@ export default function AITab({ project }) {
               </div>
             </div>
 
+            {/* Save Destination */}
+             <div className="space-y-2">
+               <Label className="text-xs font-medium text-gray-500 uppercase tracking-wide">Save To *</Label>
+               <div className="grid grid-cols-3 gap-2">
+                 <button
+                   onClick={() => setSaveDestination("current")}
+                   className={`px-3 py-2.5 rounded-lg text-xs border font-medium transition-all ${
+                     saveDestination === "current"
+                       ? "bg-blue-50 border-blue-400 text-blue-700"
+                       : "bg-white border-gray-200 text-gray-600 hover:border-gray-300"
+                   }`}
+                 >
+                   This Project
+                 </button>
+                 <button
+                   onClick={() => setSaveDestination("workspace")}
+                   className={`px-3 py-2.5 rounded-lg text-xs border font-medium transition-all ${
+                     saveDestination === "workspace"
+                       ? "bg-blue-50 border-blue-400 text-blue-700"
+                       : "bg-white border-gray-200 text-gray-600 hover:border-gray-300"
+                   }`}
+                 >
+                   Workspace
+                 </button>
+                 <button
+                   onClick={() => setSaveDestination("new_project")}
+                   className={`px-3 py-2.5 rounded-lg text-xs border font-medium transition-all ${
+                     saveDestination === "new_project"
+                       ? "bg-blue-50 border-blue-400 text-blue-700"
+                       : "bg-white border-gray-200 text-gray-600 hover:border-gray-300"
+                   }`}
+                 >
+                   New Project
+                 </button>
+               </div>
+             </div>
+
+             {/* New Project Name */}
+             {saveDestination === "new_project" && (
+               <div className="space-y-1.5">
+                 <Label className="text-xs font-medium text-gray-500 uppercase tracking-wide">Project Name *</Label>
+                 <Input
+                   value={newProjectName}
+                   onChange={(e) => setNewProjectName(e.target.value)}
+                   placeholder="e.g. MRSA Resistance Analysis"
+                   className="text-sm"
+                 />
+               </div>
+             )}
+
             {/* Note Title */}
-            <div className="space-y-1.5">
-              <Label className="text-xs font-medium text-gray-500 uppercase tracking-wide">Note Title *</Label>
-              <input
-                value={summarizeTitle}
-                onChange={(e) => setSummarizeTitle(e.target.value)}
-                placeholder="e.g. Project Research Summary"
-                className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400/30 focus:border-blue-400"
-              />
+             <div className="space-y-1.5">
+               <Label className="text-xs font-medium text-gray-500 uppercase tracking-wide">Note Title *</Label>
+               <input
+                 value={summarizeTitle}
+                 onChange={(e) => setSummarizeTitle(e.target.value)}
+                 placeholder="e.g. Project Research Summary"
+                 className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400/30 focus:border-blue-400"
+               />
+             </div>
             </div>
-          </div>
           <DialogFooter className="pt-2">
             <Button type="button" variant="ghost" size="sm" onClick={() => setShowSummarizeDialog(false)}>Cancel</Button>
             <Button
