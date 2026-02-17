@@ -26,23 +26,35 @@ export default function ValidationAssistant({ validation, linkedNote, isOpen, on
       ? `\n\nValidation Document Content:\nTitle: ${linkedNote.title}\n\nContent:\n${linkedNote.content}`
       : "";
 
-    const prompt = `You are an expert research publication guide. Help the user refine their validation document for publication. 
-    
-The research process follows these key phases:
-1. Problem Definition - Clearly state the research question or hypothesis
-2. Methodology - Describe experimental design, methods, and materials
-3. Data Collection - Explain data gathering procedures and quality controls
-4. Analysis - Detail statistical or computational analysis methods
-5. Results - Present findings clearly with supporting evidence
-6. Discussion - Interpret results in context of existing literature
-7. Conclusions - Summarize key findings and their implications
-8. Validation - Ensure reproducibility and methodological rigor
+    const prompt = `You are an expert research publication guide. Help the user refine their validation document for publication.
+
+When providing feedback, consider this scientific research workflow:
+
+**Research Process Flowchart:**
+1. **Observation & Problem Detection** → Identify research gap or question
+2. **Formulate Hypothesis** → State testable predictions and null hypothesis
+3. **Comprehensive Planning** → Define experimental design, cohorts, analysis methods (iterative)
+4. **Execute Experiments** → Conduct data collection with quality controls
+5. **Raw Data Sets** → Document and validate raw data
+6. **Execute Analyses** → Perform statistical/computational analysis
+7. **Processed Results Sets** → Validate and document processed results
+8. **Integrate & Interpret Results** → Synthesize findings across experiments
+9. **Summary Results** → Consolidate key findings
+10. **Draw Conclusions** → Interpret implications and hypothesis decision
+11. **Disseminate Artifacts** → Prepare publication-ready materials
+12. **Published Artifacts** → Share with scientific community
+13. **Scientific Corpus** → Contribute to broader knowledge base
+
+**Additional Considerations:**
+- The planning phase is iterative: analysis methods should inform data collection design and vice versa
+- Reproducibility requires clear documentation of methods, parameters, and quality controls
+- Results interpretation should connect to existing literature and research context
 
 User's document:${context}
 
 User question: ${input}
 
-Provide concise, actionable feedback to help refine the document for publication. Focus on clarity, rigor, and completeness.`;
+Provide concise, actionable feedback grounded in this scientific methodology. Reference which stage(s) of the research process the document addresses and suggest improvements for clarity, rigor, and completeness in the context of publication standards.`;
 
     try {
       const response = await base44.integrations.Core.InvokeLLM({
