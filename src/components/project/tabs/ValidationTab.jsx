@@ -144,16 +144,13 @@ export default function ValidationTab({ project }) {
           {/* Validation List */}
           <div className="col-span-2 space-y-3">
             {validations.map((v) => (
-              <button
-                key={v.id}
-                onClick={() => {
-                    setSelectedValidation(v);
-                    setResultsText(v.results || "");
-                    setEditingResults(false);
-                    if (v.note_id) {
-                      setReviewingNote(true);
-                    }
-                  }}
+             <button
+               key={v.id}
+               onClick={() => {
+                   setSelectedValidation(v);
+                   setResultsText(v.results || "");
+                   setEditingResults(false);
+                 }}
                 className={`w-full text-left bg-white rounded-lg border p-5 hover:border-gray-300 transition-all ${
                   selectedValidation?.id === v.id ? "border-blue-300 ring-1 ring-blue-100 bg-blue-50" : "border-gray-100"
                 }`}
