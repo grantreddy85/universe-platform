@@ -155,34 +155,46 @@ export default function Search() {
   };
 
   const generateSummary = async () => {
-    if (selectedTabs.length === 0 || !saveForm.projectId) return;
+    if (selectedTabs.length === 0 || !saveForm.projectId || !saveForm.title.trim()) return;
     setSummarizing(true);
 
     try {
-      const selectedMessages = tabs
-        .filter((t) => selectedTabs.includes(t.id))
-        .flatMap((t) =>
-          t.messages.map((m) => `${m.role === "user" ? "User" : "AI"}: ${m.content}`)
-        )
+      const selectedSessions = tabs.filter((t) => selectedTabs.includes(t.id));
+      const selectedMessages = selectedSessions
+        .map((t) => {
+          const msgs = t.messages
+            .map((m) => `${m.role === "user" ? "User" : "AI"}: ${m.content}`)
+            .join("\n");
+          return `--- Session: "${t.name}" ---\n${msgs}`;
+        })
         .join("\n\n");
+
+      const sessionNames = selectedSessions.map((t) => t.name).join(", ");
 
       const prompt =
         summarizeFormat === "research_paper"
-          ? `You are a scientific research assistant. Analyze the following AI research chat sessions and create a structured research paper summary with the following sections:
+          ? `You are a scientific research assistant. Analyze the following AI research chat sessions (${sessionNames}) and produce a full structured research paper with these exact sections:
 
-**Introduction**: Provide context and background for the research topic discussed.
-**Methodology**: Describe the research approach, methods, or frameworks mentioned.
-**Results**: Summarize key findings, data, or insights discovered.
-**Discussion**: Interpret the results, discuss implications, and address limitations.
-**Conclusion**: Provide a concise summary of the research outcomes and potential future directions.
+## Introduction
+Provide scientific context, background, and the research question or problem explored in these sessions.
 
-Format the output in Markdown with clear section headings. Be detailed, scientific, and objective.
+## Methodology
+Describe the research approaches, analytical methods, frameworks, or experimental designs discussed.
 
-Chat Sessions:
+## Results
+Summarize the key findings, data points, insights, and outcomes discovered across the sessions.
+
+## Discussion
+Interpret the results, discuss their significance, compare with existing knowledge, and address any limitations or uncertainties raised.
+
+## Conclusion
+Provide a concise synthesis of the research outcomes and suggest potential next steps or future research directions.
+
+Format strictly in Markdown with these exact headings. Be detailed, scientific, and objective. Draw only from the content of the sessions.
+
 ${selectedMessages}`
-          : `Summarize the following AI research chat sessions into a clear, concise, and well-structured note. Highlight key insights, findings, and important information discussed.
+          : `You are a research assistant. Summarize the following AI research chat sessions (${sessionNames}) into a clear, well-structured note. Highlight the key insights, findings, hypotheses, and important information discussed. Use bullet points and short paragraphs for readability.
 
-Chat Sessions:
 ${selectedMessages}`;
 
       const summary = await base44.integrations.Core.InvokeLLM({
@@ -190,9 +202,17 @@ ${selectedMessages}`;
         add_context_from_internet: false,
       });
 
-      setSaveForm({ ...saveForm, content: summary });
+      // Save directly to Notes
+      await base44.entities.Note.create({
+        project_id: saveForm.projectId,
+        title: saveForm.title,
+        content: summary,
+        source: "research_chat",
+      });
+      queryClient.invalidateQueries({ queryKey: ["project-notes", saveForm.projectId] });
       setShowSummarizeDialog(false);
-      setShowSaveDialog(true);
+      setSaveForm({ projectId: "", title: "", content: "" });
+      setSelectedTabs([]);
     } catch (error) {
       console.error("Failed to generate summary:", error);
     }
