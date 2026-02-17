@@ -306,76 +306,51 @@ export default function Search() {
             </form>
           </div>
 
-          <div className="space-y-2">
-            {conversations.length > 0 ? (
-              <>
-                <p className="text-xs font-medium text-gray-400 uppercase tracking-wide px-1">Recent Conversations</p>
-                <div className="max-h-64 overflow-y-auto space-y-2">
-                  {conversations.map((conv, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => {
-                        const newTab = {
-                          id: Date.now().toString(),
-                          name: conv.name || `Chat ${tabs.length + 1}`,
-                          messages: conv.messages || [],
-                        };
-                        setTabs([...tabs, newTab]);
-                        setActiveTab(newTab.id);
-                        setMessages(conv.messages || []);
-                      }}
-                      className="w-full text-left px-5 py-3 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 hover:border-gray-300 transition-all text-sm text-gray-600 hover:text-gray-900 truncate"
-                    >
-                      {conv.name || "Untitled Conversation"}
-                    </button>
-                  ))}
-                </div>
-                <div className="pt-2 border-t border-gray-200 mt-4">
-                  <p className="text-xs font-medium text-gray-400 uppercase tracking-wide px-1 mb-2">Or start new with suggestions</p>
-                  <div className="space-y-2">
-                    {suggestions.slice(0, 3).map((suggestion, idx) => (
-                      <button
-                        key={idx}
-                        onClick={() => {
-                          setInput(suggestion);
-                          createNewChat();
-                          setTimeout(() => {
-                            setInput(suggestion);
-                            sendMessage();
-                          }, 100);
-                        }}
-                        className="w-full text-left px-5 py-3 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 hover:border-gray-300 transition-all text-sm text-gray-600 hover:text-gray-900"
-                      >
-                        {suggestion}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </>
-            ) : (
-              <>
-                <p className="text-xs font-medium text-gray-400 uppercase tracking-wide px-1 mb-2">Start with a suggestion</p>
-                <div className="space-y-2.5">
-                  {suggestions.map((suggestion, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => {
-                        setInput(suggestion);
-                        createNewChat();
-                        setTimeout(() => {
-                          setInput(suggestion);
-                          sendMessage();
-                        }, 100);
-                      }}
-                      className="w-full text-left px-5 py-3 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 hover:border-gray-300 transition-all text-sm text-gray-600 hover:text-gray-900"
-                    >
-                      {suggestion}
-                    </button>
-                  ))}
-                </div>
-              </>
-            )}
-          </div>
+          {conversations.length > 0 ? (
+            <div className="space-y-2">
+              <p className="text-xs font-medium text-gray-400 uppercase tracking-wide px-1">Recent Conversations</p>
+              <div className="max-h-96 overflow-y-auto space-y-2">
+                {conversations.map((conv, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => {
+                      const newTab = {
+                        id: Date.now().toString(),
+                        name: conv.name || `Chat ${tabs.length + 1}`,
+                        messages: conv.messages || [],
+                      };
+                      setTabs([...tabs, newTab]);
+                      setActiveTab(newTab.id);
+                      setMessages(conv.messages || []);
+                    }}
+                    className="w-full text-left px-5 py-3 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 hover:border-gray-300 transition-all text-sm text-gray-600 hover:text-gray-900 truncate"
+                  >
+                    {conv.name || "Untitled Conversation"}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <div className="space-y-2.5">
+              <p className="text-xs font-medium text-gray-400 uppercase tracking-wide px-1 mb-2">Start with a suggestion</p>
+              {suggestions.map((suggestion, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => {
+                    setInput(suggestion);
+                    createNewChat();
+                    setTimeout(() => {
+                      setInput(suggestion);
+                      sendMessage();
+                    }, 100);
+                  }}
+                  className="w-full text-left px-5 py-3 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 hover:border-gray-300 transition-all text-sm text-gray-600 hover:text-gray-900"
+                >
+                  {suggestion}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     );
