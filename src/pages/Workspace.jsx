@@ -185,8 +185,27 @@ export default function Workspace() {
     },
   });
 
+  const [selectedCategory, setSelectedCategory] = useState(null);
+
+  const categoryCounts = items.reduce((acc, item) => {
+    acc[item.type] = (acc[item.type] || 0) + 1;
+    return acc;
+  }, {});
+
+  const categories = Object.keys(typeLabels).map(key => ({
+    type: key,
+    label: typeLabels[key],
+    icon: typeIcons[key],
+    style: typeStyles[key],
+    count: categoryCounts[key] || 0,
+  }));
+
+  const filteredItems = selectedCategory 
+    ? items.filter(item => item.type === selectedCategory)
+    : items;
+
   return (
-    <div className="min-h-screen p-6 lg:p-10 max-w-5xl mx-auto">
+    <div className="min-h-screen p-6 lg:p-10 max-w-6xl mx-auto">
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-2xl font-semibold text-gray-900 tracking-tight">Workspace</h1>
@@ -203,10 +222,10 @@ export default function Workspace() {
       </div>
 
       {isLoading ? (
-        <div className="space-y-3">
-          {[1, 2, 3].map((i) => (
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {[1, 2, 3, 4].map((i) => (
             <div key={i} className="bg-white rounded-lg border border-gray-100 p-5 animate-pulse">
-              <div className="h-4 w-48 bg-gray-100 rounded" />
+              <div className="h-4 w-24 bg-gray-100 rounded" />
             </div>
           ))}
         </div>
@@ -216,91 +235,135 @@ export default function Workspace() {
           <p className="text-sm text-gray-400">Your workspace is empty. Add notes, ideas, or draft hypotheses here.</p>
         </div>
       ) : (
-        <div className="space-y-3">
-          {items.map((item) => {
-            const Icon = typeIcons[item.type] || StickyNote;
-            const assignedProject = projects.find((p) => p.id === item.assigned_project_id);
-            return (
-              <div
-                key={item.id}
-                className="bg-white rounded-lg border border-gray-100 p-5 hover:border-gray-200 transition-colors"
+        <>
+          {/* Category Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8">
+            {categories.map((cat) => {
+              const Icon = cat.icon;
+              return (
+                <button
+                  key={cat.type}
+                  onClick={() => setSelectedCategory(selectedCategory === cat.type ? null : cat.type)}
+                  className={`relative bg-white rounded-xl border-2 p-5 transition-all text-left hover:shadow-md ${
+                    selectedCategory === cat.type
+                      ? "border-blue-400 shadow-sm"
+                      : "border-gray-100 hover:border-gray-200"
+                  }`}
+                >
+                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center mb-3 ${cat.style}`}>
+                    <Icon className="w-5 h-5" strokeWidth={1.8} />
+                  </div>
+                  <h3 className="text-sm font-semibold text-gray-900 mb-1">{cat.label}</h3>
+                  <p className="text-2xl font-bold text-gray-800">{cat.count}</p>
+                  <p className="text-xs text-gray-400 mt-0.5">
+                    {cat.count === 1 ? "item" : "items"}
+                  </p>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Items List */}
+          {selectedCategory && (
+            <div className="flex items-center gap-2 mb-4">
+              <h2 className="text-sm font-medium text-gray-700">
+                Showing: {typeLabels[selectedCategory]}
+              </h2>
+              <button
+                onClick={() => setSelectedCategory(null)}
+                className="text-xs text-blue-600 hover:text-blue-700"
               >
-                <div className="flex items-start justify-between">
-                  <div className="flex items-start gap-3">
-                    <div
-                      className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5 ${
-                        typeStyles[item.type] || typeStyles.note
-                      }`}
-                    >
-                      <Icon className="w-3.5 h-3.5" strokeWidth={1.8} />
-                    </div>
-                    <div>
-                      <h3 className="text-sm font-semibold text-gray-900">{item.title}</h3>
-                      {item.content && (
-                        <p className="text-xs text-gray-500 mt-1 line-clamp-2">{item.content}</p>
-                      )}
-                      <div className="flex items-center gap-2 mt-2">
-                        <Badge
-                          variant="secondary"
-                          className={`text-[10px] uppercase ${typeStyles[item.type] || typeStyles.note}`}
-                        >
-                          {typeLabels[item.type] || item.type}
-                        </Badge>
-                        {assignedProject && (
-                          <Badge variant="outline" className="text-[10px]">
-                            <FolderInput className="w-2.5 h-2.5 mr-1" />
-                            {assignedProject.title}
-                          </Badge>
+                Clear filter
+              </button>
+            </div>
+          )}
+
+          <div className="space-y-3">
+            {filteredItems.map((item) => {
+              const Icon = typeIcons[item.type] || StickyNote;
+              const assignedProject = projects.find((p) => p.id === item.assigned_project_id);
+              return (
+                <div
+                  key={item.id}
+                  className="bg-white rounded-lg border border-gray-100 p-5 hover:border-gray-200 transition-colors"
+                >
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-start gap-3">
+                      <div
+                        className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5 ${
+                          typeStyles[item.type] || typeStyles.note
+                        }`}
+                      >
+                        <Icon className="w-3.5 h-3.5" strokeWidth={1.8} />
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-semibold text-gray-900">{item.title}</h3>
+                        {item.content && (
+                          <p className="text-xs text-gray-500 mt-1 line-clamp-2">{item.content}</p>
                         )}
-                        <span className="text-[11px] text-gray-400">
-                          {item.created_date && format(new Date(item.created_date), "MMM d")}
-                        </span>
+                        <div className="flex items-center gap-2 mt-2">
+                          <Badge
+                            variant="secondary"
+                            className={`text-[10px] uppercase ${typeStyles[item.type] || typeStyles.note}`}
+                          >
+                            {typeLabels[item.type] || item.type}
+                          </Badge>
+                          {assignedProject && (
+                            <Badge variant="outline" className="text-[10px]">
+                              <FolderInput className="w-2.5 h-2.5 mr-1" />
+                              {assignedProject.title}
+                            </Badge>
+                          )}
+                          <span className="text-[11px] text-gray-400">
+                            {item.created_date && format(new Date(item.created_date), "MMM d")}
+                          </span>
+                        </div>
                       </div>
                     </div>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon" className="h-7 w-7 text-gray-400">
+                          <MoreHorizontal className="w-4 h-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem
+                          onClick={() => {
+                            setEditingItem(item);
+                            setForm({ title: item.title, type: item.type, content: item.content || "" });
+                          }}
+                        >
+                          <Edit3 className="w-3.5 h-3.5 mr-2" />
+                          Edit
+                        </DropdownMenuItem>
+                        {projects.length > 0 && (
+                          <>
+                            {projects.slice(0, 5).map((p) => (
+                              <DropdownMenuItem
+                                key={p.id}
+                                onClick={() => assignMutation.mutate({ id: item.id, projectId: p.id, item })}
+                              >
+                                <FolderInput className="w-3.5 h-3.5 mr-2" />
+                                Assign to {p.title}
+                              </DropdownMenuItem>
+                            ))}
+                          </>
+                        )}
+                        <DropdownMenuItem
+                          className="text-red-600"
+                          onClick={() => deleteMutation.mutate(item.id)}
+                        >
+                          <Trash2 className="w-3.5 h-3.5 mr-2" />
+                          Delete
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </div>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon" className="h-7 w-7 text-gray-400">
-                        <MoreHorizontal className="w-4 h-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem
-                        onClick={() => {
-                          setEditingItem(item);
-                          setForm({ title: item.title, type: item.type, content: item.content || "" });
-                        }}
-                      >
-                        <Edit3 className="w-3.5 h-3.5 mr-2" />
-                        Edit
-                      </DropdownMenuItem>
-                      {projects.length > 0 && (
-                        <>
-                          {projects.slice(0, 5).map((p) => (
-                            <DropdownMenuItem
-                              key={p.id}
-                              onClick={() => assignMutation.mutate({ id: item.id, projectId: p.id, item })}
-                            >
-                              <FolderInput className="w-3.5 h-3.5 mr-2" />
-                              Assign to {p.title}
-                            </DropdownMenuItem>
-                          ))}
-                        </>
-                      )}
-                      <DropdownMenuItem
-                        className="text-red-600"
-                        onClick={() => deleteMutation.mutate(item.id)}
-                      >
-                        <Trash2 className="w-3.5 h-3.5 mr-2" />
-                        Delete
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
                 </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+        </>
       )}
 
       <Dialog open={showNew || editingItem} onOpenChange={(open) => {
