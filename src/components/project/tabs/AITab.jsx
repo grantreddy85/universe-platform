@@ -122,38 +122,66 @@ export default function AITab({ project }) {
   };
 
   const generateSummary = async () => {
-    if (selectedConvos.length === 0 || !summarizeTitle.trim()) return;
-    setSummarizing(true);
+     if (selectedConvos.length === 0 || !summarizeTitle.trim()) return;
+     if (saveDestination === "new_project" && !newProjectName.trim()) return;
+     setSummarizing(true);
 
-    const selected = conversations.filter((c) => selectedConvos.includes(c.id));
-    const fullConvos = await Promise.all(selected.map((c) => base44.agents.getConversation(c.id)));
+     const selected = conversations.filter((c) => selectedConvos.includes(c.id));
+     const fullConvos = await Promise.all(selected.map((c) => base44.agents.getConversation(c.id)));
 
-    const sessionTexts = fullConvos.map((c) => {
-      const msgs = (c.messages || [])
-        .filter((m) => m.role !== "system")
-        .map((m) => `${m.role === "user" ? "User" : "AI"}: ${m.content?.replace(/\[Project Context:[\s\S]*?User Question: /s, "") || ""}`)
-        .join("\n");
-      return `--- Session: "${c.metadata?.name || "Session"}" ---\n${msgs}`;
-    }).join("\n\n");
+     const sessionTexts = fullConvos.map((c) => {
+       const msgs = (c.messages || [])
+         .filter((m) => m.role !== "system")
+         .map((m) => `${m.role === "user" ? "User" : "AI"}: ${m.content?.replace(/\[Project Context:[\s\S]*?User Question: /s, "") || ""}`)
+         .join("\n");
+       return `--- Session: "${c.metadata?.name || "Session"}" ---\n${msgs}`;
+     }).join("\n\n");
 
-    const sessionNames = selected.map((c) => c.metadata?.name || "Session").join(", ");
+     const sessionNames = selected.map((c) => c.metadata?.name || "Session").join(", ");
 
-    const prompt = summarizeFormat === "research_paper"
-      ? `You are a scientific research assistant. Analyze the following AI research chat sessions (${sessionNames}) and produce a full structured research paper with these exact sections:\n\n## Introduction\nProvide scientific context, background, and the research question or problem explored in these sessions.\n\n## Methodology\nDescribe the research approaches, analytical methods, frameworks, or experimental designs discussed.\n\n## Results\nSummarize the key findings, data points, insights, and outcomes discovered across the sessions.\n\n## Discussion\nInterpret the results, discuss their significance, compare with existing knowledge, and address any limitations or uncertainties raised.\n\n## Conclusion\nProvide a concise synthesis of the research outcomes and suggest potential next steps or future research directions.\n\nFormat strictly in Markdown with these exact headings. Be detailed, scientific, and objective. Draw only from the content of the sessions.\n\n${sessionTexts}`
-      : `You are a research assistant. Summarize the following AI research chat sessions (${sessionNames}) into a clear, well-structured note. Highlight the key insights, findings, hypotheses, and important information discussed. Use bullet points and short paragraphs for readability.\n\n${sessionTexts}`;
+     const prompt = summarizeFormat === "research_paper"
+       ? `You are a scientific research assistant. Analyze the following AI research chat sessions (${sessionNames}) and produce a full structured research paper with these exact sections:\n\n## Introduction\nProvide scientific context, background, and the research question or problem explored in these sessions.\n\n## Methodology\nDescribe the research approaches, analytical methods, frameworks, or experimental designs discussed.\n\n## Results\nSummarize the key findings, data points, insights, and outcomes discovered across the sessions.\n\n## Discussion\nInterpret the results, discuss their significance, compare with existing knowledge, and address any limitations or uncertainties raised.\n\n## Conclusion\nProvide a concise synthesis of the research outcomes and suggest potential next steps or future research directions.\n\nFormat strictly in Markdown with these exact headings. Be detailed, scientific, and objective. Draw only from the content of the sessions.\n\n${sessionTexts}`
+       : `You are a research assistant. Summarize the following AI research chat sessions (${sessionNames}) into a clear, well-structured note. Highlight the key insights, findings, hypotheses, and important information discussed. Use bullet points and short paragraphs for readability.\n\n${sessionTexts}`;
 
-    const summary = await base44.integrations.Core.InvokeLLM({ prompt, add_context_from_internet: false });
+     const summary = await base44.integrations.Core.InvokeLLM({ prompt, add_context_from_internet: false });
 
-    await base44.entities.Note.create({
-      project_id: project.id,
-      title: summarizeTitle,
-      content: summary,
-      source: "ai_copilot",
-    });
-    queryClient.invalidateQueries({ queryKey: ["project-notes", project.id] });
-    setShowSummarizeDialog(false);
-    setSummarizing(false);
-  };
+     if (saveDestination === "workspace") {
+       // Save to Workspace as WorkspaceItem
+       await base44.entities.WorkspaceItem.create({
+         title: summarizeTitle,
+         type: "note",
+         content: summary,
+         metadata: { source: "ai_copilot_summary" }
+       });
+     } else if (saveDestination === "new_project") {
+       // Create new project and save note to it
+       const newProj = await base44.entities.Project.create({
+         title: newProjectName.trim(),
+         status: "draft"
+       });
+       await base44.entities.Note.create({
+         project_id: newProj.id,
+         title: summarizeTitle,
+         content: summary,
+         source: "ai_copilot",
+       });
+       queryClient.invalidateQueries({ queryKey: ["projects"] });
+     } else {
+       // Save to current project
+       await base44.entities.Note.create({
+         project_id: project.id,
+         title: summarizeTitle,
+         content: summary,
+         source: "ai_copilot",
+       });
+       queryClient.invalidateQueries({ queryKey: ["project-notes", project.id] });
+     }
+
+     setShowSummarizeDialog(false);
+     setSummarizing(false);
+     setSaveDestination("current");
+     setNewProjectName("");
+   };
 
   const switchConversation = async (convo) => {
     const full = await base44.agents.getConversation(convo.id);
