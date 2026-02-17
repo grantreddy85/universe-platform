@@ -410,20 +410,7 @@ export default function ValidationTab({ project }) {
         </div>
       )}
 
-      {reviewingNote && selectedNote && (
-        <div className="fixed inset-0 z-50 bg-white flex flex-col">
-          <DocumentReview 
-            validation={selectedValidation} 
-            note={selectedNote}
-            onClose={() => setReviewingNote(false)}
-            onEditNote={() => {
-              setReviewingNote(false);
-              // Navigate to Notes tab and select the note for editing
-              // This assumes a parent component handles tab switching
-            }}
-          />
-        </div>
-      )}
+
 
       <Dialog open={showNew} onOpenChange={setShowNew}>
         <DialogContent className="sm:max-w-md">
