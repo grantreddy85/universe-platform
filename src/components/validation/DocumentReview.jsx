@@ -6,9 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { X, Save, History, Loader2, Check } from "lucide-react";
 
-export default function DocumentReview({ validation, note, onClose }) {
-  const [isEditing, setIsEditing] = useState(true);
-  const [editedContent, setEditedContent] = useState(note?.content || "");
+export default function DocumentReview({ validation, note, onClose, onEditNote }) {
   const [showHistory, setShowHistory] = useState(false);
   const queryClient = useQueryClient();
 
