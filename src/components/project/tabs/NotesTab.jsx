@@ -289,13 +289,11 @@ export default function NotesTab({ project }) {
           )}
 
           {/* Notes Assistant */}
-          {isEditorOpen && (
           <NotesAssistant
-          allNotes={notes}
-          isOpen={assistantOpen}
-          onToggle={() => setAssistantOpen(!assistantOpen)}
+            allNotes={notes}
+            isOpen={assistantOpen}
+            onToggle={() => setAssistantOpen(!assistantOpen)}
           />
-          )}
           </div>
           );
           }
