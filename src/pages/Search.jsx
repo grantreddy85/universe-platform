@@ -157,69 +157,97 @@ export default function Search() {
   };
 
   const generateSummary = async () => {
-    if (selectedTabs.length === 0 || !saveForm.projectId || !saveForm.title.trim()) return;
-    setSummarizing(true);
+     if (selectedTabs.length === 0 || !saveForm.title.trim() || !saveDestination) return;
+     if (saveDestination === "new_project" && !newProjectName.trim()) return;
+     setSummarizing(true);
 
-    try {
-      const selectedSessions = tabs.filter((t) => selectedTabs.includes(t.id));
-      const selectedMessages = selectedSessions
-        .map((t) => {
-          const msgs = t.messages
-            .map((m) => `${m.role === "user" ? "User" : "AI"}: ${m.content}`)
-            .join("\n");
-          return `--- Session: "${t.name}" ---\n${msgs}`;
-        })
-        .join("\n\n");
+     try {
+       const selectedSessions = tabs.filter((t) => selectedTabs.includes(t.id));
+       const selectedMessages = selectedSessions
+         .map((t) => {
+           const msgs = t.messages
+             .map((m) => `${m.role === "user" ? "User" : "AI"}: ${m.content}`)
+             .join("\n");
+           return `--- Session: "${t.name}" ---\n${msgs}`;
+         })
+         .join("\n\n");
 
-      const sessionNames = selectedSessions.map((t) => t.name).join(", ");
+       const sessionNames = selectedSessions.map((t) => t.name).join(", ");
 
-      const prompt =
-        summarizeFormat === "research_paper"
-          ? `You are a scientific research assistant. Analyze the following AI research chat sessions (${sessionNames}) and produce a full structured research paper with these exact sections:
+       const prompt =
+         summarizeFormat === "research_paper"
+           ? `You are a scientific research assistant. Analyze the following AI research chat sessions (${sessionNames}) and produce a full structured research paper with these exact sections:
 
-## Introduction
-Provide scientific context, background, and the research question or problem explored in these sessions.
+  ## Introduction
+  Provide scientific context, background, and the research question or problem explored in these sessions.
 
-## Methodology
-Describe the research approaches, analytical methods, frameworks, or experimental designs discussed.
+  ## Methodology
+  Describe the research approaches, analytical methods, frameworks, or experimental designs discussed.
 
-## Results
-Summarize the key findings, data points, insights, and outcomes discovered across the sessions.
+  ## Results
+  Summarize the key findings, data points, insights, and outcomes discovered across the sessions.
 
-## Discussion
-Interpret the results, discuss their significance, compare with existing knowledge, and address any limitations or uncertainties raised.
+  ## Discussion
+  Interpret the results, discuss their significance, compare with existing knowledge, and address any limitations or uncertainties raised.
 
-## Conclusion
-Provide a concise synthesis of the research outcomes and suggest potential next steps or future research directions.
+  ## Conclusion
+  Provide a concise synthesis of the research outcomes and suggest potential next steps or future research directions.
 
-Format strictly in Markdown with these exact headings. Be detailed, scientific, and objective. Draw only from the content of the sessions.
+  Format strictly in Markdown with these exact headings. Be detailed, scientific, and objective. Draw only from the content of the sessions.
 
-${selectedMessages}`
-          : `You are a research assistant. Summarize the following AI research chat sessions (${sessionNames}) into a clear, well-structured note. Highlight the key insights, findings, hypotheses, and important information discussed. Use bullet points and short paragraphs for readability.
+  ${selectedMessages}`
+           : `You are a research assistant. Summarize the following AI research chat sessions (${sessionNames}) into a clear, well-structured note. Highlight the key insights, findings, hypotheses, and important information discussed. Use bullet points and short paragraphs for readability.
 
-${selectedMessages}`;
+  ${selectedMessages}`;
 
-      const summary = await base44.integrations.Core.InvokeLLM({
-        prompt,
-        add_context_from_internet: false,
-      });
+       const summary = await base44.integrations.Core.InvokeLLM({
+         prompt,
+         add_context_from_internet: false,
+       });
 
-      // Save directly to Notes
-      await base44.entities.Note.create({
-        project_id: saveForm.projectId,
-        title: saveForm.title,
-        content: summary,
-        source: "research_chat",
-      });
-      queryClient.invalidateQueries({ queryKey: ["project-notes", saveForm.projectId] });
-      setShowSummarizeDialog(false);
-      setSaveForm({ projectId: "", title: "", content: "" });
-      setSelectedTabs([]);
-    } catch (error) {
-      console.error("Failed to generate summary:", error);
-    }
-    setSummarizing(false);
-  };
+       if (saveDestination === "workspace") {
+         // Save to Workspace as WorkspaceItem
+         await base44.entities.WorkspaceItem.create({
+           title: saveForm.title,
+           type: "note",
+           content: summary,
+           metadata: { source: "research_chat_summary" }
+         });
+       } else if (saveDestination === "new_project") {
+         // Create new project and save note to it
+         const newProj = await base44.entities.Project.create({
+           title: newProjectName.trim(),
+           status: "draft"
+         });
+         await base44.entities.Note.create({
+           project_id: newProj.id,
+           title: saveForm.title,
+           content: summary,
+           source: "research_chat",
+         });
+         queryClient.invalidateQueries({ queryKey: ["projects-list"] });
+       } else if (saveDestination.startsWith("project_")) {
+         // Save to selected project
+         const projectId = saveDestination.split("_")[1];
+         await base44.entities.Note.create({
+           project_id: projectId,
+           title: saveForm.title,
+           content: summary,
+           source: "research_chat",
+         });
+         queryClient.invalidateQueries({ queryKey: ["project-notes", projectId] });
+       }
+
+       setShowSummarizeDialog(false);
+       setSaveForm({ projectId: "", title: "", content: "" });
+       setSelectedTabs([]);
+       setSaveDestination("");
+       setNewProjectName("");
+     } catch (error) {
+       console.error("Failed to generate summary:", error);
+     }
+     setSummarizing(false);
+   };
 
   const hasStarted = tabs.length > 0;
 
