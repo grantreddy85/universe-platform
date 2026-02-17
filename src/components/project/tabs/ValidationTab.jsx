@@ -136,10 +136,8 @@ export default function ValidationTab({ project }) {
              <button
                key={v.id}
                onClick={() => {
-                   setSelectedValidation(v);
-                   setResultsText(v.results || "");
-                   setEditingResults(false);
-                 }}
+                    setSelectedValidation(v);
+                  }}
                 className={`w-full text-left bg-white rounded-lg border p-5 hover:border-gray-300 transition-all ${
                   selectedValidation?.id === v.id ? "border-blue-300 ring-1 ring-blue-100 bg-blue-50" : "border-gray-100"
                 }`}
