@@ -503,7 +503,7 @@ export default function AITab({ project }) {
         <DialogContent className="sm:max-w-xl">
           <DialogHeader>
             <DialogTitle className="text-base font-semibold">Summarize AI Sessions into a Note</DialogTitle>
-            <p className="text-xs text-gray-400 mt-0.5">Select sessions, choose a format, and generate a research note saved to this project's Notes tab.</p>
+            <p className="text-xs text-gray-400 mt-0.5">Select sessions, choose a format, and generate an editable research note saved to your project.</p>
           </DialogHeader>
           <div className="space-y-5 mt-2">
             {/* Session selection */}
