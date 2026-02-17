@@ -53,6 +53,23 @@ export default function Search() {
     queryFn: () => base44.entities.Project.list("title", 100),
   });
 
+  // Load drafts from localStorage on mount
+  useEffect(() => {
+    const saved = localStorage.getItem("search_drafts");
+    if (saved) {
+      try {
+        const drafts = JSON.parse(saved);
+        if (drafts.length > 0) {
+          setTabs(drafts);
+          setActiveTab(drafts[0].id);
+          setMessages(drafts[0].messages || []);
+        }
+      } catch (e) {
+        console.error("Failed to load drafts:", e);
+      }
+    }
+  }, []);
+
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
