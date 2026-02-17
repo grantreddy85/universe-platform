@@ -140,9 +140,9 @@ export default function ValidationTab({ project }) {
           <p className="text-sm text-gray-400">No validation requests yet.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-3 gap-6">
+        <div className="grid grid-cols-4 gap-6">
           {/* Validation List */}
-          <div className="col-span-2 space-y-3">
+          <div className="col-span-1 space-y-3">
             {validations.map((v) => (
              <button
                key={v.id}
