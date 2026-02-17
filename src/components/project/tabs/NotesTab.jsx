@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, StickyNote, MoreHorizontal, Trash2, Edit3, Send } from "lucide-react";
+import { Plus, StickyNote, MoreHorizontal, Trash2, Edit3 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -66,17 +66,6 @@ export default function NotesTab({ project }) {
     mutationFn: (id) => base44.entities.Note.delete(id),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["project-notes", project.id] }),
   });
-
-  const sendForValidation = async (note) => {
-    await base44.entities.ValidationRequest.create({
-      project_id: project.id,
-      title: `Validation: ${note.title}`,
-      type: "in_silico",
-      status: "pending",
-      linked_assets: [note.id],
-    });
-    queryClient.invalidateQueries({ queryKey: ["project-validations", project.id] });
-  };
 
   return (
     <div className="p-6 lg:p-8">
@@ -152,14 +141,6 @@ export default function NotesTab({ project }) {
                       <Edit3 className="w-3.5 h-3.5 mr-2" />
                       Edit
                     </DropdownMenuItem>
-                    {note.source === "research_chat" && (
-                      <DropdownMenuItem
-                        onClick={() => sendForValidation(note)}
-                      >
-                        <Send className="w-3.5 h-3.5 mr-2" />
-                        Send for Validation
-                      </DropdownMenuItem>
-                    )}
                     <DropdownMenuItem
                       className="text-red-600"
                       onClick={() => deleteMutation.mutate(note.id)}
