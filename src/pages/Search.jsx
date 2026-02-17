@@ -125,9 +125,14 @@ export default function Search() {
       setMessages(finalMessages);
 
       // Update tab
-      setTabs((prev) =>
-        prev.map((t) => (t.id === activeTab ? { ...t, messages: finalMessages } : t))
-      );
+      setTabs((prev) => {
+        const updated = prev.map((t) => (t.id === activeTab ? { ...t, messages: finalMessages } : t));
+        const currentTab = updated.find((t) => t.id === activeTab);
+        if (currentTab) {
+          saveConversationToHistory(currentTab.name, finalMessages);
+        }
+        return updated;
+      });
     } catch (error) {
       console.error(error);
     }
