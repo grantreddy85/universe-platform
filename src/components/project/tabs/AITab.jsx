@@ -94,6 +94,18 @@ export default function AITab({ project }) {
     setEditingName("");
   };
 
+  const deleteConversation = async (convoId) => {
+    setConversations((prev) => prev.filter((c) => c.id !== convoId));
+    if (activeConversation?.id === convoId) {
+      setActiveConversation(conversations[1] || null);
+      if (conversations[1]) {
+        setMessages(conversations[1].messages || []);
+      } else {
+        setMessages([]);
+      }
+    }
+  };
+
   const openSummarizeDialog = () => {
     setSelectedConvos(conversations.map((c) => c.id));
     setSummarizeTitle("");
