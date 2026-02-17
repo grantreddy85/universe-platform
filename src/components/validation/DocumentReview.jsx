@@ -123,40 +123,25 @@ export default function DocumentReview({ validation, note, onClose }) {
 
       {/* Footer */}
       <div className="border-t border-gray-200 px-8 py-6 flex gap-2 bg-gray-50">
-        {isEditing ? (
-          <>
-            <Button
-              className="bg-blue-600 hover:bg-blue-700 text-xs flex-1"
-              onClick={() => updateMutation.mutate(editedContent)}
-              disabled={updateMutation.isPending}
-            >
-              {updateMutation.isPending ? (
-                <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" />
-              ) : (
-                <Check className="w-3.5 h-3.5 mr-1.5" />
-              )}
-              Save Changes
-            </Button>
-            <Button
-              variant="outline"
-              onClick={() => {
-                setIsEditing(false);
-                setEditedContent(note.content);
-              }}
-              className="text-xs"
-            >
-              Cancel
-            </Button>
-          </>
-        ) : (
-          <Button
-            variant="outline"
-            onClick={() => setIsEditing(true)}
-            className="text-xs w-full"
-          >
-            Suggest Changes
-          </Button>
-        )}
+       <Button
+         className="bg-blue-600 hover:bg-blue-700 text-xs"
+         onClick={() => updateMutation.mutate(editedContent)}
+         disabled={updateMutation.isPending}
+       >
+         {updateMutation.isPending ? (
+           <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" />
+         ) : (
+           <Check className="w-3.5 h-3.5 mr-1.5" />
+         )}
+         Save Changes
+       </Button>
+       <Button
+         variant="outline"
+         onClick={onClose}
+         className="text-xs"
+       >
+         Close
+       </Button>
       </div>
     </div>
   );
