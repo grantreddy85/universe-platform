@@ -4,6 +4,14 @@ import { Send, Sparkles, Loader2, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import ReactMarkdown from "react-markdown";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
 
 export default function AITab({ project }) {
   const [conversations, setConversations] = useState([]);
@@ -12,6 +20,8 @@ export default function AITab({ project }) {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [initLoading, setInitLoading] = useState(true);
+  const [showNewSessionDialog, setShowNewSessionDialog] = useState(false);
+  const [newSessionName, setNewSessionName] = useState("");
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
@@ -39,17 +49,19 @@ export default function AITab({ project }) {
     setInitLoading(false);
   };
 
-  const createNewChat = async () => {
+  const createNewChat = async (customName) => {
     const convo = await base44.agents.createConversation({
       agent_name: "research_copilot",
       metadata: {
-        name: `${project.title} — Session`,
+        name: customName || `${project.title} — Session`,
         project_id: project.id,
       },
     });
     setConversations((prev) => [convo, ...prev]);
     setActiveConversation(convo);
     setMessages([]);
+    setShowNewSessionDialog(false);
+    setNewSessionName("");
   };
 
   const switchConversation = async (convo) => {
@@ -65,15 +77,8 @@ export default function AITab({ project }) {
 
     let convo = activeConversation;
     if (!convo) {
-      convo = await base44.agents.createConversation({
-        agent_name: "research_copilot",
-        metadata: {
-          name: `${project.title} — Session`,
-          project_id: project.id,
-        },
-      });
-      setConversations((prev) => [convo, ...prev]);
-      setActiveConversation(convo);
+      await createNewChat();
+      return;
     }
 
     setMessages((prev) => [...prev, { role: "user", content: text }]);
@@ -173,7 +178,7 @@ export default function AITab({ project }) {
       <div className="w-56 border-r border-gray-100 flex flex-col bg-gray-50/50">
         <div className="p-3 border-b border-gray-100">
           <Button
-            onClick={createNewChat}
+            onClick={() => setShowNewSessionDialog(true)}
             variant="outline"
             size="sm"
             className="w-full text-xs"
@@ -285,6 +290,49 @@ export default function AITab({ project }) {
           </form>
         </div>
       </div>
+
+      {/* New Session Dialog */}
+      <Dialog open={showNewSessionDialog} onOpenChange={setShowNewSessionDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-lg font-semibold">New Session</DialogTitle>
+          </DialogHeader>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              createNewChat(newSessionName.trim() || undefined);
+            }}
+            className="space-y-4 mt-2"
+          >
+            <div className="space-y-1.5">
+              <Label className="text-xs font-medium text-gray-500">Session Name</Label>
+              <Input
+                value={newSessionName}
+                onChange={(e) => setNewSessionName(e.target.value)}
+                placeholder={`${project.title} — Session`}
+                className="text-sm"
+                autoFocus
+              />
+            </div>
+            <DialogFooter className="pt-2">
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  setShowNewSessionDialog(false);
+                  setNewSessionName("");
+                }}
+              >
+                Cancel
+              </Button>
+              <Button type="submit" size="sm" className="bg-blue-600 hover:bg-blue-700 text-xs">
+                Create Session
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
