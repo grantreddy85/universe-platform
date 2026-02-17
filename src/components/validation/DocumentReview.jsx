@@ -82,7 +82,7 @@ export default function DocumentReview({ validation, note, onClose }) {
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="flex-1 overflow-y-auto px-8 py-6 space-y-4">
         {showHistory && validation.edit_history?.length > 0 && (
           <div className="bg-blue-50 rounded-lg border border-blue-200 p-4 space-y-3 mb-4">
             <h4 className="text-xs font-semibold text-blue-900 uppercase">Edit History</h4>
