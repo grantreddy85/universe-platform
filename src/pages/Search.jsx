@@ -609,6 +609,43 @@ export default function Search() {
         </DialogContent>
       </Dialog>
 
+      {/* History Modal */}
+      <Dialog open={showHistoryModal} onOpenChange={setShowHistoryModal}>
+        <DialogContent className="sm:max-w-md max-h-[80vh] flex flex-col">
+          <DialogHeader>
+            <DialogTitle className="text-base font-semibold flex items-center gap-2">
+              <History className="w-4 h-4" />
+              Conversation History
+            </DialogTitle>
+          </DialogHeader>
+          <div className="flex-1 overflow-y-auto space-y-1.5 pr-2">
+            {tabs.length === 0 ? (
+              <p className="text-sm text-gray-400 text-center py-8">No conversations yet</p>
+            ) : (
+              tabs.slice().reverse().map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => {
+                    switchTab(tab.id);
+                    setShowHistoryModal(false);
+                  }}
+                  className={`w-full text-left px-4 py-3 rounded-lg border transition-all ${
+                    activeTab === tab.id
+                      ? "bg-blue-50 border-blue-200"
+                      : "border-gray-100 hover:bg-gray-50 hover:border-gray-200"
+                  }`}
+                >
+                  <p className={`text-sm font-medium truncate ${activeTab === tab.id ? "text-blue-700" : "text-gray-900"}`}>
+                    {tab.name}
+                  </p>
+                  <p className="text-xs text-gray-400 mt-0.5">{tab.messages.length} messages</p>
+                </button>
+              ))
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
+
       {/* Save single message Dialog */}
       <Dialog open={showSaveDialog} onOpenChange={setShowSaveDialog}>
         <DialogContent className="sm:max-w-md">
