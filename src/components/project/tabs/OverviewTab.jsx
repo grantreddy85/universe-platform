@@ -215,35 +215,7 @@ export default function OverviewTab({ project, onTabChange }) {
         )}
       </div>
 
-      {/* Assigned Tasks from Workspace */}
-      {workspaceItems.length > 0 && (
-        <div className="bg-white rounded-xl border border-gray-100 p-6">
-          <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-4">
-            Assigned Workspace Items
-          </h3>
-          <div className="space-y-2">
-            {workspaceItems.slice(0, 5).map((item) => (
-              <div
-                key={item.id}
-                className="flex items-center gap-3 p-3 rounded-lg border border-gray-100 hover:border-gray-200 transition-colors"
-              >
-                <Badge
-                  variant="secondary"
-                  className="text-[10px] uppercase bg-purple-50 text-purple-600"
-                >
-                  {item.type}
-                </Badge>
-                <span className="text-sm text-gray-700 flex-1">{item.title}</span>
-              </div>
-            ))}
-            {workspaceItems.length > 5 && (
-              <p className="text-xs text-gray-400 text-center pt-2">
-                +{workspaceItems.length - 5} more items
-              </p>
-            )}
-          </div>
-        </div>
-      )}
+
     </div>
   );
 }
