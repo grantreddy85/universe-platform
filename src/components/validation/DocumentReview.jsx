@@ -91,15 +91,9 @@ export default function DocumentReview({ validation, note, onClose, onEditNote }
       <div className="border-t border-gray-200 px-8 py-6 flex gap-2 bg-gray-50">
        <Button
          className="bg-blue-600 hover:bg-blue-700 text-xs"
-         onClick={() => updateMutation.mutate(editedContent)}
-         disabled={updateMutation.isPending}
+         onClick={onEditNote}
        >
-         {updateMutation.isPending ? (
-           <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" />
-         ) : (
-           <Check className="w-3.5 h-3.5 mr-1.5" />
-         )}
-         Save Changes
+         Edit Note
        </Button>
        <Button
          variant="outline"
