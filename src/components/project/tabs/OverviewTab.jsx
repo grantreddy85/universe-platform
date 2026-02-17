@@ -76,12 +76,6 @@ export default function OverviewTab({ project, onTabChange }) {
           subtitle={`${validatedAssets.length} validated`}
           color="text-green-600"
         />
-        <StatCard
-          icon={Target}
-          label="Workspace Items"
-          value={workspaceItems.length}
-          color="text-purple-600"
-        />
       </div>
 
       {/* Research Progress Guidance */}
