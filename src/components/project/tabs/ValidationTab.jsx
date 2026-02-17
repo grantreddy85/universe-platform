@@ -128,67 +128,196 @@ export default function ValidationTab({ project }) {
           <p className="text-sm text-gray-400">No validation requests yet.</p>
         </div>
       ) : (
-        <div className="space-y-3">
-          {validations.map((v) => (
-            <div
-              key={v.id}
-              className="bg-white rounded-lg border border-gray-100 p-5 hover:border-gray-200 transition-colors"
-            >
-              <div className="flex items-start justify-between mb-3">
-                <div>
-                  <div className="flex items-center gap-2 mb-1">
-                    <h3 className="text-sm font-semibold text-gray-900">{v.title}</h3>
-                    <Badge
-                      variant="secondary"
-                      className={`text-[10px] uppercase ${statusStyles[v.status] || statusStyles.pending}`}
-                    >
-                      {(v.status || "pending").replace(/_/g, " ")}
-                    </Badge>
+        <div className="grid grid-cols-3 gap-6">
+          {/* Validation List */}
+          <div className="col-span-2 space-y-3">
+            {validations.map((v) => (
+              <button
+                key={v.id}
+                onClick={() => {
+                  setSelectedValidation(v);
+                  setResultsText(v.results || "");
+                  setEditingResults(false);
+                }}
+                className={`w-full text-left bg-white rounded-lg border p-5 hover:border-gray-300 transition-all ${
+                  selectedValidation?.id === v.id ? "border-blue-300 ring-1 ring-blue-100 bg-blue-50" : "border-gray-100"
+                }`}
+              >
+                <div className="flex items-start justify-between mb-3">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-1">
+                      <h3 className="text-sm font-semibold text-gray-900">{v.title}</h3>
+                      <Badge
+                        variant="secondary"
+                        className={`text-[10px] uppercase ${statusStyles[v.status] || statusStyles.pending}`}
+                      >
+                        {(v.status || "pending").replace(/_/g, " ")}
+                      </Badge>
+                    </div>
+                    <p className="text-xs text-gray-400">
+                      {v.type === "in_silico" ? "In-Silico Validation" : "Lab Submission"}
+                    </p>
                   </div>
-                  <p className="text-xs text-gray-400">
-                    {v.type === "in_silico" ? "In-Silico Validation" : "Lab Submission"}
-                  </p>
+                  <DropdownMenu onClick={(e) => e.stopPropagation()}>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="icon" className="h-7 w-7 text-gray-400">
+                        <MoreHorizontal className="w-4 h-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem
+                        className="text-red-600"
+                        onClick={() => deleteMutation.mutate(v.id)}
+                      >
+                        <Trash2 className="w-3.5 h-3.5 mr-2" />
+                        Delete
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </div>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon" className="h-7 w-7 text-gray-400">
-                      <MoreHorizontal className="w-4 h-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem
-                      className="text-red-600"
-                      onClick={() => deleteMutation.mutate(v.id)}
+                {(v.reproducibility_score != null || v.confidence_index != null) && (
+                  <div className="grid grid-cols-2 gap-4 mt-3">
+                    {v.reproducibility_score != null && (
+                      <div>
+                        <p className="text-[11px] text-gray-400 mb-1">Reproducibility</p>
+                        <Progress value={v.reproducibility_score} className="h-1.5" />
+                        <p className="text-xs text-gray-600 mt-1">{v.reproducibility_score}%</p>
+                      </div>
+                    )}
+                    {v.confidence_index != null && (
+                      <div>
+                        <p className="text-[11px] text-gray-400 mb-1">Confidence</p>
+                        <Progress value={v.confidence_index} className="h-1.5" />
+                        <p className="text-xs text-gray-600 mt-1">{v.confidence_index}%</p>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </button>
+            ))}
+          </div>
+
+          {/* Details Panel */}
+          {selectedValidation && (
+            <div className="col-span-1 bg-white rounded-xl border border-gray-100 p-5 space-y-5 max-h-[600px] overflow-y-auto">
+              <div>
+                <h4 className="text-xs font-semibold text-gray-500 uppercase mb-3">Results</h4>
+                {editingResults ? (
+                  <div className="space-y-2">
+                    <Textarea
+                      value={resultsText}
+                      onChange={(e) => setResultsText(e.target.value)}
+                      className="text-xs h-32"
+                      placeholder="Add validation results..."
+                    />
+                    <div className="flex gap-2">
+                      <Button
+                        size="sm"
+                        className="bg-blue-600 hover:bg-blue-700 text-xs flex-1"
+                        onClick={() => updateResultsMutation.mutate({ id: selectedValidation.id, results: resultsText })}
+                        disabled={updateResultsMutation.isPending}
+                      >
+                        {updateResultsMutation.isPending ? <Loader2 className="w-3 h-3 mr-1 animate-spin" /> : <Check className="w-3 h-3 mr-1" />}
+                        Save
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => setEditingResults(false)}
+                        className="text-xs"
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                  </div>
+                ) : (
+                  <div>
+                    {resultsText ? (
+                      <p className="text-xs text-gray-600 bg-gray-50 rounded-lg p-3 mb-2">{resultsText}</p>
+                    ) : (
+                      <p className="text-xs text-gray-400 italic mb-2">No results added yet</p>
+                    )}
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => setEditingResults(true)}
+                      className="text-xs text-blue-600 hover:bg-blue-50 w-full justify-start"
                     >
-                      <Trash2 className="w-3.5 h-3.5 mr-2" />
-                      Delete
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                      <Edit2 className="w-3 h-3 mr-1.5" />
+                      {resultsText ? "Edit Results" : "Add Results"}
+                    </Button>
+                  </div>
+                )}
               </div>
-              {(v.reproducibility_score != null || v.confidence_index != null) && (
-                <div className="grid grid-cols-2 gap-4 mt-3">
-                  {v.reproducibility_score != null && (
-                    <div>
-                      <p className="text-[11px] text-gray-400 mb-1">Reproducibility</p>
-                      <Progress value={v.reproducibility_score} className="h-1.5" />
-                      <p className="text-xs text-gray-600 mt-1">{v.reproducibility_score}%</p>
+
+              <div className="border-t border-gray-100 pt-4">
+                <h4 className="text-xs font-semibold text-gray-500 uppercase mb-3">Approvers</h4>
+                {editingApprovers ? (
+                  <div className="space-y-2">
+                    <Input
+                      value={approverEmail}
+                      onChange={(e) => setApproverEmail(e.target.value)}
+                      placeholder="approver@example.com"
+                      type="email"
+                      className="text-xs h-8"
+                    />
+                    <div className="flex gap-2">
+                      <Button
+                        size="sm"
+                        className="bg-blue-600 hover:bg-blue-700 text-xs flex-1"
+                        onClick={() => {
+                          if (approverEmail.trim() && !selectedValidation.approvers?.includes(approverEmail)) {
+                            addApproverMutation.mutate({ validation: selectedValidation, email: approverEmail.trim() });
+                          }
+                        }}
+                        disabled={!approverEmail.trim() || addApproverMutation.isPending}
+                      >
+                        {addApproverMutation.isPending ? <Loader2 className="w-3 h-3 mr-1 animate-spin" /> : <Mail className="w-3 h-3 mr-1" />}
+                        Add
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => setEditingApprovers(false)}
+                        className="text-xs"
+                      >
+                        Done
+                      </Button>
                     </div>
-                  )}
-                  {v.confidence_index != null && (
-                    <div>
-                      <p className="text-[11px] text-gray-400 mb-1">Confidence</p>
-                      <Progress value={v.confidence_index} className="h-1.5" />
-                      <p className="text-xs text-gray-600 mt-1">{v.confidence_index}%</p>
-                    </div>
-                  )}
-                </div>
-              )}
-              {v.results && (
-                <p className="text-xs text-gray-500 mt-3 bg-gray-50 rounded-lg p-3">{v.results}</p>
-              )}
+                  </div>
+                ) : (
+                  <div>
+                    {selectedValidation.approvers?.length > 0 ? (
+                      <div className="space-y-1.5 mb-2">
+                        {selectedValidation.approvers.map((email) => (
+                          <div key={email} className="flex items-center justify-between bg-blue-50 rounded-lg p-2 border border-blue-200 text-xs">
+                            <span className="text-gray-700">{email}</span>
+                            <button
+                              onClick={() => removeApproverMutation.mutate({ validation: selectedValidation, email })}
+                              className="text-gray-400 hover:text-red-500 transition-colors"
+                            >
+                              <X className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-xs text-gray-400 italic mb-2">No approvers assigned</p>
+                    )}
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => setEditingApprovers(true)}
+                      className="text-xs text-blue-600 hover:bg-blue-50 w-full justify-start"
+                    >
+                      <Mail className="w-3 h-3 mr-1.5" />
+                      Add Approver
+                    </Button>
+                  </div>
+                )}
+              </div>
             </div>
-          ))}
+          )}
         </div>
       )}
 
