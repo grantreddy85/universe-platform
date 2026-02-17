@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, FileText, MoreHorizontal, Trash2, FolderInput, Lightbulb, Upload, StickyNote, Edit3 } from "lucide-react";
+import { Plus, FileText, MoreHorizontal, Trash2, FolderInput, Lightbulb, Upload, StickyNote, Edit3, FlaskConical, GitBranch, Archive, Shield, Box } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -31,16 +31,32 @@ import { format } from "date-fns";
 
 const typeIcons = {
   note: StickyNote,
-  hypothesis_draft: Lightbulb,
-  data_upload: Upload,
-  idea: Lightbulb,
+  hypothesis: Lightbulb,
+  cohort: FlaskConical,
+  workflow: GitBranch,
+  document: Archive,
+  validation: Shield,
+  asset: Box,
 };
 
 const typeStyles = {
   note: "bg-gray-50 text-gray-600",
-  hypothesis_draft: "bg-amber-50 text-amber-600",
-  data_upload: "bg-blue-50 text-blue-600",
-  idea: "bg-violet-50 text-violet-600",
+  hypothesis: "bg-amber-50 text-amber-600",
+  cohort: "bg-blue-50 text-blue-600",
+  workflow: "bg-purple-50 text-purple-600",
+  document: "bg-green-50 text-green-600",
+  validation: "bg-red-50 text-red-600",
+  asset: "bg-indigo-50 text-indigo-600",
+};
+
+const typeLabels = {
+  note: "Note",
+  hypothesis: "Hypothesis",
+  cohort: "Cohort",
+  workflow: "Workflow",
+  document: "Document",
+  validation: "Validation",
+  asset: "Asset",
 };
 
 export default function Workspace() {
@@ -83,9 +99,90 @@ export default function Workspace() {
   });
 
   const assignMutation = useMutation({
-    mutationFn: ({ id, projectId }) =>
-      base44.entities.WorkspaceItem.update(id, { assigned_project_id: projectId }),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["workspace-items"] }),
+    mutationFn: async ({ id, projectId, item }) => {
+      // Create the appropriate entity based on type
+      const entityData = {
+        project_id: projectId,
+        title: item.title,
+        description: item.content,
+        content: item.content,
+      };
+
+      switch (item.type) {
+        case "note":
+          await base44.entities.Note.create({
+            project_id: projectId,
+            title: item.title,
+            content: item.content || "",
+            source: "manual",
+          });
+          break;
+        case "hypothesis":
+          await base44.entities.Hypothesis.create({
+            project_id: projectId,
+            title: item.title,
+            description: item.content || "",
+            status: "draft",
+          });
+          break;
+        case "cohort":
+          await base44.entities.Cohort.create({
+            project_id: projectId,
+            name: item.title,
+            status: "draft",
+          });
+          break;
+        case "workflow":
+          await base44.entities.Workflow.create({
+            project_id: projectId,
+            title: item.title,
+            description: item.content || "",
+            status: "draft",
+            type: "other",
+          });
+          break;
+        case "document":
+          if (item.file_url) {
+            await base44.entities.ProjectDocument.create({
+              project_id: projectId,
+              title: item.title,
+              file_url: item.file_url,
+              file_type: "other",
+            });
+          }
+          break;
+        case "validation":
+          await base44.entities.ValidationRequest.create({
+            project_id: projectId,
+            title: item.title,
+            type: "in_silico",
+            status: "pending",
+          });
+          break;
+        case "asset":
+          await base44.entities.Asset.create({
+            project_id: projectId,
+            title: item.title,
+            type: "hypothesis",
+            description: item.content || "",
+            status: "draft",
+          });
+          break;
+      }
+
+      // Update workspace item as assigned
+      await base44.entities.WorkspaceItem.update(id, { assigned_project_id: projectId });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["workspace-items"] });
+      queryClient.invalidateQueries({ queryKey: ["project-notes"] });
+      queryClient.invalidateQueries({ queryKey: ["project-hypotheses"] });
+      queryClient.invalidateQueries({ queryKey: ["project-cohorts"] });
+      queryClient.invalidateQueries({ queryKey: ["project-workflows"] });
+      queryClient.invalidateQueries({ queryKey: ["project-documents"] });
+      queryClient.invalidateQueries({ queryKey: ["project-validations"] });
+      queryClient.invalidateQueries({ queryKey: ["project-assets"] });
+    },
   });
 
   return (
@@ -147,7 +244,7 @@ export default function Workspace() {
                           variant="secondary"
                           className={`text-[10px] uppercase ${typeStyles[item.type] || typeStyles.note}`}
                         >
-                          {item.type?.replace(/_/g, " ")}
+                          {typeLabels[item.type] || item.type}
                         </Badge>
                         {assignedProject && (
                           <Badge variant="outline" className="text-[10px]">
@@ -182,7 +279,7 @@ export default function Workspace() {
                           {projects.slice(0, 5).map((p) => (
                             <DropdownMenuItem
                               key={p.id}
-                              onClick={() => assignMutation.mutate({ id: item.id, projectId: p.id })}
+                              onClick={() => assignMutation.mutate({ id: item.id, projectId: p.id, item })}
                             >
                               <FolderInput className="w-3.5 h-3.5 mr-2" />
                               Assign to {p.title}
@@ -248,9 +345,12 @@ export default function Workspace() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="note">Note</SelectItem>
-                  <SelectItem value="hypothesis_draft">Hypothesis Draft</SelectItem>
-                  <SelectItem value="data_upload">Data Upload</SelectItem>
-                  <SelectItem value="idea">Idea</SelectItem>
+                  <SelectItem value="hypothesis">Hypothesis</SelectItem>
+                  <SelectItem value="cohort">Cohort</SelectItem>
+                  <SelectItem value="workflow">Workflow</SelectItem>
+                  <SelectItem value="document">Document</SelectItem>
+                  <SelectItem value="validation">Validation Request</SelectItem>
+                  <SelectItem value="asset">Asset</SelectItem>
                 </SelectContent>
               </Select>
             </div>
