@@ -212,17 +212,73 @@ export default function AITab({ project }) {
         </div>
         <div className="flex-1 overflow-y-auto p-2 space-y-0.5">
           {conversations.map((convo) => (
-            <button
+            <div
               key={convo.id}
-              onClick={() => switchConversation(convo)}
-              className={`w-full text-left px-3 py-2 rounded-lg text-xs transition-colors truncate ${
+              className={`w-full px-3 py-2 rounded-lg text-xs transition-colors group ${
                 activeConversation?.id === convo.id
                   ? "bg-blue-50 text-blue-600 font-medium"
                   : "text-gray-500 hover:bg-gray-100"
               }`}
             >
-              {convo.metadata?.name || "Session"}
-            </button>
+              {editingConvoId === convo.id ? (
+                <div className="flex items-center gap-1">
+                  <Input
+                    value={editingName}
+                    onChange={(e) => setEditingName(e.target.value)}
+                    className="h-6 text-xs"
+                    autoFocus
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        updateConversationName(convo.id, editingName);
+                      } else if (e.key === "Escape") {
+                        setEditingConvoId(null);
+                        setEditingName("");
+                      }
+                    }}
+                  />
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-6 w-6 flex-shrink-0"
+                    onClick={() => updateConversationName(convo.id, editingName)}
+                  >
+                    <Check className="w-3 h-3" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-6 w-6 flex-shrink-0"
+                    onClick={() => {
+                      setEditingConvoId(null);
+                      setEditingName("");
+                    }}
+                  >
+                    <X className="w-3 h-3" />
+                  </Button>
+                </div>
+              ) : (
+                <div className="flex items-center justify-between gap-2">
+                  <button
+                    onClick={() => switchConversation(convo)}
+                    className="flex-1 text-left truncate"
+                  >
+                    {convo.metadata?.name || "Session"}
+                  </button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-5 w-5 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setEditingConvoId(convo.id);
+                      setEditingName(convo.metadata?.name || "");
+                    }}
+                  >
+                    <Pencil className="w-3 h-3" />
+                  </Button>
+                </div>
+              )}
+            </div>
           ))}
           {conversations.length === 0 && (
             <p className="text-[11px] text-gray-400 text-center py-6 px-2">
