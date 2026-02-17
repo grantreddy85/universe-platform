@@ -65,7 +65,7 @@ export default function ValidationTab({ project }) {
               }}
               className="text-xs text-gray-500 hover:text-blue-600"
             >
-              {assistantOpen ? (
+              {isAssistantVisible ? (
                 <>
                   <X className="w-3.5 h-3.5 mr-1.5" />
                   Close Assistant
