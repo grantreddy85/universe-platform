@@ -82,13 +82,9 @@ export default function DocumentReview({ validation, note, onClose, onEditNote }
           </div>
         )}
 
-        <Textarea
-          value={editedContent}
-          onChange={(e) => setEditedContent(e.target.value)}
-          className="w-full text-base leading-relaxed resize-none focus:outline-none border-0 p-0 bg-transparent"
-          placeholder="Start typing..."
-          style={{ minHeight: '600px' }}
-        />
+        <div className="bg-gray-50 rounded-lg border border-gray-200 p-6 text-base text-gray-700 whitespace-pre-wrap overflow-y-auto" style={{ minHeight: '600px' }}>
+          {note.content}
+        </div>
       </div>
 
       {/* Footer */}
