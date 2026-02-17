@@ -79,6 +79,67 @@ export default function AITab({ project }) {
     setMessages((prev) => [...prev, { role: "user", content: text }]);
     setLoading(true);
 
+    // Fetch all project data for context
+    const [notes, documents, hypotheses, cohorts, workflows, validations, assets] = await Promise.all([
+      base44.entities.Note.filter({ project_id: project.id }, "-created_date", 50),
+      base44.entities.ProjectDocument.filter({ project_id: project.id }, "-created_date", 50),
+      base44.entities.Hypothesis.filter({ project_id: project.id }, "-created_date", 50),
+      base44.entities.Cohort.filter({ project_id: project.id }, "-created_date", 50),
+      base44.entities.Workflow.filter({ project_id: project.id }, "-created_date", 50),
+      base44.entities.ValidationRequest.filter({ project_id: project.id }, "-created_date", 50),
+      base44.entities.Asset.filter({ project_id: project.id }, "-created_date", 50),
+    ]);
+
+    // Build context string
+    let contextStr = `[Project Context: "${project.title}"]\n`;
+    contextStr += `Description: ${project.description || "No description"}\n`;
+    contextStr += `Field: ${project.field || "Unspecified"}\n`;
+    contextStr += `Status: ${project.status}\n\n`;
+
+    if (notes.length > 0) {
+      contextStr += `=== NOTES (${notes.length}) ===\n`;
+      notes.forEach(n => contextStr += `- "${n.title}": ${n.content?.substring(0, 200) || 'No content'}...\n`);
+      contextStr += `\n`;
+    }
+
+    if (hypotheses.length > 0) {
+      contextStr += `=== HYPOTHESES (${hypotheses.length}) ===\n`;
+      hypotheses.forEach(h => contextStr += `- "${h.title}": ${h.description?.substring(0, 150) || 'No description'}, Status: ${h.status}\n`);
+      contextStr += `\n`;
+    }
+
+    if (cohorts.length > 0) {
+      contextStr += `=== COHORTS (${cohorts.length}) ===\n`;
+      cohorts.forEach(c => contextStr += `- "${c.name}": Organism=${c.organism || 'N/A'}, Strain=${c.strain || 'N/A'}, Sample Size=${c.sample_size || 'N/A'}, Status: ${c.status}\n`);
+      contextStr += `\n`;
+    }
+
+    if (workflows.length > 0) {
+      contextStr += `=== WORKFLOWS (${workflows.length}) ===\n`;
+      workflows.forEach(w => contextStr += `- "${w.title}": Type=${w.type}, Status=${w.status}, ${w.results_summary ? 'Results: ' + w.results_summary.substring(0, 150) : 'No results yet'}\n`);
+      contextStr += `\n`;
+    }
+
+    if (documents.length > 0) {
+      contextStr += `=== VAULT DOCUMENTS (${documents.length}) ===\n`;
+      documents.forEach(d => contextStr += `- "${d.title}": ${d.file_type}, ${d.summary ? 'Summary: ' + d.summary.substring(0, 150) : 'No summary'}...\n`);
+      contextStr += `\n`;
+    }
+
+    if (validations.length > 0) {
+      contextStr += `=== VALIDATIONS (${validations.length}) ===\n`;
+      validations.forEach(v => contextStr += `- "${v.title}": Type=${v.type}, Status=${v.status}, Reproducibility=${v.reproducibility_score || 'N/A'}\n`);
+      contextStr += `\n`;
+    }
+
+    if (assets.length > 0) {
+      contextStr += `=== ASSETS (${assets.length}) ===\n`;
+      assets.forEach(a => contextStr += `- "${a.title}": Type=${a.type}, Status=${a.status}\n`);
+      contextStr += `\n`;
+    }
+
+    contextStr += `User Question: ${text}`;
+
     const unsubscribe = base44.agents.subscribeToConversation(
       convo.id,
       (data) => {
@@ -92,7 +153,7 @@ export default function AITab({ project }) {
 
     await base44.agents.addMessage(convo, {
       role: "user",
-      content: `[Context: Project "${project.title}" — ${project.description || "No description"}, Field: ${project.field || "Unspecified"}]\n\n${text}`,
+      content: contextStr,
     });
 
     setTimeout(() => unsubscribe(), 60000);
@@ -175,7 +236,7 @@ export default function AITab({ project }) {
                   }`}
                 >
                   {msg.role === "user" ? (
-                    <p className="leading-relaxed whitespace-pre-wrap">{msg.content?.replace(/\[Context:.*?\]\n\n/s, "")}</p>
+                    <p className="leading-relaxed whitespace-pre-wrap">{msg.content?.replace(/\[Project Context:[\s\S]*?User Question: /s, "")}</p>
                   ) : (
                     <ReactMarkdown className="prose prose-sm prose-gray max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
                       {msg.content || ""}
