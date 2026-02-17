@@ -10,9 +10,7 @@ export default function DocumentReview({ validation, note, onClose, onEditNote }
   const [showHistory, setShowHistory] = useState(false);
   const queryClient = useQueryClient();
 
-  useEffect(() => {
-    setEditedContent(note?.content || "");
-  }, [note]);
+
 
   const updateMutation = useMutation({
     mutationFn: async (newContent) => {
