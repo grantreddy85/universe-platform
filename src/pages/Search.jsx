@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, X, RotateCcw, Send, Loader2, Sparkles, Save } from "lucide-react";
+import { Plus, X, RotateCcw, Send, Loader2, Sparkles, Save, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import ReactMarkdown from "react-markdown";
@@ -39,6 +39,7 @@ export default function Search() {
   const [loading, setLoading] = useState(false);
   const [showSaveDialog, setShowSaveDialog] = useState(false);
   const [saveForm, setSaveForm] = useState({ projectId: "", title: "", content: "" });
+  const [summarizing, setSummarizing] = useState(false);
   const messagesEndRef = useRef(null);
   const queryClient = useQueryClient();
 
@@ -137,6 +138,59 @@ export default function Search() {
     queryClient.invalidateQueries({ queryKey: ["project-notes", saveForm.projectId] });
     setShowSaveDialog(false);
     setSaveForm({ projectId: "", title: "", content: "" });
+  };
+
+  const summarizeAllChats = async () => {
+    if (tabs.length === 0 || summarizing) return;
+    
+    setSummarizing(true);
+    try {
+      // Gather all messages from all tabs
+      const allMessages = tabs.flatMap(tab => 
+        tab.messages.map(msg => `[${msg.role.toUpperCase()}]: ${msg.content}`)
+      ).join("\n\n");
+
+      // Generate structured publication-format summary
+      const prompt = `Based on the following research chat sessions, create a structured scientific publication summary. Format the output with these sections:
+
+## Introduction
+Provide context and background for the research discussed.
+
+## Methodology
+Describe the approaches, methods, or frameworks discussed.
+
+## Results
+Summarize the key findings, insights, and discoveries from the discussions.
+
+## Conclusion
+Synthesize the main takeaways and potential implications.
+
+## References
+List any sources, papers, or data mentioned.
+
+---
+Research Chat Sessions:
+${allMessages}
+
+Please provide a comprehensive, well-structured summary suitable for a scientific mini-publication.`;
+
+      const summary = await base44.integrations.Core.InvokeLLM({
+        prompt: prompt,
+        add_context_from_internet: false,
+      });
+
+      // Open save dialog with pre-filled content
+      setSaveForm({ 
+        projectId: "", 
+        title: "Research Summary - " + new Date().toLocaleDateString(), 
+        content: summary 
+      });
+      setShowSaveDialog(true);
+    } catch (error) {
+      console.error("Error summarizing chats:", error);
+    } finally {
+      setSummarizing(false);
+    }
   };
 
   const hasStarted = tabs.length > 0;
@@ -242,8 +296,25 @@ export default function Search() {
             New Chat
           </button>
           <button
+            onClick={summarizeAllChats}
+            disabled={summarizing || tabs.length === 0}
+            className="ml-auto flex items-center gap-1.5 px-3 py-2 text-sm text-blue-600 hover:bg-blue-50 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {summarizing ? (
+              <>
+                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                Summarizing...
+              </>
+            ) : (
+              <>
+                <FileText className="w-3.5 h-3.5" />
+                Summarize & Create Note
+              </>
+            )}
+          </button>
+          <button
             onClick={resetAll}
-            className="ml-auto flex items-center gap-1.5 px-3 py-2 text-sm text-gray-400 hover:text-gray-600 rounded-lg transition-colors"
+            className="flex items-center gap-1.5 px-3 py-2 text-sm text-gray-400 hover:text-gray-600 rounded-lg transition-colors"
           >
             <RotateCcw className="w-3.5 h-3.5" />
             Reset All
