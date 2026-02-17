@@ -8,8 +8,7 @@ import {
   Box,
   Users,
   TrendingUp,
-  Clock,
-  Target
+  Clock
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
