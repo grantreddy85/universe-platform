@@ -12,33 +12,7 @@ export default function DocumentReview({ validation, note, onClose, onEditNote }
 
 
 
-  const updateMutation = useMutation({
-    mutationFn: async (newContent) => {
-      // Update the note
-      await base44.entities.Note.update(note.id, { content: newContent });
 
-      // Track edit in validation history
-      const user = await base44.auth.me();
-      const editHistory = validation.edit_history || [];
-      const newEdit = {
-        editor_email: user.email,
-        timestamp: new Date().toISOString(),
-        original_content: note.content,
-        edited_content: newContent,
-        change_summary: `Edited by ${user.full_name || user.email}`
-      };
-
-      // Update validation request with new edit history
-      await base44.entities.ValidationRequest.update(validation.id, {
-        edit_history: [...editHistory, newEdit]
-      });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["project-notes"] });
-      queryClient.invalidateQueries({ queryKey: ["project-validations"] });
-      setIsEditing(false);
-    },
-  });
 
   if (!note) {
     return (
