@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, X, RotateCcw, Send, Loader2, Sparkles, Save, FileText } from "lucide-react";
+import { Plus, X, RotateCcw, Send, Loader2, Sparkles, Save } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import ReactMarkdown from "react-markdown";
@@ -39,7 +39,6 @@ export default function Search() {
   const [loading, setLoading] = useState(false);
   const [showSaveDialog, setShowSaveDialog] = useState(false);
   const [saveForm, setSaveForm] = useState({ projectId: "", title: "", content: "" });
-  const [summarizing, setSummarizing] = useState(false);
   const messagesEndRef = useRef(null);
   const queryClient = useQueryClient();
 
@@ -138,68 +137,6 @@ export default function Search() {
     queryClient.invalidateQueries({ queryKey: ["project-notes", saveForm.projectId] });
     setShowSaveDialog(false);
     setSaveForm({ projectId: "", title: "", content: "" });
-  };
-
-  const summarizeAndCreateNote = async () => {
-    if (tabs.length === 0 || summarizing) return;
-    
-    setSummarizing(true);
-    try {
-      // Gather all messages from all tabs
-      const allMessages = tabs.flatMap(tab => tab.messages || []);
-      
-      if (allMessages.length === 0) {
-        setSummarizing(false);
-        return;
-      }
-
-      // Create a conversation string
-      const conversationText = allMessages
-        .map(msg => `${msg.role === "user" ? "User" : "Assistant"}: ${msg.content}`)
-        .join("\n\n");
-
-      // Use InvokeLLM to generate structured summary
-      const summary = await base44.integrations.Core.InvokeLLM({
-        prompt: `You are a scientific research assistant. Based on the following conversation(s) from research chat sessions, create a structured scientific publication draft.
-
-Format your response with the following sections:
-# Introduction
-[Provide context and background]
-
-# Methodology
-[Describe approaches and methods discussed]
-
-# Results
-[Summarize key findings and outcomes]
-
-# Discussion
-[Analysis and interpretation]
-
-# Conclusion
-[Summary and future directions]
-
-# References
-[List any sources or citations mentioned]
-
-Here is the conversation:
-
-${conversationText}
-
-Create a comprehensive, well-structured scientific publication draft based on this research discussion.`,
-        add_context_from_internet: false,
-      });
-
-      // Open save dialog with the structured summary
-      setSaveForm({
-        projectId: "",
-        title: "Research Publication Draft",
-        content: summary,
-      });
-      setShowSaveDialog(true);
-    } catch (error) {
-      console.error("Error generating summary:", error);
-    }
-    setSummarizing(false);
   };
 
   const hasStarted = tabs.length > 0;
@@ -305,25 +242,8 @@ Create a comprehensive, well-structured scientific publication draft based on th
             New Chat
           </button>
           <button
-            onClick={summarizeAndCreateNote}
-            disabled={summarizing || tabs.length === 0}
-            className="ml-auto flex items-center gap-1.5 px-3 py-2 text-sm text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {summarizing ? (
-              <>
-                <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                Generating...
-              </>
-            ) : (
-              <>
-                <FileText className="w-3.5 h-3.5" />
-                Create Publication
-              </>
-            )}
-          </button>
-          <button
             onClick={resetAll}
-            className="flex items-center gap-1.5 px-3 py-2 text-sm text-gray-400 hover:text-gray-600 rounded-lg transition-colors"
+            className="ml-auto flex items-center gap-1.5 px-3 py-2 text-sm text-gray-400 hover:text-gray-600 rounded-lg transition-colors"
           >
             <RotateCcw className="w-3.5 h-3.5" />
             Reset All
