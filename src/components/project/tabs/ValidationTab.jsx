@@ -55,6 +55,16 @@ export default function ValidationTab({ project }) {
       base44.entities.ValidationRequest.filter({ project_id: project.id }, "-created_date", 100),
   });
 
+  const { data: projectNotes = [] } = useQuery({
+    queryKey: ["project-notes", project.id],
+    queryFn: () => base44.entities.Note.filter({ project_id: project.id }, "-updated_date"),
+    initialData: [],
+  });
+
+  const selectedNote = selectedValidation?.note_id 
+    ? projectNotes.find(n => n.id === selectedValidation.note_id)
+    : null;
+
   const createMutation = useMutation({
     mutationFn: (data) =>
       base44.entities.ValidationRequest.create({ ...data, project_id: project.id }),
