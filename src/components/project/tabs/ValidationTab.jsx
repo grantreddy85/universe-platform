@@ -319,7 +319,28 @@ export default function ValidationTab({ project }) {
         </div>
       )}
 
-
+      {reviewingNote && selectedValidation.note_id && selectedNote && (
+       <div className="fixed inset-0 z-50 bg-white flex flex-col">
+         <div className="flex items-center justify-between p-6 border-b border-gray-100">
+           <h2 className="text-lg font-semibold text-gray-900">{selectedNote.title}</h2>
+           <Button
+             variant="ghost"
+             size="icon"
+             onClick={() => setReviewingNote(false)}
+             className="text-gray-400 hover:text-gray-600"
+           >
+             <X className="w-5 h-5" />
+           </Button>
+         </div>
+         <div className="flex-1 overflow-y-auto p-6 lg:p-8">
+           <div className="max-w-4xl mx-auto">
+             <div className="whitespace-pre-wrap text-gray-700 leading-relaxed">
+               {selectedNote.content}
+             </div>
+           </div>
+         </div>
+       </div>
+      )}
 
       <Dialog open={showNew} onOpenChange={setShowNew}>
         <DialogContent className="sm:max-w-md">
