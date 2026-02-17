@@ -39,7 +39,6 @@ export default function Search() {
   const [loading, setLoading] = useState(false);
   const [showSaveDialog, setShowSaveDialog] = useState(false);
   const [saveForm, setSaveForm] = useState({ projectId: "", title: "", content: "" });
-  const [isSummarizing, setIsSummarizing] = useState(false);
   const messagesEndRef = useRef(null);
   const queryClient = useQueryClient();
 
@@ -140,50 +139,6 @@ export default function Search() {
     setSaveForm({ projectId: "", title: "", content: "" });
   };
 
-  const handleSummarizeAll = async () => {
-    setIsSummarizing(true);
-    try {
-      // Gather all messages from all tabs
-      const allMessages = tabs.flatMap(tab => 
-        tab.messages.map(msg => `**${msg.role === 'user' ? 'User' : 'AI'}:** ${msg.content}`)
-      ).join('\n\n');
-
-      // Generate structured summary using AI
-      const result = await base44.integrations.Core.InvokeLLM({
-        prompt: `You are a research assistant. Analyze the following research conversation and structure it into a scientific publication format with the following sections:
-
-# Introduction
-Provide context and background of the research topic discussed.
-
-# Methodology
-Describe the research methods, approaches, and techniques used or discussed.
-
-# Results
-Summarize the key findings, insights, and data discovered.
-
-# Conclusion
-Provide conclusions, implications, and potential next steps.
-
-# References
-List any sources, papers, or resources mentioned.
-
-Here is the conversation to analyze:
-
-${allMessages}
-
-Please provide a well-structured, publication-ready summary.`
-      });
-
-      // Pre-fill the save dialog with the structured summary
-      setSaveForm({ projectId: "", title: "Research Summary - Publication Draft", content: result });
-      setShowSaveDialog(true);
-    } catch (error) {
-      console.error("Failed to summarize:", error);
-    } finally {
-      setIsSummarizing(false);
-    }
-  };
-
   const hasStarted = tabs.length > 0;
 
   if (!hasStarted) {
@@ -252,8 +207,7 @@ Please provide a well-structured, publication-ready summary.`
     <div className="min-h-screen bg-gray-50 flex flex-col">
       {/* Tabs */}
       <div className="bg-white border-b border-gray-200 px-6 py-3">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 overflow-x-auto">
+        <div className="flex items-center gap-2 overflow-x-auto">
           <div className="flex items-center gap-2 mr-4 pr-4 border-r border-gray-200">
             <UniVerseLogo className="w-6 h-6" />
             <span className="text-sm font-semibold text-gray-900">UniVerse</span>
@@ -294,15 +248,6 @@ Please provide a well-structured, publication-ready summary.`
             <RotateCcw className="w-3.5 h-3.5" />
             Reset All
           </button>
-          </div>
-          <Button
-            onClick={handleSummarizeAll}
-            disabled={tabs.every(tab => tab.messages.length === 0) || isSummarizing}
-            size="sm"
-            className="bg-blue-600 hover:bg-blue-700 text-xs flex-shrink-0"
-          >
-            {isSummarizing ? "Summarizing..." : "Summarize All & Create Note"}
-          </Button>
         </div>
       </div>
 
