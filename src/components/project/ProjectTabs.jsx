@@ -1,0 +1,47 @@
+import React from "react";
+import {
+  Sparkles,
+  Archive,
+  FlaskConical,
+  GitBranch,
+  Shield,
+  Box,
+  Coins
+} from "lucide-react";
+
+const tabs = [
+  { id: "ai", label: "AI", icon: Sparkles },
+  { id: "vault", label: "Vault", icon: Archive },
+  { id: "cohorts", label: "Cohorts", icon: FlaskConical },
+  { id: "workflows", label: "Workflows", icon: GitBranch },
+  { id: "validation", label: "Validation", icon: Shield },
+  { id: "assets", label: "Assets", icon: Box },
+  { id: "tokenisation", label: "Tokenisation", icon: Coins },
+];
+
+export default function ProjectTabs({ activeTab, onTabChange }) {
+  return (
+    <div className="border-b border-gray-100 bg-white px-6 lg:px-10">
+      <nav className="flex gap-0 -mb-px overflow-x-auto">
+        {tabs.map((tab) => {
+          const Icon = tab.icon;
+          const isActive = activeTab === tab.id;
+          return (
+            <button
+              key={tab.id}
+              onClick={() => onTabChange(tab.id)}
+              className={`flex items-center gap-1.5 px-4 py-3 text-xs font-medium border-b-2 transition-all whitespace-nowrap ${
+                isActive
+                  ? "border-blue-600 text-blue-600"
+                  : "border-transparent text-gray-400 hover:text-gray-600"
+              }`}
+            >
+              <Icon className="w-3.5 h-3.5" strokeWidth={1.8} />
+              {tab.label}
+            </button>
+          );
+        })}
+      </nav>
+    </div>
+  );
+}
