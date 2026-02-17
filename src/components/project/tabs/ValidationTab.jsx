@@ -46,6 +46,7 @@ export default function ValidationTab({ project }) {
   const [editingApprovers, setEditingApprovers] = useState(false);
   const [resultsText, setResultsText] = useState("");
   const [approverEmail, setApproverEmail] = useState("");
+  const [reviewingNote, setReviewingNote] = useState(false);
   const queryClient = useQueryClient();
 
   const { data: validations = [], isLoading } = useQuery({
