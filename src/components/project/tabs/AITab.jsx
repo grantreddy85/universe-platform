@@ -32,7 +32,13 @@ export default function AITab({ project }) {
   const [newSessionName, setNewSessionName] = useState("");
   const [editingConvoId, setEditingConvoId] = useState(null);
   const [editingName, setEditingName] = useState("");
+  const [showSummarizeDialog, setShowSummarizeDialog] = useState(false);
+  const [selectedConvos, setSelectedConvos] = useState([]);
+  const [summarizeFormat, setSummarizeFormat] = useState("research_paper");
+  const [summarizeTitle, setSummarizeTitle] = useState("");
+  const [summarizing, setSummarizing] = useState(false);
   const messagesEndRef = useRef(null);
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     loadConversations();
