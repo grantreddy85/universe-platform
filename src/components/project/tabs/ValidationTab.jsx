@@ -378,6 +378,18 @@ export default function ValidationTab({ project }) {
         </div>
       )}
 
+      {reviewingNote && selectedNote && (
+        <div className="fixed inset-0 z-50 bg-black/50">
+          <div className="absolute inset-0 m-auto max-w-2xl max-h-[90vh] bg-white rounded-xl shadow-xl flex flex-col">
+            <DocumentReview 
+              validation={selectedValidation} 
+              note={selectedNote}
+              onClose={() => setReviewingNote(false)}
+            />
+          </div>
+        </div>
+      )}
+
       <Dialog open={showNew} onOpenChange={setShowNew}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
