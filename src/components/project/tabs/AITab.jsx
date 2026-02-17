@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { base44 } from "@/api/base44Client";
-import { Send, Sparkles, Loader2, Plus } from "lucide-react";
+import { Send, Sparkles, Loader2, Plus, Pencil, Check, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import ReactMarkdown from "react-markdown";
@@ -22,6 +22,8 @@ export default function AITab({ project }) {
   const [initLoading, setInitLoading] = useState(true);
   const [showNewSessionDialog, setShowNewSessionDialog] = useState(false);
   const [newSessionName, setNewSessionName] = useState("");
+  const [editingConvoId, setEditingConvoId] = useState(null);
+  const [editingName, setEditingName] = useState("");
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
@@ -62,6 +64,27 @@ export default function AITab({ project }) {
     setMessages([]);
     setShowNewSessionDialog(false);
     setNewSessionName("");
+  };
+
+  const updateConversationName = async (convoId, newName) => {
+    if (!newName.trim()) return;
+    await base44.agents.updateConversation(convoId, {
+      metadata: {
+        name: newName.trim(),
+        project_id: project.id,
+      },
+    });
+    setConversations((prev) =>
+      prev.map((c) => (c.id === convoId ? { ...c, metadata: { ...c.metadata, name: newName.trim() } } : c))
+    );
+    if (activeConversation?.id === convoId) {
+      setActiveConversation((prev) => ({
+        ...prev,
+        metadata: { ...prev.metadata, name: newName.trim() },
+      }));
+    }
+    setEditingConvoId(null);
+    setEditingName("");
   };
 
   const switchConversation = async (convo) => {
