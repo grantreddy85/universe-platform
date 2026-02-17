@@ -623,12 +623,12 @@ export default function AITab({ project }) {
               onClick={generateSummary}
               size="sm"
               className="bg-blue-600 hover:bg-blue-700 text-xs"
-              disabled={selectedConvos.length === 0 || !summarizeTitle.trim() || summarizing}
+              disabled={selectedConvos.length === 0 || !summarizeTitle.trim() || (saveDestination === "new_project" && !newProjectName.trim()) || summarizing}
             >
               {summarizing ? (
                 <><Loader2 className="w-3 h-3 mr-1.5 animate-spin" />Generating...</>
               ) : (
-                <><Sparkles className="w-3 h-3 mr-1.5" />Generate & Save to Notes</>
+                <><Sparkles className="w-3 h-3 mr-1.5" />Generate & Save</>
               )}
             </Button>
           </DialogFooter>
