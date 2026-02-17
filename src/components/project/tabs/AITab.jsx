@@ -341,18 +341,31 @@ export default function AITab({ project }) {
                   >
                     {convo.metadata?.name || "Session"}
                   </button>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-5 w-5 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setEditingConvoId(convo.id);
-                      setEditingName(convo.metadata?.name || "");
-                    }}
-                  >
-                    <Pencil className="w-3 h-3" />
-                  </Button>
+                  <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-5 w-5 flex-shrink-0"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setEditingConvoId(convo.id);
+                        setEditingName(convo.metadata?.name || "");
+                      }}
+                    >
+                      <Pencil className="w-3 h-3" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-5 w-5 flex-shrink-0 hover:text-red-600"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        deleteConversation(convo.id);
+                      }}
+                    >
+                      <Trash2 className="w-3 h-3" />
+                    </Button>
+                  </div>
                 </div>
               )}
             </div>
