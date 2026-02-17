@@ -13,8 +13,9 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
+import ResearchProgress from "../ResearchProgress";
 
-export default function OverviewTab({ project }) {
+export default function OverviewTab({ project, onTabChange }) {
   const { data: notes = [] } = useQuery({
     queryKey: ["project-notes", project.id],
     queryFn: () => base44.entities.Note.filter({ project_id: project.id }, "-created_date", 100),
