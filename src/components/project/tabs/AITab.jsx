@@ -30,6 +30,8 @@ export default function AITab({ project }) {
   const [summarizeFormat, setSummarizeFormat] = useState("research_paper");
   const [summarizeTitle, setSummarizeTitle] = useState("");
   const [summarizing, setSummarizing] = useState(false);
+  const [saveDestination, setSaveDestination] = useState("current");
+  const [newProjectName, setNewProjectName] = useState("");
   const messagesEndRef = useRef(null);
   const queryClient = useQueryClient();
 
