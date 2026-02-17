@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 import ProjectHeader from "../components/project/ProjectHeader";
 import ProjectTabs from "../components/project/ProjectTabs";
+import OverviewTab from "../components/project/tabs/OverviewTab";
 import AITab from "../components/project/tabs/AITab";
 import NotesTab from "../components/project/tabs/NotesTab";
 import VaultTab from "../components/project/tabs/VaultTab";
@@ -14,7 +15,7 @@ import AssetsTab from "../components/project/tabs/AssetsTab";
 import TokenisationTab from "../components/project/tabs/TokenisationTab";
 
 export default function ProjectDetail() {
-  const [activeTab, setActiveTab] = useState("ai");
+  const [activeTab, setActiveTab] = useState("overview");
   const urlParams = new URLSearchParams(window.location.search);
   const projectId = urlParams.get("id");
 
@@ -36,6 +37,7 @@ export default function ProjectDetail() {
   }
 
   const tabComponents = {
+    overview: OverviewTab,
     ai: AITab,
     notes: NotesTab,
     vault: VaultTab,
@@ -46,7 +48,7 @@ export default function ProjectDetail() {
     tokenisation: TokenisationTab,
   };
 
-  const ActiveComponent = tabComponents[activeTab] || AITab;
+  const ActiveComponent = tabComponents[activeTab] || OverviewTab;
 
   return (
     <div className="min-h-screen bg-[#fafbfc]">

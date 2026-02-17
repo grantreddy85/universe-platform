@@ -7,10 +7,12 @@ import {
   Shield,
   Box,
   Coins,
-  StickyNote
+  StickyNote,
+  LayoutDashboard
 } from "lucide-react";
 
 const tabs = [
+  { id: "overview", label: "Overview", icon: LayoutDashboard },
   { id: "ai", label: "AI", icon: Sparkles },
   { id: "notes", label: "Notes", icon: StickyNote },
   { id: "vault", label: "Vault", icon: Archive },
