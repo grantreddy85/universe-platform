@@ -20,6 +20,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import UniVerseLogo from "@/components/UniVerseLogo";
 
 const suggestions = [
@@ -168,15 +169,47 @@ export default function Search() {
 
       const prompt =
         summarizeFormat === "research_paper"
-          ? `You are a scientific research assistant. Analyze the following AI research chat sessions and create a structured research paper summary with the following sections:
+          ? `You are a scientific research assistant. Analyze the following AI research chat sessions and create a comprehensive, detailed research paper with the following structure:
 
-**Introduction**: Provide context and background for the research topic discussed.
-**Methodology**: Describe the research approach, methods, or frameworks mentioned.
-**Results**: Summarize key findings, data, or insights discovered.
-**Discussion**: Interpret the results, discuss implications, and address limitations.
-**Conclusion**: Provide a concise summary of the research outcomes and potential future directions.
+# Introduction
+Provide comprehensive context and background for the research topic. Include:
+- Research problem or question being addressed
+- Significance and relevance of the topic
+- Brief overview of current understanding
+- Objectives of the research discussed
 
-Format the output in Markdown with clear section headings. Be detailed, scientific, and objective.
+# Methodology
+Describe in detail the research approach, methods, or frameworks mentioned:
+- Research design and approach
+- Data collection methods or sources discussed
+- Analytical frameworks or tools mentioned
+- Any experimental or computational methods proposed
+
+# Results
+Summarize all key findings, data, and insights discovered:
+- Main findings and discoveries from the discussions
+- Important data points, statistics, or evidence mentioned
+- Patterns, trends, or correlations identified
+- Visual descriptions if charts or diagrams were discussed
+
+# Discussion
+Provide comprehensive interpretation and analysis:
+- Interpretation of the results in context
+- Comparison with existing knowledge or literature
+- Implications for the field or practice
+- Limitations and potential confounding factors
+- Alternative explanations or perspectives
+- Unexpected findings or observations
+
+# Conclusion
+Synthesize the research outcomes:
+- Summary of main findings and their significance
+- Answers to the original research questions
+- Contribution to the field
+- Future research directions and recommendations
+- Practical applications or implications
+
+Format the output in clean, professional Markdown with clear section headings. Be detailed, scientific, objective, and thorough. Include all relevant information from the chat sessions.
 
 Chat Sessions:
 ${selectedMessages}`
@@ -488,11 +521,14 @@ ${selectedMessages}`;
 
       {/* Save Dialog */}
       <Dialog open={showSaveDialog} onOpenChange={setShowSaveDialog}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-3xl max-h-[90vh] overflow-hidden flex flex-col">
           <DialogHeader>
             <DialogTitle className="text-lg font-semibold">Save to Project</DialogTitle>
+            <p className="text-xs text-gray-500 mt-1">
+              Review and edit the content before saving to your project notes
+            </p>
           </DialogHeader>
-          <div className="space-y-4 mt-2">
+          <div className="space-y-4 mt-2 flex-1 overflow-y-auto">
             <div className="space-y-1.5">
               <Label className="text-xs font-medium text-gray-500">Project *</Label>
               <Select value={saveForm.projectId} onValueChange={(v) => setSaveForm({ ...saveForm, projectId: v })}>
@@ -517,8 +553,20 @@ ${selectedMessages}`;
                 className="text-sm"
               />
             </div>
+            <div className="space-y-1.5 flex-1">
+              <Label className="text-xs font-medium text-gray-500">Content *</Label>
+              <Textarea
+                value={saveForm.content}
+                onChange={(e) => setSaveForm({ ...saveForm, content: e.target.value })}
+                placeholder="Note content (supports Markdown)"
+                className="text-sm font-mono min-h-[400px] resize-none"
+              />
+              <p className="text-[10px] text-gray-400">
+                Edit the content as needed. This will be saved to the Notes tab where you can further refine it before sending for validation.
+              </p>
+            </div>
           </div>
-          <DialogFooter className="pt-2">
+          <DialogFooter className="pt-4 border-t">
             <Button type="button" variant="ghost" size="sm" onClick={() => setShowSaveDialog(false)}>
               Cancel
             </Button>
@@ -526,7 +574,7 @@ ${selectedMessages}`;
               onClick={saveToProject}
               size="sm"
               className="bg-blue-600 hover:bg-blue-700 text-xs"
-              disabled={!saveForm.projectId || !saveForm.title.trim()}
+              disabled={!saveForm.projectId || !saveForm.title.trim() || !saveForm.content.trim()}
             >
               Save Note
             </Button>
