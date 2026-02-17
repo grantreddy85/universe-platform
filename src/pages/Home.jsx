@@ -96,10 +96,10 @@ export default function Home() {
 
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
-        <StatsCard label="Active Projects" value={projects.length} icon={FolderKanban} accent="blue" />
-        <StatsCard label="In Validation" value={activeValidations} icon={Shield} accent="amber" />
-        <StatsCard label="Validated Assets" value={validatedAssets} icon={Box} accent="green" />
-        <StatsCard label="Tokenised" value={tokenisedAssets} icon={Coins} accent="purple" />
+        <StatsCard label="Active Projects" value={projects.length} icon={FolderKanban} accent="blue" linkTo="Projects" />
+        <StatsCard label="In Validation" value={activeValidations} icon={Shield} accent="amber" linkTo="Validations" />
+        <StatsCard label="Validated Assets" value={validatedAssets} icon={Box} accent="green" linkTo="ValidatedAssets" />
+        <StatsCard label="Tokenised" value={tokenisedAssets} icon={Coins} accent="purple" linkTo="Tokenisation" />
       </div>
 
       {/* Projects + Activity */}
