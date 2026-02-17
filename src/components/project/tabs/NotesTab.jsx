@@ -36,6 +36,7 @@ export default function NotesTab({ project }) {
   const [selectedNote, setSelectedNote] = useState(null); // null = list view, "new" = new note, note object = editing
   const [form, setForm] = useState({ title: "", content: "" });
   const [isDirty, setIsDirty] = useState(false);
+  const [assistantOpen, setAssistantOpen] = useState(false);
   const queryClient = useQueryClient();
 
   const { data: notes = [], isLoading } = useQuery({
