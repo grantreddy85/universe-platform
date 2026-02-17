@@ -197,102 +197,24 @@ export default function ValidationTab({ project }) {
           </div>
 
           {/* Details/Note Review Panel */}
-          {selectedValidation && (
+          {selectedValidation && !reviewingNote && (
             <div className="col-span-3 bg-white rounded-xl border border-gray-100 p-8 flex flex-col space-y-6">
-              <div>
-                <h4 className="text-xs font-semibold text-gray-500 uppercase mb-3">Results</h4>
-                {editingResults ? (
-                  <div className="space-y-2">
-                    <Textarea
-                      value={resultsText}
-                      onChange={(e) => setResultsText(e.target.value)}
-                      className="text-xs h-32"
-                      placeholder="Add validation results..."
-                    />
-                    <div className="flex gap-2">
-                      <Button
-                        size="sm"
-                        className="bg-blue-600 hover:bg-blue-700 text-xs flex-1"
-                        onClick={() => updateResultsMutation.mutate({ id: selectedValidation.id, results: resultsText })}
-                        disabled={updateResultsMutation.isPending}
-                      >
-                        {updateResultsMutation.isPending ? <Loader2 className="w-3 h-3 mr-1 animate-spin" /> : <Check className="w-3 h-3 mr-1" />}
-                        Save
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => setEditingResults(false)}
-                        className="text-xs"
-                      >
-                        Cancel
-                      </Button>
-                    </div>
-                  </div>
-                ) : (
-                  <div>
-                    {resultsText ? (
-                      <p className="text-xs text-gray-600 bg-gray-50 rounded-lg p-3 mb-2">{resultsText}</p>
-                    ) : (
-                      <p className="text-xs text-gray-400 italic mb-2">No results added yet</p>
-                    )}
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={() => setEditingResults(true)}
-                      className="text-xs text-blue-600 hover:bg-blue-50 w-full justify-start"
-                    >
-                      <Edit2 className="w-3 h-3 mr-1.5" />
-                      {resultsText ? "Edit Results" : "Add Results"}
-                    </Button>
-                  </div>
-                )}
-              </div>
-
               {selectedValidation.note_id && selectedNote && (
-                <div className="border-t border-gray-100 pt-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <h4 className="text-sm font-semibold text-gray-900">Linked Note Review</h4>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="text-xs"
-                      onClick={() => setShowHistory(!showHistory)}
-                    >
-                      {showHistory ? "Hide History" : "View History"}
-                    </Button>
+                <div>
+                  <h4 className="text-sm font-semibold text-gray-900 mb-4">Linked Note for Review</h4>
+                  <div className="bg-gray-50 rounded-lg border border-gray-200 p-6 mb-4">
+                    <h3 className="text-base font-semibold text-gray-900 mb-2">{selectedNote.title}</h3>
+                    <p className="text-xs text-gray-500 mb-3">Created {new Date(selectedNote.created_date).toLocaleDateString()}</p>
+                    <div className="text-sm text-gray-700 whitespace-pre-wrap max-h-80 overflow-y-auto">
+                      {selectedNote.content}
+                    </div>
                   </div>
-
-                  {!showHistory ? (
-                    <div className="space-y-4">
-                      <div>
-                        <h3 className="text-base font-semibold text-gray-900 mb-2">{selectedNote.title}</h3>
-                        <div className="bg-gray-50 rounded-lg border border-gray-200 p-6 text-sm text-gray-700 whitespace-pre-wrap overflow-y-auto" style={{ maxHeight: '400px' }}>
-                          {selectedNote.content}
-                        </div>
-                      </div>
-                      <div className="flex gap-2">
-                        <Button
-                          className="bg-blue-600 hover:bg-blue-700 text-xs"
-                        >
-                          Edit Note
-                        </Button>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="bg-gray-50 rounded-lg border border-gray-200 p-4 space-y-4">
-                      {selectedValidation.edit_history?.length > 0 ? (
-                        selectedValidation.edit_history.map((edit, idx) => (
-                          <div key={idx} className="border-l-2 border-blue-300 pl-4 py-2">
-                            <p className="text-xs font-medium text-gray-900">{edit.change_summary}</p>
-                            <p className="text-xs text-gray-500">{edit.editor_email} • {new Date(edit.timestamp).toLocaleString()}</p>
-                          </div>
-                        ))
-                      ) : (
-                        <p className="text-xs text-gray-400 italic">No edit history</p>
-                      )}
-                    </div>
-                  )}
+                  <Button
+                    onClick={() => setReviewingNote(true)}
+                    className="bg-blue-600 hover:bg-blue-700 text-xs w-full"
+                  >
+                    Open in Full View
+                  </Button>
                 </div>
               )}
 
