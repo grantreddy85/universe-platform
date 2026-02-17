@@ -53,9 +53,9 @@ import ProjectDetail from './pages/ProjectDetail';
 import Projects from './pages/Projects';
 import Search from './pages/Search';
 import Tokenisation from './pages/Tokenisation';
-import Workspace from './pages/Workspace';
-import Validations from './pages/Validations';
 import ValidatedAssets from './pages/ValidatedAssets';
+import Validations from './pages/Validations';
+import Workspace from './pages/Workspace';
 import __Layout from './Layout.jsx';
 
 
@@ -66,9 +66,9 @@ export const PAGES = {
     "Projects": Projects,
     "Search": Search,
     "Tokenisation": Tokenisation,
-    "Workspace": Workspace,
-    "Validations": Validations,
     "ValidatedAssets": ValidatedAssets,
+    "Validations": Validations,
+    "Workspace": Workspace,
 }
 
 export const pagesConfig = {

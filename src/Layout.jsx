@@ -13,9 +13,9 @@ import {
   ChevronLeft,
   ChevronRight,
   LogOut,
-  Atom,
   Search
 } from "lucide-react";
+import UniVerseLogo from "@/components/UniVerseLogo";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
@@ -52,9 +52,7 @@ export default function Layout({ children, currentPageName }) {
         >
           {/* Logo */}
           <div className="flex items-center gap-2.5 px-5 h-16 border-b border-gray-100">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center flex-shrink-0">
-              <Atom className="w-4.5 h-4.5 text-white" strokeWidth={1.8} />
-            </div>
+            <UniVerseLogo className="w-8 h-8 flex-shrink-0" />
             {!collapsed && (
               <span className="text-[15px] font-semibold tracking-tight text-gray-900">
                 UniVerse
