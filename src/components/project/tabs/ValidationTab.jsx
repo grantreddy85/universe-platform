@@ -50,6 +50,7 @@ export default function ValidationTab({ project }) {
   };
 
   if (expandedNote) {
+    const isAssistantVisible = assistantOpen !== false;
     return (
       <div className="fixed inset-0 z-50 bg-white flex flex-col">
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-white">
@@ -60,7 +61,7 @@ export default function ValidationTab({ project }) {
               size="sm"
               onClick={() => {
                 setSelectedValidation(validations.find(v => getLinkedNote(v)?.id === expandedNote.id));
-                setAssistantOpen(!assistantOpen);
+                setAssistantOpen(!isAssistantVisible);
               }}
               className="text-xs text-gray-500 hover:text-blue-600"
             >
