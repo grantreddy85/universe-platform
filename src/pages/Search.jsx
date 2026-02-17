@@ -48,11 +48,17 @@ export default function Search() {
   const [newProjectName, setNewProjectName] = useState("");
   const messagesEndRef = useRef(null);
   const queryClient = useQueryClient();
+  const location = useLocation();
 
   const { data: projects = [] } = useQuery({
     queryKey: ["projects-list"],
     queryFn: () => base44.entities.Project.list("title", 100),
   });
+
+  // Reset to landing page when Research tab is clicked
+  useEffect(() => {
+    resetAll();
+  }, [location.pathname]);
 
   // Load drafts from localStorage on mount
   useEffect(() => {
