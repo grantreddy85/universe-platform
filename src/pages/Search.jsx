@@ -538,31 +538,48 @@ export default function Search() {
               </div>
             </div>
 
-            {/* Project + Title */}
-            <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-1.5">
-                <Label className="text-xs font-medium text-gray-500 uppercase tracking-wide">Save to Project *</Label>
-                <Select value={saveForm.projectId} onValueChange={(v) => setSaveForm({ ...saveForm, projectId: v })}>
-                  <SelectTrigger className="text-sm">
-                    <SelectValue placeholder="Select project" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {projects.map((p) => (
-                      <SelectItem key={p.id} value={p.id}>{p.title}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-1.5">
-                <Label className="text-xs font-medium text-gray-500 uppercase tracking-wide">Note Title *</Label>
-                <Input
-                  value={saveForm.title}
-                  onChange={(e) => setSaveForm({ ...saveForm, title: e.target.value })}
-                  placeholder="e.g. MRSA Resistance Review"
-                  className="text-sm"
-                />
-              </div>
-            </div>
+            {/* Save to Project */}
+             <div className="space-y-1.5">
+               <Label className="text-xs font-medium text-gray-500 uppercase tracking-wide">Save to Project *</Label>
+               <select
+                 value={saveDestination}
+                 onChange={(e) => setSaveDestination(e.target.value)}
+                 className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-400/30 focus:border-blue-400 bg-white"
+               >
+                 <option value="">Select project</option>
+                 {projects.map((proj) => (
+                   <option key={proj.id} value={`project_${proj.id}`}>
+                     {proj.title}
+                   </option>
+                 ))}
+                 <option value="workspace">Workspace</option>
+                 <option value="new_project">+ Create New Project</option>
+               </select>
+             </div>
+
+             {/* New Project Name */}
+             {saveDestination === "new_project" && (
+               <div className="space-y-1.5">
+                 <Label className="text-xs font-medium text-gray-500 uppercase tracking-wide">Project Name *</Label>
+                 <Input
+                   value={newProjectName}
+                   onChange={(e) => setNewProjectName(e.target.value)}
+                   placeholder="e.g. MRSA Resistance Analysis"
+                   className="text-sm"
+                 />
+               </div>
+             )}
+
+             {/* Note Title */}
+             <div className="space-y-1.5">
+               <Label className="text-xs font-medium text-gray-500 uppercase tracking-wide">Note Title *</Label>
+               <Input
+                 value={saveForm.title}
+                 onChange={(e) => setSaveForm({ ...saveForm, title: e.target.value })}
+                 placeholder="e.g. MRSA Resistance Review"
+                 className="text-sm"
+               />
+             </div>
           </div>
           <DialogFooter className="pt-2">
             <Button type="button" variant="ghost" size="sm" onClick={() => setShowSummarizeDialog(false)}>
