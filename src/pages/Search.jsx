@@ -360,6 +360,13 @@ export default function Search() {
             Summarize Sessions
           </button>
           <button
+            onClick={() => setShowHistoryModal(true)}
+            className="flex items-center gap-1.5 px-3 py-2 text-sm text-gray-500 hover:bg-gray-50 rounded-lg transition-colors"
+          >
+            <History className="w-3.5 h-3.5" />
+            History
+          </button>
+          <button
             onClick={resetAll}
             className="flex items-center gap-1.5 px-3 py-2 text-sm text-gray-400 hover:text-gray-600 rounded-lg transition-colors"
           >
