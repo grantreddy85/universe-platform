@@ -38,15 +38,7 @@ export default function OverviewTab({ project, onTabChange }) {
       base44.entities.Activity.filter({ project_id: project.id }, "-created_date", 10),
   });
 
-  const { data: workspaceItems = [] } = useQuery({
-    queryKey: ["project-workspace", project.id],
-    queryFn: () =>
-      base44.entities.WorkspaceItem.filter(
-        { assigned_project_id: project.id },
-        "-created_date",
-        100
-      ),
-  });
+
 
   const statusColors = {
     draft: "bg-gray-100 text-gray-600",
