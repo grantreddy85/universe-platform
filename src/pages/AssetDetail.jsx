@@ -53,6 +53,7 @@ export default function AssetDetail() {
   const projectId = params.get("project_id");
 
   const [marketplaceSubmitted, setMarketplaceSubmitted] = useState(false);
+  const [showInfographic, setShowInfographic] = useState(false);
 
   const { data: asset, isLoading: assetLoading } = useQuery({
     queryKey: ["asset", assetId],
