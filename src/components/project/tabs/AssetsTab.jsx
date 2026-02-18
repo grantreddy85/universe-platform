@@ -122,7 +122,7 @@ export default function AssetsTab({ project }) {
                 </div>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon" className="h-7 w-7 text-gray-400">
+                    <Button variant="ghost" size="icon" className="h-7 w-7 text-gray-400" onClick={(e) => e.stopPropagation()}>
                       <MoreHorizontal className="w-4 h-4" />
                     </Button>
                   </DropdownMenuTrigger>
