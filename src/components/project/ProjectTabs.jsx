@@ -7,7 +7,8 @@ import {
   Shield,
   Box,
   StickyNote,
-  LayoutDashboard
+  LayoutDashboard,
+  TestTube
 } from "lucide-react";
 
 const tabs = [
