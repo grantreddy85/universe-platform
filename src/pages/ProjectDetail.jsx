@@ -45,7 +45,7 @@ export default function ProjectDetail() {
     workflows: WorkflowsTab,
     validation: ValidationTab,
     assets: AssetsTab,
-    tokenisation: TokenisationTab,
+    labs: LabsTab,
   };
 
   const ActiveComponent = tabComponents[activeTab] || OverviewTab;
