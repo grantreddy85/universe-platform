@@ -6,7 +6,6 @@ import {
   GitBranch,
   Shield,
   Box,
-  Coins,
   StickyNote,
   LayoutDashboard
 } from "lucide-react";
