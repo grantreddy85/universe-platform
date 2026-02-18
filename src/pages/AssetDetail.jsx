@@ -348,6 +348,16 @@ export default function AssetDetail() {
               <p className="text-xs text-gray-300 text-center py-8">Not yet part of any external projects.</p>
             )}
           </div>
+
+          {/* Infographic Section */}
+          {showInfographic && (
+            <InfographicModal
+              asset={asset}
+              project={project}
+              inline={true}
+              onClose={() => setShowInfographic(false)}
+            />
+          )}
         </div>
 
         {/* Right Sidebar */}
