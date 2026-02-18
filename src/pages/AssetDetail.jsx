@@ -447,14 +447,13 @@ export default function AssetDetail() {
           </div>
         </div>
       </div>
+      {showInfographic && (
+        <InfographicModal
+          asset={asset}
+          project={project}
+          onClose={() => setShowInfographic(false)}
+        />
+      )}
     </div>
-
-    {showInfographic && (
-      <InfographicModal
-        asset={asset}
-        project={project}
-        onClose={() => setShowInfographic(false)}
-      />
-    )}
   );
 }
