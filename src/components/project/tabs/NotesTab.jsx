@@ -19,6 +19,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { format } from "date-fns";
 import NotesAssistant from "./NotesAssistant";
+import SectionQueryDialog from "../SectionQueryDialog";
 
 const sourceStyles = {
   manual: "bg-gray-100 text-gray-600",
@@ -37,6 +38,7 @@ export default function NotesTab({ project }) {
   const [form, setForm] = useState({ title: "", content: "" });
   const [isDirty, setIsDirty] = useState(false);
   const [assistantOpen, setAssistantOpen] = useState(false);
+  const [showQueryDialog, setShowQueryDialog] = useState(false);
   const queryClient = useQueryClient();
 
   const { data: notes = [], isLoading } = useQuery({
@@ -133,11 +135,20 @@ export default function NotesTab({ project }) {
              <Button
                variant="ghost"
                size="sm"
+               onClick={() => setShowQueryDialog(true)}
+               className="text-xs text-gray-500 hover:text-green-600 h-7 px-2"
+               title="Query notes"
+             >
+               <Sparkles className="w-3.5 h-3.5" />
+             </Button>
+             <Button
+               variant="ghost"
+               size="sm"
                onClick={() => setAssistantOpen(!assistantOpen)}
                className="text-xs text-gray-500 hover:text-blue-600 h-7 px-2"
                title="Open notes guide"
              >
-               <Sparkles className="w-3.5 h-3.5" />
+               <FileText className="w-3.5 h-3.5" />
              </Button>
              <Button
                onClick={openNew}
@@ -293,6 +304,24 @@ export default function NotesTab({ project }) {
             allNotes={notes}
             isOpen={assistantOpen}
             onToggle={() => setAssistantOpen(!assistantOpen)}
+          />
+
+          {/* Section Query Dialog */}
+          <SectionQueryDialog
+            open={showQueryDialog}
+            onOpenChange={setShowQueryDialog}
+            sectionName="Notes"
+            sectionData={notes.map(n => ({ title: n.title, content: n.content }))}
+            project={project}
+            onSaveToNotes={async ({ title, content, source }) => {
+              await base44.entities.Note.create({
+                project_id: project.id,
+                title,
+                content,
+                source: source || "manual"
+              });
+              queryClient.invalidateQueries({ queryKey: ["project-notes", project.id] });
+            }}
           />
           </div>
           );
