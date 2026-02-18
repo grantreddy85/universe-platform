@@ -113,6 +113,7 @@ export default function ValidationTab({ project }) {
             linkedNote={expandedNote}
             isOpen={isAssistantVisible}
             onToggle={() => setAssistantOpen(!isAssistantVisible)}
+            onApplySuggestion={handleApplySuggestion}
           />
         </div>
       </div>
