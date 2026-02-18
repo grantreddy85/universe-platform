@@ -18,9 +18,9 @@ const tabs = [
   { id: "vault", label: "Vault", icon: Archive },
   { id: "cohorts", label: "Cohorts", icon: FlaskConical },
   { id: "workflows", label: "Workflows", icon: GitBranch },
+  { id: "labs", label: "Labs", icon: TestTube },
   { id: "validation", label: "Validation", icon: Shield },
   { id: "assets", label: "Assets", icon: Box },
-  { id: "labs", label: "Labs", icon: TestTube },
 ];
 
 export default function ProjectTabs({ activeTab, onTabChange }) {
