@@ -300,51 +300,22 @@ export default function AITab({ project }) {
   }
 
   return (
-    <div className="flex h-[calc(100vh-220px)]">
-      {/* Sidebar - Conversations */}
-      <div className="w-56 border-r border-gray-100 flex flex-col bg-gray-50/50">
-        <div className="p-3 border-b border-gray-100 space-y-1.5">
-          <Button
-            onClick={() => setShowNewSessionDialog(true)}
-            variant="outline"
-            size="sm"
-            className="w-full text-xs"
-          >
-            <Plus className="w-3 h-3 mr-1.5" />
-            New Session
-          </Button>
-          {conversations.length > 0 && (
-            <Button
-              onClick={openSummarizeDialog}
-              variant="ghost"
-              size="sm"
-              className="w-full text-xs text-blue-600 hover:bg-blue-50"
-            >
-              <FileText className="w-3 h-3 mr-1.5" />
-              Summarize Sessions
-            </Button>
-          )}
-        </div>
-        <div className="flex-1 overflow-y-auto p-2 space-y-0.5">
-          {conversations.map((convo) => (
-            <div
-              key={convo.id}
-              className={`w-full px-3 py-2 rounded-lg text-xs transition-colors group ${
-                activeConversation?.id === convo.id
-                  ? "bg-blue-50 text-blue-600 font-medium"
-                  : "text-gray-500 hover:bg-gray-100"
-              }`}
-            >
-              {editingConvoId === convo.id ? (
-                <div className="flex items-center gap-1">
+    <div className="flex flex-col h-[calc(100vh-220px)]">
+      {/* Top Session Tabs */}
+      <div className="border-b border-gray-100 bg-white px-6 py-3 flex items-center justify-between gap-4 overflow-x-auto">
+        <div className="flex items-center gap-2">
+          {activeConversation && (
+            <div className="flex items-center gap-2">
+              {editingConvoId === activeConversation.id ? (
+                <div className="flex items-center gap-1 bg-white border border-blue-300 rounded-lg px-2 py-1">
                   <Input
                     value={editingName}
                     onChange={(e) => setEditingName(e.target.value)}
-                    className="h-6 text-xs"
+                    className="h-6 text-xs border-0 p-0"
                     autoFocus
                     onKeyDown={(e) => {
                       if (e.key === "Enter") {
-                        updateConversationName(convo.id, editingName);
+                        updateConversationName(activeConversation.id, editingName);
                       } else if (e.key === "Escape") {
                         setEditingConvoId(null);
                         setEditingName("");
@@ -354,66 +325,63 @@ export default function AITab({ project }) {
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-6 w-6 flex-shrink-0"
-                    onClick={() => updateConversationName(convo.id, editingName)}
+                    className="h-5 w-5 flex-shrink-0"
+                    onClick={() => updateConversationName(activeConversation.id, editingName)}
                   >
                     <Check className="w-3 h-3" />
+                  </Button>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-blue-50 border border-blue-200 rounded-lg group">
+                  <span className="text-sm font-medium text-blue-600">{activeConversation.metadata?.name || "Session"}</span>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-4 w-4 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setEditingConvoId(activeConversation.id);
+                      setEditingName(activeConversation.metadata?.name || "");
+                    }}
+                  >
+                    <Pencil className="w-3 h-3" />
                   </Button>
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-6 w-6 flex-shrink-0"
-                    onClick={() => {
-                      setEditingConvoId(null);
-                      setEditingName("");
+                    className="h-4 w-4 flex-shrink-0 hover:text-red-600 opacity-0 group-hover:opacity-100 transition-opacity"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      deleteConversation(activeConversation.id);
                     }}
                   >
                     <X className="w-3 h-3" />
                   </Button>
                 </div>
-              ) : (
-                <div className="flex items-center justify-between gap-2">
-                  <button
-                    onClick={() => switchConversation(convo)}
-                    className="flex-1 text-left truncate"
-                  >
-                    {convo.metadata?.name || "Session"}
-                  </button>
-                  <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-5 w-5 flex-shrink-0"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setEditingConvoId(convo.id);
-                        setEditingName(convo.metadata?.name || "");
-                      }}
-                    >
-                      <Pencil className="w-3 h-3" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-5 w-5 flex-shrink-0 hover:text-red-600"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        deleteConversation(convo.id);
-                      }}
-                    >
-                      <Trash2 className="w-3 h-3" />
-                    </Button>
-                  </div>
-                </div>
               )}
             </div>
-          ))}
-          {conversations.length === 0 && (
-            <p className="text-[11px] text-gray-400 text-center py-6 px-2">
-              Start a conversation with your AI Co-Pilot.
-            </p>
           )}
+          <Button
+            onClick={() => setShowNewSessionDialog(true)}
+            variant="outline"
+            size="sm"
+            className="text-xs"
+          >
+            <Plus className="w-3 h-3 mr-1.5" />
+            New Session
+          </Button>
         </div>
+        {conversations.length > 0 && (
+          <Button
+            onClick={openSummarizeDialog}
+            variant="ghost"
+            size="sm"
+            className="text-xs text-blue-600 hover:bg-blue-50 flex-shrink-0"
+          >
+            <FileText className="w-3 h-3 mr-1.5" />
+            Summarize Sessions
+          </Button>
+        )}
       </div>
 
       {/* Chat */}
