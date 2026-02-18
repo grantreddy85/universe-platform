@@ -135,7 +135,7 @@ export default function AssetsTab({ project }) {
                     )}
                     <DropdownMenuItem
                       className="text-red-600"
-                      onClick={() => deleteMutation.mutate(asset.id)}
+                      onClick={(e) => { e.stopPropagation(); deleteMutation.mutate(asset.id); }}
                     >
                       <Trash2 className="w-3.5 h-3.5 mr-2" />
                       Delete
