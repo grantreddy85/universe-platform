@@ -48,6 +48,7 @@ const typeIcons = {
 };
 
 export default function AssetsTab({ project }) {
+  const navigate = useNavigate();
   const [showNew, setShowNew] = useState(false);
   const [form, setForm] = useState({ title: "", type: "hypothesis", description: "" });
   const [infographicAsset, setInfographicAsset] = useState(null);
