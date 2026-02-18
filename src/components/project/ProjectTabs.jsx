@@ -20,6 +20,7 @@ const tabs = [
   { id: "workflows", label: "Workflows", icon: GitBranch },
   { id: "validation", label: "Validation", icon: Shield },
   { id: "assets", label: "Assets", icon: Box },
+  { id: "labs", label: "Labs", icon: TestTube },
 ];
 
 export default function ProjectTabs({ activeTab, onTabChange }) {
