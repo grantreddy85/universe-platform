@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
-import { Loader2 } from "lucide-react";
+import { Loader2, Sparkles } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import ProjectHeader from "../components/project/ProjectHeader";
 import ProjectTabs from "../components/project/ProjectTabs";
+import TabAIQuery from "../components/project/TabAIQuery";
 import OverviewTab from "../components/project/tabs/OverviewTab";
 import AITab from "../components/project/tabs/AITab";
 import NotesTab from "../components/project/tabs/NotesTab";
