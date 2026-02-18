@@ -34,7 +34,7 @@ const navItems = [
 export default function Layout({ children, currentPageName }) {
   const [collapsed, setCollapsed] = useState(false);
   const [user, setUser] = useState(null);
-  const [showChatDropdown, setShowChatDropdown] = useState(false);
+  const [showChatDropdown, setShowChatDropdown] = useState(true);
   const [activeChats, setActiveChats] = useState([]);
   const navigate = useNavigate();
 
