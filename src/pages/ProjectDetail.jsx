@@ -18,6 +18,7 @@ import LabsTab from "../components/project/tabs/LabsTab";
 
 export default function ProjectDetail() {
   const [activeTab, setActiveTab] = useState("overview");
+  const [aiQueryOpen, setAiQueryOpen] = useState(false);
   const urlParams = new URLSearchParams(window.location.search);
   const projectId = urlParams.get("id");
 
