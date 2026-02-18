@@ -28,7 +28,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import InfographicModal from "./InfographicModal";
-import AssetDetailModal from "./AssetDetailModal";
 
 const statusStyles = {
   draft: "bg-gray-100 text-gray-600",
@@ -50,7 +49,6 @@ export default function AssetsTab({ project }) {
   const [showNew, setShowNew] = useState(false);
   const [form, setForm] = useState({ title: "", type: "hypothesis", description: "" });
   const [infographicAsset, setInfographicAsset] = useState(null);
-  const [detailAsset, setDetailAsset] = useState(null);
   const queryClient = useQueryClient();
 
   const { data: assets = [], isLoading } = useQuery({
