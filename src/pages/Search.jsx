@@ -106,6 +106,7 @@ export default function Search() {
     setActiveTab(newTab.id);
     setMessages([]);
     localStorage.setItem("search_drafts", JSON.stringify(updated));
+    window.dispatchEvent(new CustomEvent("search_drafts_updated"));
   };
 
   const closeTab = (tabId) => {
