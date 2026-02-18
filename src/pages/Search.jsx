@@ -389,59 +389,62 @@ export default function Search() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
-      {/* Tabs */}
-      <div className="bg-white border-b border-gray-200 px-6 py-3">
-        <div className="flex items-center gap-2 overflow-x-auto">
-          <div className="flex items-center gap-2 mr-4 pr-4 border-r border-gray-200">
-            <UniVerseLogo className="w-6 h-6" />
-            <span className="text-sm font-semibold text-gray-900">UniVerse</span>
-          </div>
+    <div className="h-screen bg-gray-50 flex overflow-hidden">
+      {/* Chat sidebar */}
+      <div className="w-56 flex-shrink-0 bg-white border-r border-gray-200 flex flex-col">
+        <div className="flex items-center gap-2 px-4 h-14 border-b border-gray-100">
+          <UniVerseLogo className="w-5 h-5" />
+          <span className="text-sm font-semibold text-gray-900">Chats</span>
+        </div>
+        <div className="flex-1 overflow-y-auto py-2 px-2 space-y-0.5">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => switchTab(tab.id)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-colors ${
+              className={`w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm transition-colors text-left group ${
                 activeTab === tab.id
-                  ? "bg-gray-100 text-gray-900 font-medium"
-                  : "text-gray-500 hover:bg-gray-50"
+                  ? "bg-blue-50 text-blue-700 font-medium"
+                  : "text-gray-600 hover:bg-gray-50"
               }`}
             >
-              {tab.name}
+              <MessageSquare className="w-3.5 h-3.5 flex-shrink-0 opacity-60" />
+              <span className="flex-1 truncate">{tab.name}</span>
               <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  closeTab(tab.id);
-                }}
-                className="hover:bg-gray-200 rounded p-0.5"
+                onClick={(e) => { e.stopPropagation(); closeTab(tab.id); }}
+                className="opacity-0 group-hover:opacity-100 hover:bg-gray-200 rounded p-0.5 flex-shrink-0 transition-opacity"
               >
                 <X className="w-3 h-3" />
               </button>
             </button>
           ))}
+        </div>
+        <div className="border-t border-gray-100 p-2 space-y-1">
           <button
             onClick={createNewChat}
-            className="flex items-center gap-1.5 px-3 py-2 text-sm text-gray-500 hover:bg-gray-50 rounded-lg transition-colors"
+            className="w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-500 hover:bg-gray-50 rounded-lg transition-colors"
           >
             <Plus className="w-3.5 h-3.5" />
             New Chat
           </button>
           <button
             onClick={openSummarizeDialog}
-            className="ml-auto flex items-center gap-1.5 px-3 py-2 text-sm text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+            className="w-full flex items-center gap-2 px-3 py-2 text-sm text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
           >
             <FileText className="w-3.5 h-3.5" />
             Summarize Sessions
           </button>
           <button
             onClick={resetAll}
-            className="flex items-center gap-1.5 px-3 py-2 text-sm text-gray-400 hover:text-gray-600 rounded-lg transition-colors"
+            className="w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-lg transition-colors"
           >
             <RotateCcw className="w-3.5 h-3.5" />
             Reset All
           </button>
         </div>
       </div>
+
+      {/* Main content */}
+      <div className="flex-1 flex flex-col overflow-hidden">
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto p-6 max-w-4xl mx-auto w-full">
