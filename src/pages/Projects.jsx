@@ -21,6 +21,7 @@ export default function Projects() {
   const [showNew, setShowNew] = useState(false);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [aiQueryOpen, setAiQueryOpen] = useState(false);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
