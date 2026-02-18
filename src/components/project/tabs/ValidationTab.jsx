@@ -49,6 +49,16 @@ export default function ValidationTab({ project }) {
     return projectNotes.find(n => n.content === validation.results);
   };
 
+  const handleApplySuggestion = useCallback(async (suggestionText) => {
+    if (!expandedNote) return;
+    const newContent = expandedNote.content
+      ? `${expandedNote.content}\n\n---\n\n${suggestionText}`
+      : suggestionText;
+    await base44.entities.Note.update(expandedNote.id, { content: newContent });
+    queryClient.invalidateQueries({ queryKey: ["project-notes", project.id] });
+    setExpandedNote((prev) => ({ ...prev, content: newContent }));
+  }, [expandedNote, project.id, queryClient]);
+
   if (expandedNote) {
     const isAssistantVisible = assistantOpen !== false;
     return (
