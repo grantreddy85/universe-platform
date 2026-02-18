@@ -55,12 +55,24 @@ export default function Search() {
     queryFn: () => base44.entities.Project.list("title", 100),
   });
 
-  // Reset to landing page when Research tab is clicked (handles both navigating from elsewhere and already being on the page)
+  // Reset to landing page when Research tab is clicked
   useEffect(() => {
     const handleReset = () => resetAll();
+    const handleSwitchChat = (e) => {
+      const { chatId } = e.detail;
+      const tab = tabs.find((t) => t.id === chatId);
+      if (tab) {
+        setActiveTab(chatId);
+        setMessages(tab.messages || []);
+      }
+    };
     window.addEventListener("research_reset", handleReset);
-    return () => window.removeEventListener("research_reset", handleReset);
-  }, []);
+    window.addEventListener("research_switch_chat", handleSwitchChat);
+    return () => {
+      window.removeEventListener("research_reset", handleReset);
+      window.removeEventListener("research_switch_chat", handleSwitchChat);
+    };
+  }, [tabs]);
 
   // Load drafts from localStorage on mount
   useEffect(() => {
