@@ -112,22 +112,64 @@ IMPORTANT: If your response includes a concrete suggested edit or rewrite of the
             </p>
           </div>
         ) : (
-          messages.map((msg, idx) => (
-            <div
-              key={idx}
-              className={`flex gap-2 ${msg.role === "user" ? "justify-end" : "justify-start"}`}
-            >
-              <div
-                className={`max-w-xs rounded-lg px-3 py-2 text-xs ${
-                  msg.role === "user"
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-100 text-gray-800"
-                }`}
-              >
-                {msg.content}
+          messages.map((msg, idx) => {
+            if (msg.role === "user") {
+              return (
+                <div key={idx} className="flex gap-2 justify-end">
+                  <div className="max-w-xs rounded-lg px-3 py-2 text-xs bg-blue-600 text-white">
+                    {msg.content}
+                  </div>
+                </div>
+              );
+            }
+
+            // Parse assistant messages for <suggestion> tags
+            const parts = msg.content.split(/(<suggestion>[\s\S]*?<\/suggestion>)/g);
+            return (
+              <div key={idx} className="flex gap-2 justify-start">
+                <div className="max-w-xs space-y-2">
+                  {parts.map((part, pIdx) => {
+                    const match = part.match(/^<suggestion>([\s\S]*?)<\/suggestion>$/);
+                    if (match) {
+                      const suggestionText = match[1].trim();
+                      const isApplied = appliedIdx.has(`${idx}-${pIdx}`);
+                      const isApplying = applyingIdx === `${idx}-${pIdx}`;
+                      return (
+                        <div key={pIdx} className="bg-blue-50 border border-blue-200 rounded-lg p-3 space-y-2">
+                          <p className="text-[11px] font-semibold text-blue-700 uppercase tracking-wide">Suggested Edit</p>
+                          <p className="text-xs text-gray-700 whitespace-pre-wrap leading-relaxed">{suggestionText}</p>
+                          <Button
+                            size="sm"
+                            disabled={isApplied || isApplying || !onApplySuggestion}
+                            onClick={async () => {
+                              setApplyingIdx(`${idx}-${pIdx}`);
+                              await onApplySuggestion(suggestionText);
+                              setAppliedIdx((prev) => new Set([...prev, `${idx}-${pIdx}`]));
+                              setApplyingIdx(null);
+                            }}
+                            className={`w-full text-xs h-7 ${isApplied ? "bg-green-600 hover:bg-green-600" : "bg-blue-600 hover:bg-blue-700"}`}
+                          >
+                            {isApplying ? (
+                              <><Loader2 className="w-3 h-3 mr-1.5 animate-spin" />Applying...</>
+                            ) : isApplied ? (
+                              <><Check className="w-3 h-3 mr-1.5" />Applied</>
+                            ) : (
+                              <><Wand2 className="w-3 h-3 mr-1.5" />Apply to Document</>
+                            )}
+                          </Button>
+                        </div>
+                      );
+                    }
+                    return part.trim() ? (
+                      <div key={pIdx} className="bg-gray-100 rounded-lg px-3 py-2 text-xs text-gray-800 whitespace-pre-wrap leading-relaxed">
+                        {part.trim()}
+                      </div>
+                    ) : null;
+                  })}
+                </div>
               </div>
-            </div>
-          ))
+            );
+          })
         )}
         {isLoading && (
           <div className="flex gap-2 justify-start">
