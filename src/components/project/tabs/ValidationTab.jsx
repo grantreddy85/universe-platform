@@ -188,7 +188,18 @@ export default function ValidationTab({ project }) {
                     <h3 className="text-sm font-semibold text-gray-900">{v.title}</h3>
                     <p className="text-xs text-gray-500 mt-1">{v.type?.replace("_", " ")}</p>
                   </div>
-                  <ChevronRight className="w-4 h-4 text-gray-300" />
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (confirm("Delete this validation?")) deleteMutation.mutate(v.id);
+                      }}
+                      className="p-1.5 rounded-lg text-gray-300 hover:text-red-500 hover:bg-red-50 transition-colors"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                    <ChevronRight className="w-4 h-4 text-gray-300" />
+                  </div>
                 </div>
               </div>
             );
