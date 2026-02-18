@@ -128,7 +128,7 @@ export default function AssetsTab({ project }) {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     {(asset.type === "publication" || asset.type === "validation_report") && (
-                      <DropdownMenuItem onClick={() => setInfographicAsset(asset)}>
+                      <DropdownMenuItem onClick={(e) => { e.stopPropagation(); setInfographicAsset(asset); }}>
                         <Sparkles className="w-3.5 h-3.5 mr-2 text-blue-500" />
                         Generate Infographic
                       </DropdownMenuItem>
