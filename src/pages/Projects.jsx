@@ -136,6 +136,12 @@ export default function Projects() {
         onSubmit={(data) => createMutation.mutate(data)}
         isSubmitting={createMutation.isPending}
       />
+
+      <CrossProjectAIQuery
+        projects={projects}
+        open={aiQueryOpen}
+        onOpenChange={setAiQueryOpen}
+      />
     </div>
   );
 }
