@@ -78,11 +78,17 @@ export default function OverviewTab({ project, onTabChange }) {
         />
       </div>
 
-      {/* Research Progress Guidance */}
-      <ResearchProgress 
-        projectStatus={Object.keys({ draft: 1, active: 2, validation: 3, validated: 4, tokenised: 5 })[Object.keys({ draft: 1, active: 2, validation: 3, validated: 4, tokenised: 5 }).indexOf(project.status)] || 1}
-        onTabChange={onTabChange}
-      />
+      {/* Two-column: Research Methodology + AI Chat */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Research Progress Guidance */}
+        <ResearchProgress 
+          projectStatus={Object.keys({ draft: 1, active: 2, validation: 3, validated: 4, tokenised: 5 })[Object.keys({ draft: 1, active: 2, validation: 3, validated: 4, tokenised: 5 }).indexOf(project.status)] || 1}
+          onTabChange={onTabChange}
+        />
+
+        {/* Project AI Chat */}
+        <OverviewAIChat project={project} />
+      </div>
 
       {/* Project Status Overview */}
       <div className="bg-white rounded-xl border border-gray-100 p-6">
