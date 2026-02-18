@@ -49,11 +49,26 @@ export default function ValidationTab({ project }) {
     return projectNotes.find(n => n.content === validation.results);
   };
 
-  const handleApplySuggestion = useCallback(async (suggestionText) => {
+  const handleApplySuggestion = useCallback(async (originalExcerpt, suggestionText) => {
     if (!expandedNote) return;
-    const newContent = expandedNote.content
-      ? `${expandedNote.content}\n\n---\n\n${suggestionText}`
-      : suggestionText;
+    let newContent = expandedNote.content || "";
+
+    if (originalExcerpt && newContent.includes(originalExcerpt)) {
+      // Find the paragraph/block that contains the original excerpt and replace it
+      const paragraphs = newContent.split(/\n\n+/);
+      const matchIdx = paragraphs.findIndex((p) => p.includes(originalExcerpt));
+      if (matchIdx !== -1) {
+        paragraphs[matchIdx] = suggestionText;
+        newContent = paragraphs.join("\n\n");
+      } else {
+        // Fallback: inline replace the excerpt itself
+        newContent = newContent.replace(originalExcerpt, suggestionText);
+      }
+    } else {
+      // No match found — append as a new section
+      newContent = newContent ? `${newContent}\n\n${suggestionText}` : suggestionText;
+    }
+
     await base44.entities.Note.update(expandedNote.id, { content: newContent });
     queryClient.invalidateQueries({ queryKey: ["project-notes", project.id] });
     setExpandedNote((prev) => ({ ...prev, content: newContent }));
