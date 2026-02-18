@@ -27,7 +27,6 @@ const navItems = [
   { name: "Projects", icon: FolderKanban, page: "Projects" },
   { name: "Workspace", icon: Briefcase, page: "Workspace" },
   { name: "Labs", icon: FlaskConical, page: null, external: true },
-  { name: "Tokenisation", icon: Coins, page: "Tokenisation" },
   { name: "Marketplace", icon: Store, page: null, external: true },
 ];
 
