@@ -113,6 +113,7 @@ export default function Search() {
     const filtered = tabs.filter((t) => t.id !== tabId);
     setTabs(filtered);
     localStorage.setItem("search_drafts", JSON.stringify(filtered));
+    window.dispatchEvent(new CustomEvent("search_drafts_updated"));
     if (activeTab === tabId) {
       setActiveTab(filtered.length > 0 ? filtered[0].id : null);
       setMessages(filtered.length > 0 ? filtered[0].messages : []);
