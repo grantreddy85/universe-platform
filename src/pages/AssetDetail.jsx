@@ -8,8 +8,9 @@ import { Badge } from "@/components/ui/badge";
 import {
   ArrowLeft, Sparkles, Send, TrendingUp, Globe, Users, DollarSign,
   CheckCircle2, Clock, FlaskConical, Lightbulb, Database, BarChart3,
-  FileText, ShieldCheck, BookOpen, ExternalLink, Star
+  FileText, ShieldCheck, BookOpen, ExternalLink, Star, Image
 } from "lucide-react";
+import InfographicModal from "@/components/project/tabs/InfographicModal";
 
 const typeIcons = {
   hypothesis: { icon: Lightbulb, color: "text-amber-500", bg: "bg-amber-50" },
