@@ -7,6 +7,7 @@ import {
   FolderKanban,
   Briefcase,
   FlaskConical,
+  GitBranch,
   Store,
   User,
   ChevronLeft,
