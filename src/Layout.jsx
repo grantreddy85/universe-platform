@@ -7,7 +7,6 @@ import {
   FolderKanban,
   Briefcase,
   FlaskConical,
-  Coins,
   Store,
   User,
   ChevronLeft,
