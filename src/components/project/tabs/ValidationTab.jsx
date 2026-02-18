@@ -50,7 +50,7 @@ export default function ValidationTab({ project }) {
   };
 
   const handleApplySuggestion = useCallback(async (originalExcerpt, suggestionText) => {
-    if (!expandedNote) return;
+    if (!expandedNote || !expandedNote.id) return;
     let newContent = expandedNote.content || "";
 
     if (originalExcerpt && newContent.includes(originalExcerpt)) {
