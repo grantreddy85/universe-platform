@@ -112,16 +112,86 @@ export default function Layout({ children, currentPageName }) {
                 );
               }
 
+              // Research tab with dropdown
+              if (item.name === "Research") {
+                const hasChats = activeChats.length > 0;
+                return (
+                  <Tooltip key={item.name}>
+                    <TooltipTrigger asChild>
+                      <div className="relative">
+                        <div
+                          className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-150 cursor-pointer ${
+                            collapsed ? "justify-center" : ""
+                          } ${
+                            isActive
+                              ? "bg-blue-50/80 text-blue-600 font-medium"
+                              : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                          }`}
+                        >
+                          {/* Main click area → go to landing */}
+                          <div
+                            className="flex items-center gap-3 flex-1"
+                            onClick={() => {
+                              navigate(createPageUrl(item.page));
+                              window.dispatchEvent(new CustomEvent("research_reset"));
+                              setShowChatDropdown(false);
+                            }}
+                          >
+                            <Icon
+                              className={`w-[18px] h-[18px] flex-shrink-0 ${isActive ? "text-blue-600" : ""}`}
+                              strokeWidth={1.7}
+                            />
+                            {!collapsed && <span>{item.name}</span>}
+                          </div>
+                          {/* Chevron to open dropdown — only when there are active chats */}
+                          {!collapsed && hasChats && (
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setShowChatDropdown((v) => !v);
+                              }}
+                              className="ml-auto p-0.5 rounded hover:bg-blue-100 transition-colors"
+                            >
+                              <ChevronDown className={`w-3.5 h-3.5 transition-transform ${showChatDropdown ? "rotate-180" : ""}`} />
+                            </button>
+                          )}
+                        </div>
+
+                        {/* Dropdown list of active chats */}
+                        {!collapsed && showChatDropdown && hasChats && (
+                          <div className="ml-2 mt-1 space-y-0.5 border-l-2 border-blue-100 pl-3">
+                            {activeChats.map((chat) => (
+                              <button
+                                key={chat.id}
+                                onClick={() => {
+                                  navigate(createPageUrl(item.page));
+                                  window.dispatchEvent(new CustomEvent("research_switch_chat", { detail: { chatId: chat.id } }));
+                                  setShowChatDropdown(false);
+                                }}
+                                className="w-full flex items-center gap-2 px-2 py-1.5 rounded-lg text-xs text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors text-left truncate"
+                              >
+                                <MessageSquare className="w-3 h-3 flex-shrink-0 text-gray-400" />
+                                <span className="truncate">{chat.name}</span>
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </TooltipTrigger>
+                    {collapsed && (
+                      <TooltipContent side="right" className="text-xs">
+                        {item.name}
+                      </TooltipContent>
+                    )}
+                  </Tooltip>
+                );
+              }
+
               return (
                 <Tooltip key={item.name}>
                   <TooltipTrigger asChild>
                     <Link
                       to={createPageUrl(item.page)}
-                      onClick={() => {
-                        if (item.name === "Research") {
-                          window.dispatchEvent(new CustomEvent("research_reset"));
-                        }
-                      }}
                       className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-150 ${
                         collapsed ? "justify-center" : ""
                       } ${
