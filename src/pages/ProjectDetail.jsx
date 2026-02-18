@@ -56,8 +56,27 @@ export default function ProjectDetail() {
   return (
     <div className="min-h-screen bg-[#fafbfc]">
       <ProjectHeader project={project} />
-      <ProjectTabs activeTab={activeTab} onTabChange={setActiveTab} />
+      <div className="border-b border-gray-100 bg-white px-6 lg:px-10 flex items-center justify-between">
+        <ProjectTabs activeTab={activeTab} onTabChange={setActiveTab} />
+        {activeTab !== "overview" && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setAiQueryOpen(true)}
+            className="text-xs text-gray-600 hover:text-blue-600"
+          >
+            <Sparkles className="w-3.5 h-3.5 mr-1.5" />
+            Ask AI
+          </Button>
+        )}
+      </div>
       <ActiveComponent project={project} onTabChange={setActiveTab} />
+      <TabAIQuery
+        project={project}
+        activeTab={activeTab}
+        open={aiQueryOpen}
+        onOpenChange={setAiQueryOpen}
+      />
     </div>
   );
 }
