@@ -413,6 +413,17 @@ export default function AssetDetail() {
               <ArrowLeft className="w-3.5 h-3.5 mr-2" />
               Back to Project Assets
             </Button>
+            {(asset.type === "publication" || asset.type === "validation_report") && (
+              <Button
+                variant="outline"
+                size="sm"
+                className="w-full text-xs justify-start"
+                onClick={() => setShowInfographic(true)}
+              >
+                <Image className="w-3.5 h-3.5 mr-2" />
+                Generate Infographic
+              </Button>
+            )}
             {!isOnMarketplace && asset.status === "validated" && (
               <Button
                 size="sm"
