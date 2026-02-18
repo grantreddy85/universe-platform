@@ -95,7 +95,7 @@ export default function Layout({ children, currentPageName }) {
                       to={createPageUrl(item.page)}
                       onClick={() => {
                         if (item.name === "Research") {
-                          localStorage.setItem("search_reset_trigger", Date.now().toString());
+                          window.dispatchEvent(new CustomEvent("research_reset"));
                         }
                       }}
                       className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-150 ${
