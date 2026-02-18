@@ -34,9 +34,31 @@ const navItems = [
 export default function Layout({ children, currentPageName }) {
   const [collapsed, setCollapsed] = useState(false);
   const [user, setUser] = useState(null);
+  const [showChatDropdown, setShowChatDropdown] = useState(false);
+  const [activeChats, setActiveChats] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     base44.auth.me().then(setUser).catch(() => {});
+  }, []);
+
+  // Load active chats from localStorage whenever Research is active
+  useEffect(() => {
+    const loadChats = () => {
+      const saved = localStorage.getItem("search_drafts");
+      if (saved) {
+        try { setActiveChats(JSON.parse(saved)); } catch { setActiveChats([]); }
+      } else {
+        setActiveChats([]);
+      }
+    };
+    loadChats();
+    window.addEventListener("storage", loadChats);
+    window.addEventListener("search_drafts_updated", loadChats);
+    return () => {
+      window.removeEventListener("storage", loadChats);
+      window.removeEventListener("search_drafts_updated", loadChats);
+    };
   }, []);
 
   const handleLogout = () => {
