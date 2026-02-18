@@ -4,14 +4,14 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Button } from "@/components/ui/button";
 import { Loader2, Download, Sparkles, BookmarkPlus, Share2 } from "lucide-react";
 
-export default function InfographicModal({ asset, project, open, onClose }) {
+export default function InfographicModal({ asset, project, open, onClose, inline = false }) {
   const [infographic, setInfographic] = useState(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const printRef = useRef(null);
 
   useEffect(() => {
-    if (open && !infographic) generate();
-  }, [open]);
+    if ((open || inline) && !infographic) generate();
+  }, [open, inline]);
 
   const generate = async () => {
     setIsGenerating(true);
