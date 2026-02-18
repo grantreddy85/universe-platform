@@ -87,6 +87,26 @@ export default function ValidationTab({ project }) {
           <h2 className="text-lg font-semibold text-gray-900">{expandedNote.title}</h2>
           <div className="flex items-center gap-2">
             <Button
+              size="sm"
+              onClick={async () => {
+                const note = expandedNote;
+                await base44.entities.Asset.create({
+                  project_id: project.id,
+                  title: note.title,
+                  type: "publication",
+                  description: note.content?.slice(0, 300),
+                  status: "validated",
+                });
+                queryClient.invalidateQueries({ queryKey: ["project-assets", project.id] });
+                setExpandedNote(null);
+                alert("Published to Assets ✓");
+              }}
+              className="bg-emerald-600 hover:bg-emerald-700 text-xs"
+            >
+              <Send className="w-3 h-3 mr-1.5" />
+              Publish to Assets
+            </Button>
+            <Button
               variant="ghost"
               size="sm"
               onClick={() => {
