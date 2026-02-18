@@ -3,7 +3,7 @@ import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "../utils";
-import { Plus, Search, Filter, Sparkles } from "lucide-react";
+import { Plus, Search, Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -15,13 +15,11 @@ import {
 } from "@/components/ui/select";
 import ProjectCard from "../components/home/ProjectCard";
 import NewProjectDialog from "../components/projects/NewProjectDialog";
-import CrossProjectAIQuery from "../components/projects/CrossProjectAIQuery";
 
 export default function Projects() {
   const [showNew, setShowNew] = useState(false);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
-  const [aiQueryOpen, setAiQueryOpen] = useState(false);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
@@ -56,25 +54,14 @@ export default function Projects() {
             {projects.length} project{projects.length !== 1 ? "s" : ""}
           </p>
         </div>
-        <div className="flex items-center gap-2">
-          <Button
-            onClick={() => setAiQueryOpen(true)}
-            variant="outline"
-            size="sm"
-            className="text-xs border-purple-200 text-purple-600 hover:bg-purple-50"
-          >
-            <Sparkles className="w-3.5 h-3.5 mr-1.5" />
-            Analyze
-          </Button>
-          <Button
-            onClick={() => setShowNew(true)}
-            size="sm"
-            className="bg-blue-600 hover:bg-blue-700 text-xs"
-          >
-            <Plus className="w-3.5 h-3.5 mr-1.5" />
-            New Project
-          </Button>
-        </div>
+        <Button
+          onClick={() => setShowNew(true)}
+          size="sm"
+          className="bg-blue-600 hover:bg-blue-700 text-xs"
+        >
+          <Plus className="w-3.5 h-3.5 mr-1.5" />
+          New Project
+        </Button>
       </div>
 
       {/* Filters */}
@@ -135,12 +122,6 @@ export default function Projects() {
         onOpenChange={setShowNew}
         onSubmit={(data) => createMutation.mutate(data)}
         isSubmitting={createMutation.isPending}
-      />
-
-      <CrossProjectAIQuery
-        projects={projects}
-        open={aiQueryOpen}
-        onOpenChange={setAiQueryOpen}
       />
     </div>
   );

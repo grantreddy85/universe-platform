@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
-import { Loader2, Sparkles } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
 import ProjectHeader from "../components/project/ProjectHeader";
 import ProjectTabs from "../components/project/ProjectTabs";
-import TabAIQuery from "../components/project/TabAIQuery";
 import OverviewTab from "../components/project/tabs/OverviewTab";
 import AITab from "../components/project/tabs/AITab";
 import NotesTab from "../components/project/tabs/NotesTab";
@@ -18,7 +16,6 @@ import LabsTab from "../components/project/tabs/LabsTab";
 
 export default function ProjectDetail() {
   const [activeTab, setActiveTab] = useState("overview");
-  const [aiQueryOpen, setAiQueryOpen] = useState(false);
   const urlParams = new URLSearchParams(window.location.search);
   const projectId = urlParams.get("id");
 
@@ -56,27 +53,8 @@ export default function ProjectDetail() {
   return (
     <div className="min-h-screen bg-[#fafbfc]">
       <ProjectHeader project={project} />
-      <div className="border-b border-gray-100 bg-white px-6 lg:px-10 flex items-center justify-between">
-        <ProjectTabs activeTab={activeTab} onTabChange={setActiveTab} />
-        {activeTab !== "overview" && (
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setAiQueryOpen(true)}
-            className="text-xs text-gray-600 hover:text-blue-600"
-          >
-            <Sparkles className="w-3.5 h-3.5 mr-1.5" />
-            Ask AI
-          </Button>
-        )}
-      </div>
+      <ProjectTabs activeTab={activeTab} onTabChange={setActiveTab} />
       <ActiveComponent project={project} onTabChange={setActiveTab} />
-      <TabAIQuery
-        project={project}
-        activeTab={activeTab}
-        open={aiQueryOpen}
-        onOpenChange={setAiQueryOpen}
-      />
     </div>
   );
 }
