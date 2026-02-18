@@ -56,7 +56,9 @@ User's document:${context}
 
 User question: ${input}
 
-Provide concise, actionable feedback grounded in this scientific methodology. Reference which stage(s) of the research process the document addresses and suggest improvements for clarity, rigor, and completeness in the context of publication standards.`;
+Provide concise, actionable feedback grounded in this scientific methodology. Reference which stage(s) of the research process the document addresses and suggest improvements for clarity, rigor, and completeness in the context of publication standards.
+
+IMPORTANT: If your response includes a concrete suggested edit or rewrite of the document (or a section of it), wrap ONLY that suggested text block in <suggestion>...</suggestion> tags. Only use this tag when you have a specific text the user can directly apply to their document. Do not wrap general advice in suggestion tags.`;
 
     try {
       const response = await base44.integrations.Core.InvokeLLM({
