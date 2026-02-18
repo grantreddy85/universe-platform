@@ -529,7 +529,6 @@ export default function Search() {
         </div>
       </div>
       </div>{/* end main content */}
-    </div>{/* end outer flex - overrides the closing tag below */}
 
       {/* Summarize Dialog */}
       <Dialog open={showSummarizeDialog} onOpenChange={setShowSummarizeDialog}>
