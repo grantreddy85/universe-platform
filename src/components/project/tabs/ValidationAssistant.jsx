@@ -2,8 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ChevronLeft, Send, Loader2, Sparkles, Wand2, Check } from "lucide-react";
-import ReactMarkdown from "react-markdown";
+import { ChevronLeft, Send, Loader2, Sparkles } from "lucide-react";
 
 export default function ValidationAssistant({ validation, linkedNote, isOpen, onToggle }) {
   const [messages, setMessages] = useState([]);
