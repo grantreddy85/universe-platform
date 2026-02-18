@@ -3,7 +3,7 @@ import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "../utils";
-import { Plus, Search, Filter } from "lucide-react";
+import { Plus, Search, Filter, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/select";
 import ProjectCard from "../components/home/ProjectCard";
 import NewProjectDialog from "../components/projects/NewProjectDialog";
+import CrossProjectAIQuery from "../components/projects/CrossProjectAIQuery";
 
 export default function Projects() {
   const [showNew, setShowNew] = useState(false);
