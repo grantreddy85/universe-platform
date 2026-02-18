@@ -125,6 +125,7 @@ export default function Search() {
     setActiveTab(null);
     setMessages([]);
     localStorage.setItem("search_drafts", JSON.stringify([]));
+    window.dispatchEvent(new CustomEvent("search_drafts_updated"));
   };
 
   const switchTab = (tabId) => {
