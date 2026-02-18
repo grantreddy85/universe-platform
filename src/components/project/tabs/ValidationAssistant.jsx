@@ -4,10 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ChevronLeft, Send, Loader2, Sparkles, Check, Wand2 } from "lucide-react";
 
-export default function ValidationAssistant({ validation, linkedNote, isOpen, onToggle }) {
+export default function ValidationAssistant({ validation, linkedNote, isOpen, onToggle, onApplySuggestion }) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [applyingIdx, setApplyingIdx] = useState(null);
+  const [appliedIdx, setAppliedIdx] = useState(new Set());
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
