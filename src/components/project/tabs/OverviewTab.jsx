@@ -13,6 +13,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 import ResearchProgress from "../ResearchProgress";
+import OverviewAIChat from "./OverviewAIChat";
 
 export default function OverviewTab({ project, onTabChange }) {
   const { data: notes = [] } = useQuery({
