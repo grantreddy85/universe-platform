@@ -161,19 +161,30 @@ export default function ValidationTab({ project }) {
       ) : (
         <div className="space-y-3">
           {validations.map((v) => {
-            const linkedNote = getLinkedNote(v);
+            const linkedNote = projectNotes.find(n => n.id === v.note_id) || getLinkedNote(v);
             return (
-              <div key={v.id} className="bg-white rounded-lg border border-gray-100 p-4">
-                <h3 className="text-sm font-semibold text-gray-900">{v.title}</h3>
-                <p className="text-xs text-gray-500 mt-1">{v.type}</p>
-                {linkedNote && (
-                  <button
-                    onClick={() => setExpandedNote(linkedNote)}
-                    className="mt-3 text-xs text-blue-600 hover:text-blue-700 hover:underline"
-                  >
-                    View Note →
-                  </button>
-                )}
+              <div
+                key={v.id}
+                onClick={() => {
+                  setSelectedValidation(v);
+                  if (linkedNote) {
+                    setExpandedNote(linkedNote);
+                    setAssistantOpen(true);
+                  } else {
+                    // Open with a blank note placeholder so the guide can still help
+                    setExpandedNote({ id: null, title: v.title, content: v.results || "", created_date: v.created_date });
+                    setAssistantOpen(true);
+                  }
+                }}
+                className="bg-white rounded-lg border border-gray-100 p-4 cursor-pointer hover:border-blue-200 hover:shadow-sm transition-all"
+              >
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-sm font-semibold text-gray-900">{v.title}</h3>
+                    <p className="text-xs text-gray-500 mt-1">{v.type?.replace("_", " ")}</p>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-gray-300" />
+                </div>
               </div>
             );
           })}
