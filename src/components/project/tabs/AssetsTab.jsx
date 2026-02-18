@@ -161,6 +161,13 @@ export default function AssetsTab({ project }) {
         </div>
       )}
 
+      <InfographicModal
+        asset={infographicAsset}
+        project={project}
+        open={!!infographicAsset}
+        onClose={() => setInfographicAsset(null)}
+      />
+
       <Dialog open={showNew} onOpenChange={setShowNew}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
