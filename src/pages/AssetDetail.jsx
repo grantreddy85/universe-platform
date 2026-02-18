@@ -446,15 +446,6 @@ export default function AssetDetail() {
             )}
           </div>
 
-          {/* Inline Infographic */}
-          {showInfographic && (
-            <InfographicModal
-              asset={asset}
-              project={project}
-              inline={true}
-              onClose={() => setShowInfographic(false)}
-            />
-          )}
         </div>
       </div>
     </div>
