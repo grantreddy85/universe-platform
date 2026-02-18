@@ -107,7 +107,8 @@ export default function AssetsTab({ project }) {
           {assets.map((asset) => (
             <div
               key={asset.id}
-              className="bg-white rounded-xl border border-gray-100 p-5 hover:border-gray-200 transition-colors"
+              className="bg-white rounded-xl border border-gray-100 p-5 hover:border-gray-200 hover:shadow-sm transition-all cursor-pointer"
+              onClick={() => navigate(createPageUrl("AssetDetail") + `?id=${asset.id}&project_id=${project.id}`)}
             >
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-2">
