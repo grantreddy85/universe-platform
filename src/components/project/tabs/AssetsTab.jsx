@@ -28,6 +28,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import InfographicModal from "./InfographicModal";
+import AssetDetailModal from "./AssetDetailModal";
 
 const statusStyles = {
   draft: "bg-gray-100 text-gray-600",
