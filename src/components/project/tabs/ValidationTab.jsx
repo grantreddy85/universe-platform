@@ -44,6 +44,11 @@ export default function ValidationTab({ project }) {
     },
   });
 
+  const deleteMutation = useMutation({
+    mutationFn: (id) => base44.entities.ValidationRequest.delete(id),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["project-validations", project.id] }),
+  });
+
   const getLinkedNote = (validation) => {
     if (!validation.results) return null;
     return projectNotes.find(n => n.content === validation.results);
