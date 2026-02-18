@@ -12,7 +12,7 @@ import CohortsTab from "../components/project/tabs/CohortsTab";
 import WorkflowsTab from "../components/project/tabs/WorkflowsTab";
 import ValidationTab from "../components/project/tabs/ValidationTab";
 import AssetsTab from "../components/project/tabs/AssetsTab";
-import TokenisationTab from "../components/project/tabs/TokenisationTab";
+import LabsTab from "../components/project/tabs/LabsTab";
 
 export default function ProjectDetail() {
   const [activeTab, setActiveTab] = useState("overview");
