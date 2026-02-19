@@ -120,6 +120,57 @@ export default function Home() {
         <StatsCard label="Tokenised" value={tokenisedAssets} icon={Coins} accent="purple" linkTo="Tokenisation" />
       </div>
 
+      {/* Lab Activity */}
+      {labRequests.length > 0 && (
+        <div className="mb-10">
+          <div className="flex items-center justify-between mb-5">
+            <div className="flex items-center gap-2">
+              <h2 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">Lab Activity</h2>
+              {activeLabRequests.length > 0 && (
+                <span className="text-[10px] bg-teal-50 text-teal-600 border border-teal-100 rounded-full px-2 py-0.5 font-medium">
+                  {activeLabRequests.length} active
+                </span>
+              )}
+            </div>
+            <Link to={createPageUrl("Labs")}>
+              <Button variant="ghost" size="sm" className="text-xs text-gray-500 hover:text-gray-900">
+                View Labs <ArrowRight className="w-3 h-3 ml-1" />
+              </Button>
+            </Link>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {labRequests.slice(0, 6).map((req) => {
+              const service = labServices.find((s) => s.id === req.service_id);
+              const statusConfig = {
+                pending: { icon: Clock, color: "text-amber-500", bg: "bg-amber-50", label: "Pending" },
+                in_review: { icon: Loader, color: "text-blue-500", bg: "bg-blue-50", label: "In Review" },
+                processing: { icon: Loader, color: "text-purple-500", bg: "bg-purple-50", label: "Processing" },
+                completed: { icon: CheckCircle, color: "text-emerald-500", bg: "bg-emerald-50", label: "Completed" },
+                rejected: { icon: FlaskConical, color: "text-red-400", bg: "bg-red-50", label: "Rejected" },
+              }[req.status] || { icon: Clock, color: "text-gray-400", bg: "bg-gray-50", label: req.status };
+              const Icon = statusConfig.icon;
+              return (
+                <div key={req.id} className="bg-white rounded-xl border border-gray-100 p-4 flex items-start gap-3">
+                  <div className={`w-8 h-8 rounded-lg ${statusConfig.bg} flex items-center justify-center flex-shrink-0 mt-0.5`}>
+                    <Icon className={`w-4 h-4 ${statusConfig.color}`} strokeWidth={1.8} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-semibold text-gray-800 truncate">{req.title}</p>
+                    <p className="text-[11px] text-gray-400 mt-0.5 truncate">{service?.name || "Lab Service"}</p>
+                    <div className="flex items-center gap-2 mt-2">
+                      <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full ${statusConfig.bg} ${statusConfig.color}`}>
+                        {statusConfig.label}
+                      </span>
+                      <span className="text-[10px] text-gray-300 capitalize">{req.request_type?.replace("_", " ")}</span>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
       {/* Projects + Activity */}
       <div className="grid lg:grid-cols-3 gap-8">
         {/* Projects */}
