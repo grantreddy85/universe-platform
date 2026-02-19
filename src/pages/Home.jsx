@@ -12,7 +12,11 @@ import {
   ArrowRight,
   Sparkles,
   TrendingUp,
-  Users
+  Users,
+  FlaskConical,
+  Clock,
+  CheckCircle,
+  Loader
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import StatsCard from "../components/home/StatsCard";
