@@ -50,6 +50,20 @@ export default function Home() {
     queryFn: () => base44.entities.Activity.list("-created_date", 4),
   });
 
+  const { data: labRequests = [] } = useQuery({
+    queryKey: ["lab_requests_home"],
+    queryFn: () => base44.entities.LabRequest.list("-updated_date", 10),
+  });
+
+  const { data: labServices = [] } = useQuery({
+    queryKey: ["lab_services_home"],
+    queryFn: () => base44.entities.LabService.list(),
+  });
+
+  const activeLabRequests = labRequests.filter(
+    (r) => r.status === "pending" || r.status === "in_review" || r.status === "processing"
+  );
+
   // Mock marketplace feed data (placeholder until Marketplace is implemented)
   const marketplaceFeed = [
     {
