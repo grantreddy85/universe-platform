@@ -29,6 +29,28 @@ export default function ProjectDetail() {
     enabled: !!projectId,
   });
 
+  const { data: notes = [] } = useQuery({
+    queryKey: ["project-notes", projectId],
+    queryFn: () => base44.entities.Note.filter({ project_id: projectId }, "-created_date", 100),
+    enabled: !!projectId,
+  });
+  const { data: validations = [] } = useQuery({
+    queryKey: ["project-validations", projectId],
+    queryFn: () => base44.entities.ValidationRequest.filter({ project_id: projectId }, "-created_date", 100),
+    enabled: !!projectId,
+  });
+  const { data: assets = [] } = useQuery({
+    queryKey: ["project-assets", projectId],
+    queryFn: () => base44.entities.Asset.filter({ project_id: projectId }, "-created_date", 100),
+    enabled: !!projectId,
+  });
+
+  const tabCounts = {
+    notes: notes.length || null,
+    validation: validations.length || null,
+    assets: assets.length || null,
+  };
+
   if (isLoading || !project) {
     return (
       <div className="flex items-center justify-center h-screen">
