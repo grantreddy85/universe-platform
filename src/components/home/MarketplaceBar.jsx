@@ -121,7 +121,7 @@ export default function MarketplaceBar() {
       </div>
 
       {/* Lab Requests */}
-      <div className="flex items-center gap-3 px-5 h-full flex-shrink-0 min-w-0 flex-1">
+      <div className="flex items-center gap-3 px-5 h-full min-w-0 flex-1 overflow-hidden">
         <div className="flex items-center gap-1.5 flex-shrink-0">
           <FlaskConical className="w-3.5 h-3.5 text-teal-600" strokeWidth={2} />
           <span className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">Lab Requests</span>
@@ -131,21 +131,33 @@ export default function MarketplaceBar() {
             </span>
           )}
         </div>
+
         <div className="flex items-center gap-2 overflow-hidden flex-1">
           {labRequests.length === 0 ? (
             <span className="text-[11px] text-gray-300">No requests</span>
           ) : (
-            labRequests.slice(0, 3).map((req) => {
+            labRequests.slice(0, 5).map((req) => {
               const sc = STATUS_CONFIG[req.status] || { color: "text-gray-400", bg: "bg-gray-50", label: req.status };
               return (
-                <div key={req.id} className={`flex items-center gap-1.5 ${sc.bg} rounded-lg px-2.5 py-1 flex-shrink-0`}>
-                  <span className={`text-[11px] font-medium ${sc.color} max-w-[100px] truncate`}>{req.title}</span>
-                  <span className={`text-[9px] font-semibold ${sc.color} opacity-75`}>{sc.label}</span>
+                <div key={req.id} className="flex items-center gap-2.5 bg-white border border-gray-100 rounded-xl px-3 py-1.5 flex-shrink-0 shadow-sm min-w-[180px]">
+                  {/* Icon */}
+                  <div className="w-7 h-7 rounded-lg bg-teal-50 flex items-center justify-center flex-shrink-0">
+                    <FlaskConical className="w-3.5 h-3.5 text-teal-500" strokeWidth={1.8} />
+                  </div>
+                  {/* Text */}
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[11px] font-semibold text-gray-800 truncate leading-tight">{req.title}</p>
+                    <p className="text-[10px] text-gray-400 truncate leading-tight">{req.description || req.request_type?.replace("_", " ") || "Lab Request"}</p>
+                    <span className={`inline-block mt-0.5 text-[9px] font-semibold px-2 py-0.5 rounded-full ${sc.bg} ${sc.color}`}>
+                      {sc.label}
+                    </span>
+                  </div>
                 </div>
               );
             })
           )}
         </div>
+
         <Link to={createPageUrl("Labs")} className="flex-shrink-0">
           <span className="flex items-center gap-0.5 text-[10px] text-gray-400 hover:text-gray-600 transition-colors">
             View all <ChevronRight className="w-3 h-3" />
