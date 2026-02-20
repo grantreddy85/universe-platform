@@ -11,8 +11,7 @@ import {
   Plus,
   ArrowRight,
   Sparkles,
-  TrendingUp,
-  Users
+  FlaskConical
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import StatsCard from "../components/home/StatsCard";
