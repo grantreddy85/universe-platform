@@ -177,35 +177,48 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Marketplace Feed */}
+          {/* Lab Activity */}
           <div>
-            <h2 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-5">
-              Marketplace Highlights
-            </h2>
-            <div className="bg-white rounded-xl border border-gray-100 p-5 space-y-4">
-              {marketplaceFeed.map((item) => (
-                <div key={item.id} className="flex items-start gap-3 pb-4 border-b border-gray-50 last:border-0 last:pb-0">
-                  <div className="w-8 h-8 rounded-lg bg-green-50 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <TrendingUp className="w-4 h-4 text-green-600" strokeWidth={1.8} />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <h4 className="text-xs font-semibold text-gray-900 mb-1 line-clamp-1">
-                      {item.projectTitle}
-                    </h4>
-                    <p className="text-[11px] text-gray-400 mb-2">{item.category}</p>
-                    <div className="flex items-center gap-3 text-[11px]">
-                      <span className="font-semibold text-green-600">{item.amount}</span>
-                      <span className="flex items-center gap-1 text-gray-400">
-                        <Users className="w-3 h-3" />
-                        {item.investors} investors
-                      </span>
-                    </div>
-                  </div>
+            <div className="flex items-center justify-between mb-5">
+              <h2 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">Lab Activity</h2>
+              <Link to={createPageUrl("Labs")}>
+                <Button variant="ghost" size="sm" className="text-xs text-gray-500 hover:text-gray-900">
+                  View Labs <ArrowRight className="w-3 h-3 ml-1" />
+                </Button>
+              </Link>
+            </div>
+            <div className="bg-white rounded-xl border border-gray-100 p-5">
+              {labRequests.length === 0 ? (
+                <p className="text-xs text-gray-400 text-center py-8">No lab requests yet.</p>
+              ) : (
+                <div className="divide-y divide-gray-50">
+                  {labRequests.slice(0, 5).map((req) => {
+                    const service = labServices.find((s) => s.id === req.service_id);
+                    const STATUS_CONFIG = {
+                      pending:    { color: "bg-amber-100 text-amber-600",   label: "Pending" },
+                      in_review:  { color: "bg-blue-100 text-blue-600",     label: "In Review" },
+                      processing: { color: "bg-purple-100 text-purple-600", label: "Processing" },
+                      completed:  { color: "bg-emerald-100 text-emerald-600", label: "Completed" },
+                      rejected:   { color: "bg-red-100 text-red-500",       label: "Rejected" },
+                    };
+                    const sc = STATUS_CONFIG[req.status] || { color: "bg-gray-100 text-gray-500", label: req.status };
+                    return (
+                      <div key={req.id} className="flex items-start gap-3 py-3 first:pt-0 last:pb-0">
+                        <div className="w-8 h-8 rounded-lg bg-teal-50 flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <FlaskConical className="w-4 h-4 text-teal-600" strokeWidth={1.8} />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs font-semibold text-gray-800 truncate">{req.title}</p>
+                          <p className="text-[11px] text-gray-400 mt-0.5 truncate">{service?.name || "Lab Service"}</p>
+                          <span className={`inline-block mt-1.5 text-[10px] font-medium px-2 py-0.5 rounded-full ${sc.color}`}>
+                            {sc.label}
+                          </span>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
-              ))}
-              <p className="text-[10px] text-gray-300 text-center pt-2 italic">
-                Coming Soon: Live marketplace feed
-              </p>
+              )}
             </div>
           </div>
         </div>
