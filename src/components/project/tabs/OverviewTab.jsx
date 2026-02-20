@@ -53,30 +53,6 @@ export default function OverviewTab({ project, onTabChange }) {
 
   return (
     <div className="p-6 lg:p-8 space-y-6">
-      {/* Key Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard
-          icon={FileText}
-          label="Notes & Findings"
-          value={notes.length}
-          color="text-blue-600"
-        />
-        <StatCard
-          icon={Shield}
-          label="Validations"
-          value={validations.length}
-          subtitle={`${pendingValidations.length} pending`}
-          color="text-yellow-600"
-        />
-        <StatCard
-          icon={Box}
-          label="Assets"
-          value={assets.length}
-          subtitle={`${validatedAssets.length} validated`}
-          color="text-green-600"
-        />
-      </div>
-
       {/* Research Progress Guidance */}
       <ResearchProgress 
         projectStatus={Object.keys({ draft: 1, active: 2, validation: 3, validated: 4, tokenised: 5 })[Object.keys({ draft: 1, active: 2, validation: 3, validated: 4, tokenised: 5 }).indexOf(project.status)] || 1}
