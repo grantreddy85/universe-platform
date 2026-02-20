@@ -18,6 +18,7 @@ import {
   MessageSquare
 } from "lucide-react";
 import UniVerseLogo from "@/components/UniVerseLogo";
+import MarketplaceBar from "@/components/home/MarketplaceBar";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
