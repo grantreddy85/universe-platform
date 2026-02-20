@@ -113,11 +113,6 @@ export default function Home() {
         <StatsCard label="Tokenised" value={tokenisedAssets} icon={Coins} accent="purple" linkTo="Tokenisation" />
       </div>
 
-      {/* Lab Activity */}
-      {labRequests.length > 0 && (
-        <LabActivitySection labRequests={labRequests} labServices={labServices} />
-      )}
-
       {/* Projects + Activity */}
       <div className="grid lg:grid-cols-3 gap-8">
         {/* Projects */}
