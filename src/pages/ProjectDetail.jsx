@@ -76,7 +76,7 @@ export default function ProjectDetail() {
   return (
     <div className="min-h-screen bg-[#fafbfc]">
       <ProjectHeader project={project} />
-      <ProjectTabs activeTab={activeTab} onTabChange={setActiveTab} />
+      <ProjectTabs activeTab={activeTab} onTabChange={setActiveTab} tabCounts={tabCounts} />
       <ActiveComponent project={project} onTabChange={setActiveTab} />
     </div>
   );
