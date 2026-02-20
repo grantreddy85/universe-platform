@@ -12,16 +12,13 @@ import {
   ArrowRight,
   Sparkles,
   TrendingUp,
-  Users,
-  FlaskConical,
-  Clock,
-  CheckCircle,
-  Loader
+  Users
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import StatsCard from "../components/home/StatsCard";
 import ProjectCard from "../components/home/ProjectCard";
 import ActivityItem from "../components/home/ActivityItem";
+import LabActivitySection from "../components/home/LabActivitySection";
 
 export default function Home() {
   const [user, setUser] = useState(null);
