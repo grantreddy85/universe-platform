@@ -55,7 +55,7 @@ export default function LabRequestDialog({ service, open, onClose }) {
     setStep(2);
   };
 
-  const isValid = form.title && form.description && (requestType === "sample_submission" || file);
+  const isValid = form.title && form.description;
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
