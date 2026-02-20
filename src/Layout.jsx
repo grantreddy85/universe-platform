@@ -271,8 +271,11 @@ export default function Layout({ children, currentPageName }) {
         </aside>
 
         {/* Main Content */}
-        <main className="flex-1 overflow-auto">{children}</main>
+        <main className="flex-1 overflow-auto pb-14">{children}</main>
       </div>
+
+      {/* Marketplace Bar */}
+      <MarketplaceBar />
     </TooltipProvider>
   );
 }
