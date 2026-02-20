@@ -18,7 +18,6 @@ import {
   MessageSquare
 } from "lucide-react";
 import UniVerseLogo from "@/components/UniVerseLogo";
-import MarketplaceBar from "@/components/home/MarketplaceBar";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
@@ -271,11 +270,8 @@ export default function Layout({ children, currentPageName }) {
         </aside>
 
         {/* Main Content */}
-        <main className="flex-1 overflow-auto pb-14">{children}</main>
+        <main className="flex-1 overflow-auto">{children}</main>
       </div>
-
-      {/* Marketplace Bar */}
-      <MarketplaceBar />
     </TooltipProvider>
   );
 }
