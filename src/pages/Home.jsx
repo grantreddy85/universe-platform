@@ -57,10 +57,6 @@ export default function Home() {
     queryFn: () => base44.entities.LabService.list(),
   });
 
-  const activeLabRequests = labRequests.filter(
-    (r) => r.status === "pending" || r.status === "in_review" || r.status === "processing"
-  );
-
   // Mock marketplace feed data (placeholder until Marketplace is implemented)
   const marketplaceFeed = [
     {
