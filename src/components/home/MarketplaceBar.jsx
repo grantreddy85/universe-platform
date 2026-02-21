@@ -97,7 +97,7 @@ export default function MarketplaceBar() {
       </div>
 
       {/* 4-column grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-gray-100">
+      <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-gray-100">
 
         {/* Current Listings */}
         <div className="p-4 space-y-2.5">
