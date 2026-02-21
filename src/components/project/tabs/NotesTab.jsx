@@ -250,6 +250,18 @@ export default function NotesTab({ project }) {
                 <Button
                   variant="ghost"
                   size="sm"
+                  onClick={() => setAssistantOpen(!assistantOpen)}
+                  className={`text-xs h-7 px-2.5 ${assistantOpen ? "text-blue-600 bg-blue-50" : "text-gray-500 hover:text-blue-600"}`}
+                  title="Notes Guide"
+                >
+                  <Sparkles className="w-3.5 h-3.5 mr-1.5" />
+                  Notes Guide
+                </Button>
+              )}
+              {!isNew && (
+                <Button
+                  variant="ghost"
+                  size="sm"
                   className="text-xs text-red-400 hover:text-red-600 hover:bg-red-50 h-7 px-2.5"
                   onClick={() => deleteMutation.mutate(selectedNote.id)}
                   disabled={deleteMutation.isPending}
