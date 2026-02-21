@@ -129,7 +129,7 @@ export default function NotesTab({ project }) {
       {/* Notes List Panel */}
       <div
         className={`flex flex-col border-r border-gray-100 bg-white transition-all duration-300 ${
-          isEditorOpen ? "w-64 flex-shrink-0" : assistantOpen ? "flex-1" : "flex-1"
+          isEditorOpen ? "w-64 flex-shrink-0" : "flex-1"
         }`}
       >
         <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
