@@ -30,6 +30,13 @@ const WALLET = {
   earned: 43600.0,
 };
 
+const HOLDINGS = [
+  { name: "Validated Assets", value: 48200, color: "#10b981" },
+  { name: "Tokenised IP", value: 43600, color: "#6366f1" },
+  { name: "Pending Royalties", value: 14200, color: "#f59e0b" },
+  { name: "Liquid Balance", value: 22450, color: "#3b82f6" },
+];
+
 const ALERTS = [
   { id: 1, type: "info", text: "New investor expressed interest in your CRISPR project", time: "2h ago" },
   { id: 2, type: "success", text: "Royalty payment of $1,200 received", time: "1d ago" },
