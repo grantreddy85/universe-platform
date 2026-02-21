@@ -144,6 +144,13 @@ export default function CohortsTab({ project }) {
         </div>
       )}
 
+      </div>
+      <TabAIPanel
+        tabName="Cohorts"
+        contextData={cohorts}
+        isOpen={aiOpen}
+        onToggle={() => setAiOpen(!aiOpen)}
+      />
       <Dialog open={showNew} onOpenChange={setShowNew}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
