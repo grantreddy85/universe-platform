@@ -91,6 +91,7 @@ export default function NotesTab({ project }) {
     setSelectedNote(note);
     setForm({ title: note.title, content: note.content || "" });
     setIsDirty(false);
+    setAiPanelOpen(false);
   };
 
   const openNew = () => {
