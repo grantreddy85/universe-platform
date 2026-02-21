@@ -177,26 +177,7 @@ export default function MarketplaceBar() {
           </div>
         </div>
 
-        {/* Alerts */}
-        <div className="p-4 space-y-2.5">
-          <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
-            <Bell className="w-3 h-3" /> Alerts
-          </p>
-          {ALERTS.map((alert) => {
-            const Icon = alertIcon[alert.type] || Bell;
-            return (
-              <div key={alert.id} className="flex items-start gap-2">
-                <div className={`w-6 h-6 rounded-md flex items-center justify-center flex-shrink-0 mt-0.5 ${alertColor[alert.type]}`}>
-                  <Icon className="w-3 h-3" strokeWidth={1.8} />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-[11px] text-gray-700 leading-snug line-clamp-2">{alert.text}</p>
-                  <span className="text-[10px] text-gray-300">{alert.time}</span>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+
 
         {/* Requests */}
         <div className="p-4 space-y-2.5">
