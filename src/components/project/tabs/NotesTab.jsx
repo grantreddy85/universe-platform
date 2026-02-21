@@ -8,7 +8,6 @@ import {
   Send,
   Save,
   X,
-  FileText,
   Loader2,
   Sparkles,
 } from "lucide-react";
