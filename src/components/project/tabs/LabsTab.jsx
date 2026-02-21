@@ -151,5 +151,12 @@ export default function LabsTab({ project }) {
         );
       })}
     </div>
+    <TabAIPanel
+      tabName="Labs"
+      contextData={requests}
+      isOpen={aiOpen}
+      onToggle={() => setAiOpen(!aiOpen)}
+    />
+  </div>
   );
 }
