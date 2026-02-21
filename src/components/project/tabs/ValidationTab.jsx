@@ -21,6 +21,7 @@ export default function ValidationTab({ project }) {
   const [expandedNote, setExpandedNote] = useState(null);
   const [assistantOpen, setAssistantOpen] = useState(false);
   const [selectedValidation, setSelectedValidation] = useState(null);
+  const [aiOpen, setAiOpen] = useState(false);
   const queryClient = useQueryClient();
 
   const { data: validations = [], isLoading } = useQuery({

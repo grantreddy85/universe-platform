@@ -17,6 +17,7 @@ const statusConfig = {
 };
 
 export default function LabsTab({ project }) {
+  const [aiOpen, setAiOpen] = useState(false);
   const { data: requests = [], isLoading } = useQuery({
     queryKey: ["lab-requests-project", project?.id],
     queryFn: () => base44.entities.LabRequest.filter({ project_id: project.id }, "-created_date", 50),
