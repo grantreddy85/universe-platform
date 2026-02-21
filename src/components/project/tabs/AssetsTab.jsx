@@ -250,5 +250,12 @@ export default function AssetsTab({ project }) {
         </DialogContent>
       </Dialog>
     </div>
+    <TabAIPanel
+      tabName="Assets"
+      contextData={assets}
+      isOpen={aiOpen}
+      onToggle={() => setAiOpen(!aiOpen)}
+    />
+    </div>
   );
 }
