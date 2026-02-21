@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, GitBranch, MoreHorizontal, Trash2, Play, CheckCircle2, XCircle, Clock } from "lucide-react";
+import { Plus, GitBranch, MoreHorizontal, Trash2, Play, CheckCircle2, XCircle, Clock, Sparkles } from "lucide-react";
+import TabAIPanel from "./TabAIPanel";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
