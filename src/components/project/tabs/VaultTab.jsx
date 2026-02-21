@@ -227,6 +227,6 @@ export default function VaultTab({ project }) {
       isOpen={aiOpen}
       onToggle={() => setAiOpen(!aiOpen)}
     />
-    </div>
+  </div>
   );
 }

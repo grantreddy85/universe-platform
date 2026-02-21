@@ -219,6 +219,6 @@ export default function CohortsTab({ project }) {
       isOpen={aiOpen}
       onToggle={() => setAiOpen(!aiOpen)}
     />
-    </div>
+  </div>
   );
 }

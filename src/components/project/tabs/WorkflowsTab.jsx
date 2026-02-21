@@ -230,6 +230,6 @@ export default function WorkflowsTab({ project }) {
       isOpen={aiOpen}
       onToggle={() => setAiOpen(!aiOpen)}
     />
-    </div>
+  </div>
   );
 }

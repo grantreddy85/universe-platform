@@ -256,6 +256,6 @@ export default function AssetsTab({ project }) {
       isOpen={aiOpen}
       onToggle={() => setAiOpen(!aiOpen)}
     />
-    </div>
+  </div>
   );
 }
