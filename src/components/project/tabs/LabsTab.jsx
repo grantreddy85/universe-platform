@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
-import { FlaskConical, Clock, CheckCircle, AlertCircle, Loader2, FileText, ExternalLink } from "lucide-react";
+import { FlaskConical, Clock, CheckCircle, AlertCircle, Loader2, FileText, ExternalLink, Sparkles } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { createPageUrl } from "@/utils";
 import { Link } from "react-router-dom";
+import TabAIPanel from "./TabAIPanel";
 
 const statusConfig = {
   pending:    { label: "Pending",    color: "bg-gray-100 text-gray-600",   icon: Clock },
