@@ -2,6 +2,14 @@ import React from "react";
 import { Clock, CircleDot } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
+const CATEGORY_IMAGES = {
+  biological: "https://images.unsplash.com/photo-1576086213369-97a306d36557?w=400&q=80",
+  molecular:  "https://images.unsplash.com/photo-1614935151651-0bea6508db6b?w=400&q=80",
+  protein:    "https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=400&q=80",
+  structural: "https://images.unsplash.com/photo-1581093458791-9f3c3900df4b?w=400&q=80",
+  default:    "https://images.unsplash.com/photo-1582719471384-894fbb16e074?w=400&q=80",
+};
+
 const STATUS_STYLES = {
   available: "bg-emerald-50 text-emerald-600",
   busy: "bg-amber-50 text-amber-600",
