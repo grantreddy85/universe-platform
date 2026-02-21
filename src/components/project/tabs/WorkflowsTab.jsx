@@ -46,6 +46,7 @@ const statusStyles = {
 export default function WorkflowsTab({ project }) {
   const [showNew, setShowNew] = useState(false);
   const [form, setForm] = useState({ title: "", type: "in_silico_simulation", description: "" });
+  const [aiOpen, setAiOpen] = useState(false);
   const queryClient = useQueryClient();
 
   const { data: workflows = [], isLoading } = useQuery({

@@ -32,6 +32,7 @@ const statusStyles = {
 export default function CohortsTab({ project }) {
   const [showNew, setShowNew] = useState(false);
   const [form, setForm] = useState({ name: "", organism: "", strain: "", sample_size: "" });
+  const [aiOpen, setAiOpen] = useState(false);
   const queryClient = useQueryClient();
 
   const { data: cohorts = [], isLoading } = useQuery({

@@ -43,6 +43,7 @@ export default function VaultTab({ project }) {
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState("all");
   const [uploading, setUploading] = useState(false);
+  const [aiOpen, setAiOpen] = useState(false);
   const queryClient = useQueryClient();
 
   const { data: documents = [], isLoading } = useQuery({

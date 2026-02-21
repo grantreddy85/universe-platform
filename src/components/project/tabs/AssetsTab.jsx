@@ -53,6 +53,7 @@ export default function AssetsTab({ project }) {
   const [showNew, setShowNew] = useState(false);
   const [form, setForm] = useState({ title: "", type: "hypothesis", description: "" });
   const [infographicAsset, setInfographicAsset] = useState(null);
+  const [aiOpen, setAiOpen] = useState(false);
   const queryClient = useQueryClient();
 
   const { data: assets = [], isLoading } = useQuery({
