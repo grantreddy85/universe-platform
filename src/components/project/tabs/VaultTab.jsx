@@ -100,20 +100,21 @@ export default function VaultTab({ project }) {
             <Sparkles className="w-3.5 h-3.5 mr-1.5" />
             Notes Guide
           </Button>
-        <label>
-          <input type="file" className="hidden" onChange={handleUpload} disabled={uploading} />
-          <Button
-            size="sm"
-            className="bg-blue-600 hover:bg-blue-700 text-xs cursor-pointer"
-            disabled={uploading}
-            asChild
-          >
-            <span>
-              <Upload className="w-3.5 h-3.5 mr-1.5" />
-              {uploading ? "Uploading..." : "Upload"}
-            </span>
-          </Button>
-        </label>
+          <label>
+            <input type="file" className="hidden" onChange={handleUpload} disabled={uploading} />
+            <Button
+              size="sm"
+              className="bg-blue-600 hover:bg-blue-700 text-xs cursor-pointer"
+              disabled={uploading}
+              asChild
+            >
+              <span>
+                <Upload className="w-3.5 h-3.5 mr-1.5" />
+                {uploading ? "Uploading..." : "Upload"}
+              </span>
+            </Button>
+          </label>
+        </div>
       </div>
 
       <div className="flex items-center gap-3 mb-6">
@@ -219,6 +220,13 @@ export default function VaultTab({ project }) {
           ))}
         </div>
       )}
+    </div>
+    <TabAIPanel
+      tabName="Vault"
+      contextData={documents.map(d => ({ title: d.title, type: d.file_type, summary: d.summary }))}
+      isOpen={aiOpen}
+      onToggle={() => setAiOpen(!aiOpen)}
+    />
     </div>
   );
 }
