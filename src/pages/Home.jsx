@@ -223,6 +223,11 @@ export default function Home() {
           </div>
         </div>
       </div>
+
+      {/* Marketplace Bar */}
+      <div className="mt-8">
+        <MarketplaceBar />
+      </div>
     </div>
   );
 }
