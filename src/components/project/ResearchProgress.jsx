@@ -53,45 +53,27 @@ export default function ResearchProgress({ projectStatus, onTabChange }) {
         <p className="text-xs text-gray-500">Follow the scientific method to ensure research quality</p>
       </div>
 
-      {/* Circular visualization for desktop */}
-      <div className="hidden md:flex items-center justify-center gap-2 mb-8 flex-wrap">
+      {/* Vertical list with icons */}
+      <div className="space-y-2">
         {RESEARCH_STAGES.map((stage, index) => (
           <React.Fragment key={stage.id}>
             <button
               onClick={() => onTabChange?.(stage.tab)}
-              className="flex flex-col items-center gap-1 p-3 rounded-lg hover:bg-blue-50 transition-colors group cursor-pointer"
+              className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-blue-50 transition-colors text-left group"
             >
-              <div className="text-2xl">{stage.icon}</div>
-              <p className="text-xs font-medium text-gray-900 group-hover:text-blue-600">{stage.name}</p>
+              <div className="text-xl flex-shrink-0 w-8 text-center">{stage.icon}</div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-gray-900 group-hover:text-blue-600">{stage.name}</p>
+                <p className="text-xs text-gray-500">{stage.description}</p>
+              </div>
+              <Badge variant="outline" className="text-xs flex-shrink-0">{stage.tab}</Badge>
             </button>
             {index < RESEARCH_STAGES.length - 1 && (
-              <ArrowRight className="w-4 h-4 text-gray-300 mb-6" />
+              <div className="flex items-center pl-7">
+                <ArrowRight className="w-3 h-3 text-gray-200 rotate-90" />
+              </div>
             )}
           </React.Fragment>
-        ))}
-      </div>
-
-      {/* Linear checklist */}
-      <div className="space-y-2">
-        {RESEARCH_STAGES.map((stage) => (
-          <button
-            key={stage.id}
-            onClick={() => onTabChange?.(stage.tab)}
-            className="w-full flex items-start gap-3 p-3 rounded-lg hover:bg-blue-50 transition-colors text-left group"
-          >
-            <div className="pt-0.5">
-              {isStageComplete(stage.id) ? (
-                <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0" />
-              ) : (
-                <Circle className="w-5 h-5 text-gray-300 flex-shrink-0 group-hover:text-blue-400" />
-              )}
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-gray-900 group-hover:text-blue-600">{stage.name}</p>
-              <p className="text-xs text-gray-500">{stage.description}</p>
-            </div>
-            <Badge variant="outline" className="text-xs flex-shrink-0">{stage.tab}</Badge>
-          </button>
         ))}
       </div>
 
