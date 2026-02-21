@@ -312,6 +312,15 @@ export default function NotesTab({ project }) {
             />
           </div>
           </div>
+
+          {/* AI Panel */}
+          {aiPanelOpen && selectedNote && selectedNote !== "new" && (
+            <NoteAIPanel
+              note={{ ...selectedNote, title: form.title, content: form.content }}
+              onClose={() => setAiPanelOpen(false)}
+            />
+          )}
+          </div>
           )}
 
           {/* Notes Assistant */}
