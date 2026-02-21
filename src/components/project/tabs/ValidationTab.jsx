@@ -280,5 +280,12 @@ export default function ValidationTab({ project }) {
         </DialogContent>
       </Dialog>
     </div>
+    <TabAIPanel
+      tabName="Validation"
+      contextData={validations}
+      isOpen={aiOpen}
+      onToggle={() => setAiOpen(!aiOpen)}
+    />
+  </div>
   );
 }
