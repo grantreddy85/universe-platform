@@ -161,12 +161,6 @@ export default function WorkflowsTab({ project }) {
         </div>
       )}
 
-      <TabAIPanel
-        tabName="Workflows"
-        contextData={workflows}
-        isOpen={aiOpen}
-        onToggle={() => setAiOpen(!aiOpen)}
-      />
       <Dialog open={showNew} onOpenChange={setShowNew}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>

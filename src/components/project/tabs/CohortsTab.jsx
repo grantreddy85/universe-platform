@@ -213,5 +213,12 @@ export default function CohortsTab({ project }) {
         </DialogContent>
       </Dialog>
     </div>
+    <TabAIPanel
+      tabName="Cohorts"
+      contextData={cohorts}
+      isOpen={aiOpen}
+      onToggle={() => setAiOpen(!aiOpen)}
+    />
+    </div>
   );
 }
