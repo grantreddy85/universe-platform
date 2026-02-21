@@ -120,29 +120,52 @@ export default function MarketplaceBar() {
           ))}
         </div>
 
-        {/* Digital Wallet */}
-        <div className="p-4 space-y-2.5">
+        {/* Digital Asset Holdings */}
+        <div className="p-4 space-y-2">
           <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
-            <Wallet className="w-3 h-3" /> Digital Wallet
+            <Wallet className="w-3 h-3" /> Digital Asset Holdings
           </p>
-          <div className="space-y-2">
-            {[
-              { label: "Balance", value: WALLET.balance, accent: "text-gray-900" },
-              { label: "Pending", value: WALLET.pending, accent: "text-amber-500" },
-              { label: "Total Earned", value: WALLET.earned, accent: "text-emerald-600" },
-            ].map(({ label, value, accent }) => (
-              <div key={label} className="flex items-center justify-between">
-                <span className="text-[11px] text-gray-500">{label}</span>
-                {hidden ? (
-                  <span className="text-[11px] text-gray-300 font-semibold tracking-widest">••••••</span>
-                ) : (
-                  <span className={`text-[12px] font-semibold ${accent}`}>{fmt(value)}</span>
-                )}
-              </div>
-            ))}
+          <div className="flex items-center gap-3">
+            {/* Pie Chart */}
+            <div className="w-20 h-20 flex-shrink-0">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={HOLDINGS}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={22}
+                    outerRadius={36}
+                    paddingAngle={2}
+                    dataKey="value"
+                  >
+                    {HOLDINGS.map((entry, i) => (
+                      <Cell key={i} fill={hidden ? "#e5e7eb" : entry.color} />
+                    ))}
+                  </Pie>
+                  {!hidden && <Tooltip formatter={(v) => fmt(v)} contentStyle={{ fontSize: 10, padding: "2px 6px" }} />}
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+            {/* Legend */}
+            <div className="flex-1 space-y-1.5">
+              {HOLDINGS.map((h) => (
+                <div key={h.name} className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-1.5 min-w-0">
+                    <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: hidden ? "#d1d5db" : h.color }} />
+                    <span className="text-[10px] text-gray-500 truncate">{h.name}</span>
+                  </div>
+                  {hidden ? (
+                    <span className="text-[10px] text-gray-300 font-semibold tracking-widest">••••</span>
+                  ) : (
+                    <span className="text-[10px] font-semibold text-gray-700">{fmt(h.value)}</span>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
           <div className="pt-1 border-t border-gray-50">
-            <p className="text-[10px] text-gray-300 italic">Coming Soon: Live wallet integration</p>
+            <p className="text-[10px] text-gray-300 italic">Coming Soon: Live wallet</p>
           </div>
         </div>
 
