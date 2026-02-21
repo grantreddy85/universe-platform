@@ -23,8 +23,12 @@ export default function LabServiceCard({ service, categoryMeta, onRequest }) {
           />
         </div>
       ) : (
-        <div className={`h-40 flex items-center justify-center border-b border-gray-50 ${categoryMeta.color.split(" ").slice(0,1).join(" ")} bg-opacity-30`}>
-          <span className="text-4xl opacity-20">⚗️</span>
+        <div className="h-40 bg-gray-100 overflow-hidden">
+          <img
+            src={CATEGORY_IMAGES[categoryMeta?.label?.split(" ")[0]?.toLowerCase()] || CATEGORY_IMAGES.default}
+            alt={service.name}
+            className="w-full h-full object-cover opacity-80"
+          />
         </div>
       )}
 
