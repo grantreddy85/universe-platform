@@ -180,7 +180,7 @@ export default function NotesTab({ project }) {
                     }`}
                   >
                     <div className="flex items-center gap-2 mb-1">
-                      <FileText className={`w-3.5 h-3.5 flex-shrink-0 ${isActive ? "text-blue-500" : "text-gray-400"}`} />
+                      <StickyNote className={`w-3.5 h-3.5 flex-shrink-0 ${isActive ? "text-blue-500" : "text-gray-400"}`} />
                       <span className={`text-xs font-medium truncate ${isActive ? "text-blue-800" : "text-gray-800"}`}>
                         {note.title}
                       </span>
