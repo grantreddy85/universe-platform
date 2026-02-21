@@ -113,9 +113,6 @@ export default function Home() {
         <StatsCard label="Tokenised" value={tokenisedAssets} icon={Coins} accent="purple" linkTo="Tokenisation" />
       </div>
 
-      {/* Marketplace Bar */}
-      <MarketplaceBar />
-
       {/* Projects + Activity */}
       <div className="grid lg:grid-cols-3 gap-8">
         {/* Projects */}
