@@ -224,5 +224,12 @@ export default function WorkflowsTab({ project }) {
         </DialogContent>
       </Dialog>
     </div>
+    <TabAIPanel
+      tabName="Workflows"
+      contextData={workflows}
+      isOpen={aiOpen}
+      onToggle={() => setAiOpen(!aiOpen)}
+    />
+    </div>
   );
 }

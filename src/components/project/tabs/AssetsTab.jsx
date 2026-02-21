@@ -179,12 +179,6 @@ export default function AssetsTab({ project }) {
         </div>
       )}
 
-      <TabAIPanel
-        tabName="Assets"
-        contextData={assets}
-        isOpen={aiOpen}
-        onToggle={() => setAiOpen(!aiOpen)}
-      />
       <InfographicModal
         asset={infographicAsset}
         project={project}
