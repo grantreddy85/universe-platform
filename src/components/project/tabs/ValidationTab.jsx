@@ -286,6 +286,6 @@ export default function ValidationTab({ project }) {
       isOpen={aiOpen}
       onToggle={() => setAiOpen(!aiOpen)}
     />
-  </div>
+    </div>
   );
 }

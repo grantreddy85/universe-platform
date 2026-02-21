@@ -157,6 +157,6 @@ export default function LabsTab({ project }) {
       isOpen={aiOpen}
       onToggle={() => setAiOpen(!aiOpen)}
     />
-  </div>
+    </div>
   );
 }
