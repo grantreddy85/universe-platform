@@ -163,17 +163,29 @@ export default function ValidationTab({ project }) {
   }
 
   return (
-    <div className="p-6 lg:p-8">
+    <div className="flex h-full">
+    <div className="flex-1 p-6 lg:p-8 overflow-y-auto">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">Validation</h2>
-        <Button
-          onClick={() => setShowNew(true)}
-          size="sm"
-          className="bg-blue-600 hover:bg-blue-700 text-xs"
-        >
-          <Plus className="w-3.5 h-3.5 mr-1.5" />
-          New Validation
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setAiOpen(!aiOpen)}
+            className={`text-xs h-7 px-2.5 ${aiOpen ? "text-blue-600 bg-blue-50" : "text-gray-500 hover:text-blue-600"}`}
+          >
+            <Sparkles className="w-3.5 h-3.5 mr-1.5" />
+            Notes Guide
+          </Button>
+          <Button
+            onClick={() => setShowNew(true)}
+            size="sm"
+            className="bg-blue-600 hover:bg-blue-700 text-xs"
+          >
+            <Plus className="w-3.5 h-3.5 mr-1.5" />
+            New Validation
+          </Button>
+        </div>
       </div>
 
       {isLoading ? (
