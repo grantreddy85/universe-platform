@@ -20,6 +20,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { format } from "date-fns";
 import NotesAssistant from "./NotesAssistant";
 import SectionQueryDialog from "../SectionQueryDialog";
+import NoteAIPanel from "./NoteAIPanel";
 
 const sourceStyles = {
   manual: "bg-gray-100 text-gray-600",
