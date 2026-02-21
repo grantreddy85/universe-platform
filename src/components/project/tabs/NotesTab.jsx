@@ -141,15 +141,7 @@ export default function NotesTab({ project }) {
             >
               <Sparkles className="w-3.5 h-3.5" />
             </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setAssistantOpen(!assistantOpen)}
-              className="text-xs text-gray-500 hover:text-blue-600 h-7 px-2"
-              title="Open Notes Guide"
-            >
-              <FileText className="w-3.5 h-3.5" />
-            </Button>
+
             <Button
               onClick={openNew}
               size="sm"
