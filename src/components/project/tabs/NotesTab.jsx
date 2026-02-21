@@ -241,6 +241,17 @@ export default function NotesTab({ project }) {
                 <Button
                   variant="ghost"
                   size="sm"
+                  className={`text-xs h-7 px-2.5 ${aiPanelOpen ? "text-violet-600 bg-violet-50" : "text-gray-500 hover:text-violet-600"}`}
+                  onClick={() => setAiPanelOpen((v) => !v)}
+                >
+                  <Sparkles className="w-3.5 h-3.5 mr-1.5" />
+                  Ask AI
+                </Button>
+              )}
+              {!isNew && (
+                <Button
+                  variant="ghost"
+                  size="sm"
                   className="text-xs text-gray-500 hover:text-blue-600 h-7 px-2.5"
                   onClick={() => sendForValidation(selectedNote)}
                 >
