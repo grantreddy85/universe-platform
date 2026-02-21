@@ -41,7 +41,7 @@ Answer clearly and concisely, referencing the note content where relevant.`,
       <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
         <div className="flex items-center gap-2">
           <Sparkles className="w-3.5 h-3.5 text-violet-500" />
-          <span className="text-xs font-semibold text-gray-700">Ask AI about this note</span>
+          <span className="text-xs font-semibold text-gray-700">Notes Guide</span>
         </div>
         <button
           onClick={onClose}
