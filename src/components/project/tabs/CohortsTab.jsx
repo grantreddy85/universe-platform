@@ -144,7 +144,6 @@ export default function CohortsTab({ project }) {
         </div>
       )}
 
-      </div>
       <TabAIPanel
         tabName="Cohorts"
         contextData={cohorts}

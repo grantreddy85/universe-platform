@@ -161,7 +161,6 @@ export default function WorkflowsTab({ project }) {
         </div>
       )}
 
-      </div>
       <TabAIPanel
         tabName="Workflows"
         contextData={workflows}

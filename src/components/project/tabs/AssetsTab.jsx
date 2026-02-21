@@ -179,7 +179,6 @@ export default function AssetsTab({ project }) {
         </div>
       )}
 
-      </div>
       <TabAIPanel
         tabName="Assets"
         contextData={assets}
