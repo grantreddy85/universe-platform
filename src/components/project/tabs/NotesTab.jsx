@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
@@ -10,7 +10,6 @@ import {
   X,
   FileText,
   Loader2,
-  ChevronRight,
   Sparkles,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -35,12 +34,11 @@ const sourceLabel = {
 };
 
 export default function NotesTab({ project }) {
-  const [selectedNote, setSelectedNote] = useState(null); // null = list view, "new" = new note, note object = editing
+  const [selectedNote, setSelectedNote] = useState(null);
   const [form, setForm] = useState({ title: "", content: "" });
   const [isDirty, setIsDirty] = useState(false);
   const [assistantOpen, setAssistantOpen] = useState(false);
   const [showQueryDialog, setShowQueryDialog] = useState(false);
-  const [aiPanelOpen, setAiPanelOpen] = useState(false);
   const queryClient = useQueryClient();
 
   const { data: notes = [], isLoading } = useQuery({
@@ -91,7 +89,6 @@ export default function NotesTab({ project }) {
     setSelectedNote(note);
     setForm({ title: note.title, content: note.content || "" });
     setIsDirty(false);
-    setAiPanelOpen(false);
   };
 
   const openNew = () => {
@@ -133,36 +130,36 @@ export default function NotesTab({ project }) {
         }`}
       >
         <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
-           <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Notes</span>
-           <div className="flex items-center gap-1.5">
-             <Button
-               variant="ghost"
-               size="sm"
-               onClick={() => setShowQueryDialog(true)}
-               className="text-xs text-gray-500 hover:text-green-600 h-7 px-2"
-               title="Query notes"
-             >
-               <Sparkles className="w-3.5 h-3.5" />
-             </Button>
-             <Button
-               variant="ghost"
-               size="sm"
-               onClick={() => setAssistantOpen(!assistantOpen)}
-               className="text-xs text-gray-500 hover:text-blue-600 h-7 px-2"
-               title="Open notes guide"
-             >
-               <FileText className="w-3.5 h-3.5" />
-             </Button>
-             <Button
-               onClick={openNew}
-               size="sm"
-               className="bg-blue-600 hover:bg-blue-700 text-xs h-7 px-2.5"
-             >
-               <Plus className="w-3.5 h-3.5 mr-1" />
-               New
-             </Button>
-           </div>
-         </div>
+          <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Notes</span>
+          <div className="flex items-center gap-1.5">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setShowQueryDialog(true)}
+              className="text-xs text-gray-500 hover:text-green-600 h-7 px-2"
+              title="Query notes"
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setAssistantOpen(!assistantOpen)}
+              className="text-xs text-gray-500 hover:text-blue-600 h-7 px-2"
+              title="Open Notes Guide"
+            >
+              <FileText className="w-3.5 h-3.5" />
+            </Button>
+            <Button
+              onClick={openNew}
+              size="sm"
+              className="bg-blue-600 hover:bg-blue-700 text-xs h-7 px-2.5"
+            >
+              <Plus className="w-3.5 h-3.5 mr-1" />
+              New
+            </Button>
+          </div>
+        </div>
 
         <div className="flex-1 overflow-y-auto">
           {isLoading ? (
@@ -220,9 +217,8 @@ export default function NotesTab({ project }) {
       </div>
 
       {/* Editor Panel */}
-       {isEditorOpen && (
-         <div className="flex-1 flex min-w-0">
-         <div className="flex-1 flex flex-col bg-[#fafbfc] min-w-0">
+      {isEditorOpen && (
+        <div className="flex-1 flex flex-col bg-[#fafbfc] min-w-0">
           {/* Editor Toolbar */}
           <div className="flex items-center justify-between px-6 py-3 border-b border-gray-100 bg-white">
             <div className="flex items-center gap-2">
@@ -239,17 +235,6 @@ export default function NotesTab({ project }) {
               )}
             </div>
             <div className="flex items-center gap-2">
-              {!isNew && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className={`text-xs h-7 px-2.5 ${aiPanelOpen ? "text-violet-600 bg-violet-50" : "text-gray-500 hover:text-violet-600"}`}
-                  onClick={() => setAiPanelOpen((v) => !v)}
-                >
-                  <Sparkles className="w-3.5 h-3.5 mr-1.5" />
-                  Ask AI
-                </Button>
-              )}
               {!isNew && (
                 <Button
                   variant="ghost"
@@ -306,47 +291,38 @@ export default function NotesTab({ project }) {
             <Textarea
               value={form.content}
               onChange={(e) => handleFormChange("content", e.target.value)}
-              placeholder="Start writing your note here... You can use this space to review and edit any AI-generated summaries, add your own insights, or structure your findings before sending for validation."
+              placeholder="Start writing your note here..."
               className="w-full border-none shadow-none bg-transparent px-0 resize-none focus-visible:ring-0 text-sm text-gray-700 placeholder:text-gray-300 leading-relaxed"
               style={{ minHeight: "calc(100vh - 280px)" }}
             />
           </div>
-          </div>
+        </div>
+      )}
 
-          {/* AI Panel */}
-          {aiPanelOpen && selectedNote && selectedNote !== "new" && (
-            <NoteAIPanel
-              note={{ ...selectedNote, title: form.title, content: form.content }}
-              onClose={() => setAiPanelOpen(false)}
-            />
-          )}
-          </div>
-          )}
+      {/* Notes Guide AI Assistant */}
+      <NotesAssistant
+        allNotes={notes}
+        isOpen={assistantOpen}
+        onToggle={() => setAssistantOpen(!assistantOpen)}
+      />
 
-          {/* Notes Assistant */}
-          <NotesAssistant
-            allNotes={notes}
-            isOpen={assistantOpen}
-            onToggle={() => setAssistantOpen(!assistantOpen)}
-          />
-
-          {/* Section Query Dialog */}
-          <SectionQueryDialog
-            open={showQueryDialog}
-            onOpenChange={setShowQueryDialog}
-            sectionName="Notes"
-            sectionData={notes.map(n => ({ title: n.title, content: n.content }))}
-            project={project}
-            onSaveToNotes={async ({ title, content, source }) => {
-              await base44.entities.Note.create({
-                project_id: project.id,
-                title,
-                content,
-                source: source || "manual"
-              });
-              queryClient.invalidateQueries({ queryKey: ["project-notes", project.id] });
-            }}
-          />
-          </div>
-          );
-          }
+      {/* Section Query Dialog */}
+      <SectionQueryDialog
+        open={showQueryDialog}
+        onOpenChange={setShowQueryDialog}
+        sectionName="Notes"
+        sectionData={notes.map((n) => ({ title: n.title, content: n.content }))}
+        project={project}
+        onSaveToNotes={async ({ title, content, source }) => {
+          await base44.entities.Note.create({
+            project_id: project.id,
+            title,
+            content,
+            source: source || "manual",
+          });
+          queryClient.invalidateQueries({ queryKey: ["project-notes", project.id] });
+        }}
+      />
+    </div>
+  );
+}
