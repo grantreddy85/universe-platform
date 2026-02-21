@@ -73,13 +73,21 @@ export default function MarketplaceBar() {
           <span className="text-[10px] bg-gray-100 text-gray-400 rounded-full px-2 py-0.5 italic">Coming Soon</span>
         </div>
         <div className="flex items-center gap-2">
-          <button
-            onClick={() => setHidden((v) => !v)}
-            className="flex items-center gap-1.5 text-[11px] text-gray-400 hover:text-gray-700 transition-colors px-2 py-1 rounded-lg hover:bg-gray-50"
-          >
-            {hidden ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
-            {hidden ? "Show financials" : "Hide financials"}
-          </button>
+          <div className="flex items-center gap-2">
+            <div className="relative">
+              <Bell className="w-4 h-4 text-gray-400" />
+              {ALERTS.length > 0 && (
+                <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full" />
+              )}
+            </div>
+            <button
+              onClick={() => setHidden((v) => !v)}
+              className="flex items-center gap-1.5 text-[11px] text-gray-400 hover:text-gray-700 transition-colors px-2 py-1 rounded-lg hover:bg-gray-50"
+            >
+              {hidden ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
+              {hidden ? "Show financials" : "Hide financials"}
+            </button>
+          </div>
           <Link to={createPageUrl("Tokenisation")}>
             <Button variant="ghost" size="sm" className="text-xs text-gray-500 hover:text-gray-900 h-7 px-2">
               View All <ArrowRight className="w-3 h-3 ml-1" />
