@@ -118,7 +118,6 @@ export default function NotesTab({ project }) {
   };
 
   const isEditorOpen = selectedNote !== null;
-  const isNew = selectedNote === "new";
   const isSaving = createMutation.isPending || updateMutation.isPending;
 
   return (
