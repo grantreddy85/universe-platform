@@ -78,11 +78,12 @@ export default function NotesTab({ project }) {
   const sendForValidation = async (note) => {
     await base44.entities.ValidationRequest.create({
       project_id: project.id,
+      note_id: note.id,
       title: `Validation: ${note.title}`,
       type: "in_silico",
       status: "pending",
       results: note.content,
-      linked_assets: [],
+      linked_assets: note.image_urls || [],
     });
     queryClient.invalidateQueries({ queryKey: ["project-validations", project.id] });
   };
