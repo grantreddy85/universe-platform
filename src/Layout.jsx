@@ -82,7 +82,6 @@ export default function Layout({ children, currentPageName }) {
   const [user, setUser] = useState(null);
   const [showChatDropdown, setShowChatDropdown] = useState(true);
   const [activeChats, setActiveChats] = useState([]);
-  const { theme } = useTheme();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -170,24 +169,11 @@ export default function Layout({ children, currentPageName }) {
                         <div
                           className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-150 cursor-pointer ${
                             collapsed ? "justify-center" : ""
+                          } ${
+                            isActive
+                              ? "bg-blue-50/80 text-blue-600 font-medium"
+                              : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                           }`}
-                          style={isActive ? {
-                            backgroundColor: `${theme.accentColor}15`,
-                            color: theme.accentColor,
-                            fontWeight: 500
-                          } : {}}
-                          onMouseEnter={(e) => {
-                            if (!isActive) {
-                              e.currentTarget.style.backgroundColor = `${theme.secondaryColor}10`;
-                              e.currentTarget.style.color = theme.secondaryColor;
-                            }
-                          }}
-                          onMouseLeave={(e) => {
-                            if (!isActive) {
-                              e.currentTarget.style.backgroundColor = '';
-                              e.currentTarget.style.color = '#4b5563';
-                            }
-                          }}
                         >
                           {/* Main click area → go to landing */}
                           <div
@@ -199,9 +185,8 @@ export default function Layout({ children, currentPageName }) {
                             }}
                           >
                             <Icon
-                              className="w-[18px] h-[18px] flex-shrink-0"
+                              className={`w-[18px] h-[18px] flex-shrink-0 ${isActive ? "text-blue-600" : ""}`}
                               strokeWidth={1.7}
-                              style={isActive ? { color: theme.accentColor } : {}}
                             />
                             {!collapsed && <span>{item.name}</span>}
                           </div>
@@ -230,15 +215,7 @@ export default function Layout({ children, currentPageName }) {
                                   window.dispatchEvent(new CustomEvent("research_switch_chat", { detail: { chatId: chat.id } }));
                                   setShowChatDropdown(false);
                                 }}
-                                className="w-full flex items-center gap-2 px-2 py-1.5 rounded-lg text-xs text-gray-600 transition-colors text-left truncate"
-                                onMouseEnter={(e) => {
-                                  e.currentTarget.style.backgroundColor = `${theme.secondaryColor}10`;
-                                  e.currentTarget.style.color = theme.secondaryColor;
-                                }}
-                                onMouseLeave={(e) => {
-                                  e.currentTarget.style.backgroundColor = '';
-                                  e.currentTarget.style.color = '#4b5563';
-                                }}
+                                className="w-full flex items-center gap-2 px-2 py-1.5 rounded-lg text-xs text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors text-left truncate"
                               >
                                 <MessageSquare className="w-3 h-3 flex-shrink-0 text-gray-400" />
                                 <span className="truncate">{chat.name}</span>
@@ -264,29 +241,17 @@ export default function Layout({ children, currentPageName }) {
                       to={createPageUrl(item.page)}
                       className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-150 ${
                         collapsed ? "justify-center" : ""
+                      } ${
+                        isActive
+                          ? "bg-blue-50/80 text-blue-600 font-medium"
+                          : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                       }`}
-                      style={isActive ? {
-                        backgroundColor: `${theme.accentColor}15`,
-                        color: theme.accentColor,
-                        fontWeight: 500
-                      } : {}}
-                      onMouseEnter={(e) => {
-                        if (!isActive) {
-                          e.currentTarget.style.backgroundColor = `${theme.secondaryColor}10`;
-                          e.currentTarget.style.color = theme.secondaryColor;
-                        }
-                      }}
-                      onMouseLeave={(e) => {
-                        if (!isActive) {
-                          e.currentTarget.style.backgroundColor = '';
-                          e.currentTarget.style.color = '#4b5563';
-                        }
-                      }}
                     >
                       <Icon
-                        className="w-[18px] h-[18px] flex-shrink-0"
+                        className={`w-[18px] h-[18px] flex-shrink-0 ${
+                          isActive ? "text-blue-600" : ""
+                        }`}
                         strokeWidth={1.7}
-                        style={isActive ? { color: theme.accentColor } : {}}
                       />
                       {!collapsed && <span>{item.name}</span>}
                     </Link>
@@ -307,17 +272,9 @@ export default function Layout({ children, currentPageName }) {
               <TooltipTrigger asChild>
                 <Link
                   to={createPageUrl("Profile")}
-                  className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-gray-600 transition-all ${
+                  className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-all ${
                     collapsed ? "justify-center" : ""
                   }`}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = `${theme.secondaryColor}10`;
-                    e.currentTarget.style.color = theme.secondaryColor;
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = '';
-                    e.currentTarget.style.color = '#4b5563';
-                  }}
                 >
                   <div className="w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0">
                     <User className="w-3.5 h-3.5 text-gray-500" strokeWidth={1.8} />
