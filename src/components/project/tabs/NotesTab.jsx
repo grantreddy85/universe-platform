@@ -134,6 +134,16 @@ export default function NotesTab({ project }) {
             <Button
               variant="ghost"
               size="sm"
+              onClick={() => setAssistantOpen(!assistantOpen)}
+              className={`text-xs h-7 px-2.5 ${assistantOpen ? "text-blue-600 bg-blue-50" : "text-gray-500 hover:text-blue-600"}`}
+              title="Notes Guide"
+            >
+              <Sparkles className="w-3.5 h-3.5 mr-1" />
+              Notes Guide
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={() => setShowQueryDialog(true)}
               className="text-xs text-gray-500 hover:text-green-600 h-7 px-2"
               title="Query notes"
