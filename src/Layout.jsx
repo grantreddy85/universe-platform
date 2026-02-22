@@ -18,6 +18,7 @@ import {
   MessageSquare
 } from "lucide-react";
 import UniVerseLogo from "@/components/UniVerseLogo";
+import SettingsMenu from "@/components/SettingsMenu";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
@@ -128,6 +129,11 @@ export default function Layout({ children, currentPageName }) {
               <span className="text-[15px] font-semibold tracking-tight text-gray-900">
                 UniVerse
               </span>
+            )}
+            {user?.role === 'admin' && (
+              <div className="ml-auto">
+                <SettingsMenu />
+              </div>
             )}
           </div>
 
