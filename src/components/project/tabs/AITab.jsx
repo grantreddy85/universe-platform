@@ -19,7 +19,10 @@ export default function AITab({ project }) {
   const [activeConversation, setActiveConversation] = useState(null);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
+  const [attachedFiles, setAttachedFiles] = useState([]);
+  const [uploadingFile, setUploadingFile] = useState(false);
   const [loading, setLoading] = useState(false);
+  const fileInputRef = useRef(null);
   const [initLoading, setInitLoading] = useState(true);
   const [showNewSessionDialog, setShowNewSessionDialog] = useState(false);
   const [newSessionName, setNewSessionName] = useState("");
