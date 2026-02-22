@@ -200,10 +200,26 @@ export default function AITab({ project }) {
     setMessages(full.messages || []);
   };
 
+  const handleFileAttach = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setUploadingFile(true);
+    const { file_url } = await base44.integrations.Core.UploadFile({ file });
+    setAttachedFiles((prev) => [...prev, { name: file.name, url: file_url }]);
+    setUploadingFile(false);
+    e.target.value = "";
+  };
+
+  const removeAttachment = (url) => {
+    setAttachedFiles((prev) => prev.filter((f) => f.url !== url));
+  };
+
   const sendMessage = async () => {
-    if (!input.trim() || loading) return;
+    if ((!input.trim() && attachedFiles.length === 0) || loading) return;
     const text = input.trim();
+    const files = [...attachedFiles];
     setInput("");
+    setAttachedFiles([]);
 
     let convo = activeConversation;
     if (!convo) {
