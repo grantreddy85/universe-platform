@@ -23,6 +23,7 @@ import MarketplaceBar from "../components/home/MarketplaceBar";
 
 export default function Home() {
   const [user, setUser] = useState(null);
+  const [aiPanelOpen, setAiPanelOpen] = useState(false);
 
   useEffect(() => {
     base44.auth.me().then(setUser).catch(() => {});
