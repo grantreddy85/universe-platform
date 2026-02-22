@@ -182,15 +182,16 @@ export default function Search() {
       createNewChat();
     }
 
-    const userMessage = { role: "user", content: text, timestamp: new Date().toISOString() };
+    const userMessage = { role: "user", content: text, file_urls: files.map(f => f.url), timestamp: new Date().toISOString() };
     const updatedMessages = [...messages, userMessage];
     setMessages(updatedMessages);
     setLoading(true);
 
     try {
       const response = await base44.integrations.Core.InvokeLLM({
-        prompt: text,
+        prompt: text || "Please analyse the attached file(s).",
         add_context_from_internet: true,
+        file_urls: files.length > 0 ? files.map(f => f.url) : undefined,
       });
 
       const aiMessage = {
