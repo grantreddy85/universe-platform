@@ -223,7 +223,7 @@ export default function ValidationTab({ project }) {
                     setAssistantOpen(true);
                   } else {
                     // Open with a blank note placeholder so the guide can still help
-                    setExpandedNote({ id: null, title: v.title, content: v.results || "", created_date: v.created_date });
+                    setExpandedNote({ id: null, title: v.title, content: v.results || "", created_date: v.created_date, image_urls: [] });
                     setAssistantOpen(true);
                   }
                 }}
