@@ -13,9 +13,9 @@ import {
 
 const tabs = [
   { id: "overview", label: "Overview", icon: LayoutDashboard },
+  { id: "vault", label: "Vault", icon: Archive },
   { id: "ai", label: "AI", icon: Sparkles },
   { id: "notes", label: "Notes", icon: StickyNote },
-  { id: "vault", label: "Vault", icon: Archive },
   { id: "cohorts", label: "Cohorts", icon: FlaskConical },
   { id: "workflows", label: "Workflows", icon: GitBranch },
   { id: "labs", label: "Labs", icon: TestTube },
