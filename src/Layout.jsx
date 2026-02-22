@@ -171,7 +171,7 @@ export default function Layout({ children, currentPageName }) {
                             collapsed ? "justify-center" : ""
                           } ${
                             isActive
-                              ? "bg-blue-50/80 text-blue-600 font-medium"
+                              ? "bg-[#000021] text-[#00F2FF] font-medium"
                               : "text-gray-600 hover:bg-[#000021] hover:text-[#00F2FF]"
                           }`}
                         >
@@ -185,7 +185,7 @@ export default function Layout({ children, currentPageName }) {
                             }}
                           >
                             <Icon
-                              className={`w-[18px] h-[18px] flex-shrink-0 ${isActive ? "text-blue-600" : ""}`}
+                              className={`w-[18px] h-[18px] flex-shrink-0 ${isActive ? "text-[#00F2FF]" : ""}`}
                               strokeWidth={1.7}
                             />
                             {!collapsed && <span>{item.name}</span>}
@@ -243,13 +243,13 @@ export default function Layout({ children, currentPageName }) {
                         collapsed ? "justify-center" : ""
                       } ${
                         isActive
-                          ? "bg-blue-50/80 text-blue-600 font-medium"
+                          ? "bg-[#000021] text-[#00F2FF] font-medium"
                           : "text-gray-600 hover:bg-[#000021] hover:text-[#00F2FF]"
                       }`}
                     >
                       <Icon
                         className={`w-[18px] h-[18px] flex-shrink-0 ${
-                          isActive ? "text-blue-600" : ""
+                          isActive ? "text-[#00F2FF]" : ""
                         }`}
                         strokeWidth={1.7}
                       />
