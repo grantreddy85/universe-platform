@@ -382,6 +382,22 @@ export default function NotesTab({ project }) {
         onToggle={() => setAssistantOpen(!assistantOpen)}
       />
 
+      {/* Lightbox */}
+      {lightboxUrl && (
+        <div
+          className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4"
+          onClick={() => setLightboxUrl(null)}
+        >
+          <img src={lightboxUrl} alt="Full view" className="max-w-full max-h-full rounded-lg object-contain" />
+          <button
+            onClick={() => setLightboxUrl(null)}
+            className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/20 text-white flex items-center justify-center hover:bg-white/40 transition-colors"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      )}
+
       {/* Section Query Dialog */}
       <SectionQueryDialog
         open={showQueryDialog}
