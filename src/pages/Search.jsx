@@ -348,7 +348,21 @@ export default function Search() {
     const conversations = savedConversations ? JSON.parse(savedConversations) : [];
     
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-white to-blue-50/30 px-6">
+      <div
+        className={`min-h-screen flex items-center justify-center px-6 transition-colors ${isDragging ? "bg-blue-50" : "bg-gradient-to-br from-gray-50 via-white to-blue-50/30"}`}
+        onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+        onDragLeave={() => setIsDragging(false)}
+        onDrop={handleDrop}
+      >
+        {isDragging && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none">
+            <div className="bg-white border-2 border-dashed border-blue-400 rounded-2xl px-12 py-8 shadow-xl text-center">
+              <Paperclip className="w-8 h-8 text-blue-400 mx-auto mb-2" />
+              <p className="text-sm font-medium text-blue-600">Drop to attach file</p>
+            </div>
+          </div>
+        )}
+        <input ref={fileInputRef} type="file" accept="image/*,.pdf,.csv,.xlsx,.txt" className="hidden" onChange={handleFileInputChange} />
         <div className="w-full max-w-3xl">
           <div className="text-center mb-12">
             <div className="inline-flex items-center gap-3 mb-3">
