@@ -8,7 +8,8 @@ import {
   Box,
   StickyNote,
   LayoutDashboard,
-  TestTube
+  TestTube,
+  ChevronLeft
 } from "lucide-react";
 
 const tabs = [
