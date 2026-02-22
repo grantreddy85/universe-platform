@@ -13,6 +13,7 @@ import {
   Sparkles,
   FlaskConical
 } from "lucide-react";
+import TabAIPanel from "../components/project/tabs/TabAIPanel";
 import { Button } from "@/components/ui/button";
 import StatsCard from "../components/home/StatsCard";
 import ProjectCard from "../components/home/ProjectCard";
