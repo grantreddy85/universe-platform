@@ -28,6 +28,21 @@ export default function OverviewTab({ project, onTabChange }) {
     queryFn: () => base44.entities.Asset.filter({ project_id: project.id }, "-created_date", 100),
   });
 
+  const { data: hypotheses = [] } = useQuery({
+    queryKey: ["project-hypotheses", project.id],
+    queryFn: () => base44.entities.Hypothesis.filter({ project_id: project.id }, "-created_date", 100),
+  });
+
+  const { data: workflows = [] } = useQuery({
+    queryKey: ["project-workflows", project.id],
+    queryFn: () => base44.entities.Workflow.filter({ project_id: project.id }, "-created_date", 100),
+  });
+
+  const { data: labRequests = [] } = useQuery({
+    queryKey: ["project-labrequests", project.id],
+    queryFn: () => base44.entities.LabRequest.filter({ project_id: project.id }, "-created_date", 100),
+  });
+
   const { data: activities = [] } = useQuery({
     queryKey: ["project-activities", project.id],
     queryFn: () =>
