@@ -1,0 +1,71 @@
+import React from "react";
+import { Globe, Lock } from "lucide-react";
+
+export default function VisibilitySelector({ value, onChange, subscribed }) {
+  return (
+    <div className="space-y-2">
+      <button
+        type="button"
+        onClick={() => onChange("platform_shared")}
+        className={`w-full flex items-start gap-3 p-3 rounded-lg border text-left transition-all ${
+          value === "platform_shared"
+            ? "border-blue-500 bg-blue-50"
+            : "border-gray-200 hover:border-gray-300"
+        }`}
+      >
+        <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5 ${
+          value === "platform_shared" ? "bg-blue-100" : "bg-gray-100"
+        }`}>
+          <Globe className={`w-4 h-4 ${value === "platform_shared" ? "text-blue-600" : "text-gray-500"}`} />
+        </div>
+        <div>
+          <p className={`text-xs font-semibold ${value === "platform_shared" ? "text-blue-700" : "text-gray-700"}`}>
+            Share with UniVerse Ecosystem
+          </p>
+          <p className="text-[11px] text-gray-400 mt-0.5">
+            Free. Your vault & assets contribute to multidisciplinary platform research. You may be included in larger collaborative projects.
+          </p>
+        </div>
+        <div className={`ml-auto flex-shrink-0 mt-1 w-4 h-4 rounded-full border-2 ${
+          value === "platform_shared" ? "border-blue-500 bg-blue-500" : "border-gray-300"
+        } flex items-center justify-center`}>
+          {value === "platform_shared" && <div className="w-1.5 h-1.5 bg-white rounded-full" />}
+        </div>
+      </button>
+
+      <button
+        type="button"
+        onClick={() => onChange("private")}
+        className={`w-full flex items-start gap-3 p-3 rounded-lg border text-left transition-all ${
+          value === "private"
+            ? "border-gray-700 bg-gray-50"
+            : "border-gray-200 hover:border-gray-300"
+        }`}
+      >
+        <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5 ${
+          value === "private" ? "bg-gray-200" : "bg-gray-100"
+        }`}>
+          <Lock className={`w-4 h-4 ${value === "private" ? "text-gray-700" : "text-gray-500"}`} />
+        </div>
+        <div>
+          <p className={`text-xs font-semibold ${value === "private" ? "text-gray-800" : "text-gray-700"}`}>
+            Keep Private
+          </p>
+          <p className="text-[11px] text-gray-400 mt-0.5">
+            {subscribed
+              ? "Subscription active. Your data stays fully private."
+              : "Requires a paid subscription. Your vault & assets remain entirely private."}
+          </p>
+          {!subscribed && value === "private" && (
+            <p className="text-[11px] text-amber-600 font-medium mt-1">⚠ Subscription required to keep projects private.</p>
+          )}
+        </div>
+        <div className={`ml-auto flex-shrink-0 mt-1 w-4 h-4 rounded-full border-2 ${
+          value === "private" ? "border-gray-700 bg-gray-700" : "border-gray-300"
+        } flex items-center justify-center`}>
+          {value === "private" && <div className="w-1.5 h-1.5 bg-white rounded-full" />}
+        </div>
+      </button>
+    </div>
+  );
+}
