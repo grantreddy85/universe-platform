@@ -67,8 +67,8 @@ const STAGES = [
 ];
 
 export default function ResearchProgress({ counts, onTabChange }) {
-  const { notes = [], hypotheses = [], workflows = [], labRequests = [], validations = [], assets = [] } = counts;
-  const ctx = { notes, hypotheses, workflows, labRequests, validations, assets };
+  const { notes = [], hypotheses = [], workflows = [], labRequests = [], validations = [], assets = [], vaultDocs = [] } = counts;
+  const ctx = { notes, hypotheses, workflows, labRequests, validations, assets, vaultDocs };
 
   const stages = STAGES.map((s) => ({
     ...s,
