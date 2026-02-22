@@ -15,8 +15,8 @@ import {
   ChevronDown,
   LogOut,
   Search,
-  MessageSquare } from
-"lucide-react";
+  MessageSquare
+} from "lucide-react";
 import UniVerseLogo from "@/components/UniVerseLogo";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -26,14 +26,14 @@ const ThemeContext = createContext();
 export const useTheme = () => useContext(ThemeContext);
 
 const navItems = [
-{ name: "Research", icon: Search, page: "Search" },
-{ name: "Home", icon: Home, page: "Home" },
-{ name: "Projects", icon: FolderKanban, page: "Projects" },
-{ name: "Workspace", icon: Briefcase, page: "Workspace" },
-{ name: "Workflows", icon: GitBranch, page: null, external: true },
-{ name: "Labs", icon: FlaskConical, page: "Labs" },
-{ name: "Marketplace", icon: Store, page: null, external: true }];
-
+  { name: "Research", icon: Search, page: "Search" },
+  { name: "Home", icon: Home, page: "Home" },
+  { name: "Projects", icon: FolderKanban, page: "Projects" },
+  { name: "Workspace", icon: Briefcase, page: "Workspace" },
+  { name: "Workflows", icon: GitBranch, page: null, external: true },
+  { name: "Labs", icon: FlaskConical, page: "Labs" },
+  { name: "Marketplace", icon: Store, page: null, external: true },
+];
 
 function ThemeProvider({ children }) {
   const [theme, setTheme] = useState(() => {
@@ -51,7 +51,7 @@ function ThemeProvider({ children }) {
 
   useEffect(() => {
     localStorage.setItem('app_theme', JSON.stringify(theme));
-
+    
     // Apply CSS variables to document root
     const root = document.documentElement;
     root.style.setProperty('--font-family', theme.fontFamily);
@@ -60,21 +60,21 @@ function ThemeProvider({ children }) {
     root.style.setProperty('--accent', theme.accentColor);
     root.style.setProperty('--neutral', theme.neutralColor);
     root.style.setProperty('--font-scale', theme.fontScale);
-
+    
     // Apply to body immediately
     document.body.style.fontFamily = `'${theme.fontFamily}', sans-serif`;
     document.body.style.fontSize = `${theme.fontScale}rem`;
   }, [theme]);
 
   const updateTheme = (updates) => {
-    setTheme((prev) => ({ ...prev, ...updates }));
+    setTheme(prev => ({ ...prev, ...updates }));
   };
 
   return (
     <ThemeContext.Provider value={{ theme, updateTheme }}>
       {children}
-    </ThemeContext.Provider>);
-
+    </ThemeContext.Provider>
+  );
 }
 
 export default function Layout({ children, currentPageName }) {
@@ -93,7 +93,7 @@ export default function Layout({ children, currentPageName }) {
     const loadChats = () => {
       const saved = localStorage.getItem("search_drafts");
       if (saved) {
-        try {setActiveChats(JSON.parse(saved));} catch {setActiveChats([]);}
+        try { setActiveChats(JSON.parse(saved)); } catch { setActiveChats([]); }
       } else {
         setActiveChats([]);
       }
@@ -117,153 +117,153 @@ export default function Layout({ children, currentPageName }) {
         <div className="flex h-screen bg-[#fafbfc]">
         {/* Sidebar */}
         <aside
-            className={`relative flex flex-col border-r border-gray-200/80 bg-white transition-all duration-300 ease-in-out ${
-            collapsed ? "w-[68px]" : "w-[220px]"}`
-            }>
-
+          className={`relative flex flex-col border-r border-gray-200/80 bg-white transition-all duration-300 ease-in-out ${
+            collapsed ? "w-[68px]" : "w-[220px]"
+          }`}
+        >
           {/* Logo */}
           <div className="flex items-center gap-2.5 px-5 h-16 border-b border-gray-100">
-            <UniVerseLogo className="w-8 h-8 flex-shrink-0" />
-            
-
-
-
-
+            <UniVerseLogo className="w-8 h-8 flex-shrink-0" allowUpload={true} />
+            {!collapsed && (
+              <span className="text-[15px] font-semibold tracking-tight text-gray-900">
+                UniVerse
+              </span>
+            )}
           </div>
 
           {/* Nav */}
           <nav className="flex-1 py-4 px-3 space-y-0.5">
             {navItems.map((item) => {
-                const isActive = currentPageName === item.page;
-                const Icon = item.icon;
+              const isActive = currentPageName === item.page;
+              const Icon = item.icon;
 
-                if (item.external) {
-                  return (
-                    <Tooltip key={item.name}>
+              if (item.external) {
+                return (
+                  <Tooltip key={item.name}>
                     <TooltipTrigger asChild>
                       <div
-                          className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm cursor-default opacity-40 ${
-                          collapsed ? "justify-center" : ""}`
-                          }>
-
+                        className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm cursor-default opacity-40 ${
+                          collapsed ? "justify-center" : ""
+                        }`}
+                      >
                         <Icon className="w-[18px] h-[18px] flex-shrink-0" strokeWidth={1.7} />
                         {!collapsed && <span>{item.name}</span>}
                       </div>
                     </TooltipTrigger>
-                    {collapsed &&
+                    {collapsed && (
                       <TooltipContent side="right" className="text-xs">
                         {item.name} (Coming Soon)
                       </TooltipContent>
-                      }
-                  </Tooltip>);
+                    )}
+                  </Tooltip>
+                );
+              }
 
-                }
-
-                // Research tab with dropdown
-                if (item.name === "Research") {
-                  const hasChats = activeChats.length > 0;
-                  return (
-                    <Tooltip key={item.name}>
+              // Research tab with dropdown
+              if (item.name === "Research") {
+                const hasChats = activeChats.length > 0;
+                return (
+                  <Tooltip key={item.name}>
                     <TooltipTrigger asChild>
                       <div className="relative">
                         <div
-                            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-150 cursor-pointer hover:scale-105 ${
-                            collapsed ? "justify-center" : ""} ${
-
-                            isActive ?
-                            "bg-[#000021] text-[#00F2FF] font-medium" :
-                            "text-gray-600 hover:bg-[#000021] hover:text-[#00F2FF]"}`
-                            }>
-
+                          className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-150 cursor-pointer hover:scale-105 ${
+                            collapsed ? "justify-center" : ""
+                          } ${
+                            isActive
+                              ? "bg-[#000021] text-[#00F2FF] font-medium"
+                              : "text-gray-600 hover:bg-[#000021] hover:text-[#00F2FF]"
+                          }`}
+                        >
                           {/* Main click area → go to landing */}
                           <div
-                              className="flex items-center gap-3 flex-1"
-                              onClick={() => {
-                                navigate(createPageUrl(item.page));
-                                window.dispatchEvent(new CustomEvent("research_reset"));
-                                setShowChatDropdown(false);
-                              }}>
-
+                            className="flex items-center gap-3 flex-1"
+                            onClick={() => {
+                              navigate(createPageUrl(item.page));
+                              window.dispatchEvent(new CustomEvent("research_reset"));
+                              setShowChatDropdown(false);
+                            }}
+                          >
                             <Icon
-                                className={`w-[18px] h-[18px] flex-shrink-0 ${isActive ? "text-[#00F2FF]" : ""}`}
-                                strokeWidth={1.7} />
-
+                              className={`w-[18px] h-[18px] flex-shrink-0 ${isActive ? "text-[#00F2FF]" : ""}`}
+                              strokeWidth={1.7}
+                            />
                             {!collapsed && <span>{item.name}</span>}
                           </div>
                           {/* Chevron to open dropdown — only when there are active chats */}
-                          {!collapsed && hasChats &&
+                          {!collapsed && hasChats && (
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
                                 setShowChatDropdown((v) => !v);
                               }}
-                              className="ml-auto p-0.5 rounded hover:bg-blue-100 transition-colors">
-
+                              className="ml-auto p-0.5 rounded hover:bg-blue-100 transition-colors"
+                            >
                               <ChevronDown className={`w-3.5 h-3.5 transition-transform ${showChatDropdown ? "rotate-180" : ""}`} />
                             </button>
-                            }
+                          )}
                         </div>
 
                         {/* Dropdown list of active chats */}
-                        {!collapsed && showChatDropdown && hasChats &&
+                        {!collapsed && showChatDropdown && hasChats && (
                           <div className="ml-2 mt-1 space-y-0.5 border-l-2 border-blue-100 pl-3">
-                            {activeChats.map((chat) =>
-                            <button
-                              key={chat.id}
-                              onClick={() => {
-                                navigate(createPageUrl(item.page));
-                                window.dispatchEvent(new CustomEvent("research_switch_chat", { detail: { chatId: chat.id } }));
-                                setShowChatDropdown(false);
-                              }}
-                              className="w-full flex items-center gap-2 px-2 py-1.5 rounded-lg text-xs text-gray-600 hover:bg-[#000021] hover:text-[#00F2FF] transition-all hover:scale-105 text-left truncate">
-
+                            {activeChats.map((chat) => (
+                              <button
+                                key={chat.id}
+                                onClick={() => {
+                                  navigate(createPageUrl(item.page));
+                                  window.dispatchEvent(new CustomEvent("research_switch_chat", { detail: { chatId: chat.id } }));
+                                  setShowChatDropdown(false);
+                                }}
+                                className="w-full flex items-center gap-2 px-2 py-1.5 rounded-lg text-xs text-gray-600 hover:bg-[#000021] hover:text-[#00F2FF] transition-all hover:scale-105 text-left truncate"
+                              >
                                 <MessageSquare className="w-3 h-3 flex-shrink-0 text-gray-400" />
                                 <span className="truncate">{chat.name}</span>
                               </button>
-                            )}
+                            ))}
                           </div>
-                          }
+                        )}
                       </div>
                     </TooltipTrigger>
-                    {collapsed &&
+                    {collapsed && (
                       <TooltipContent side="right" className="text-xs">
                         {item.name}
                       </TooltipContent>
-                      }
-                  </Tooltip>);
+                    )}
+                  </Tooltip>
+                );
+              }
 
-                }
-
-                return (
-                  <Tooltip key={item.name}>
+              return (
+                <Tooltip key={item.name}>
                   <TooltipTrigger asChild>
                     <Link
-                        to={createPageUrl(item.page)}
-                        className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-150 hover:scale-105 ${
-                        collapsed ? "justify-center" : ""} ${
-
-                        isActive ?
-                        "bg-[#000021] text-[#00F2FF] font-medium" :
-                        "text-gray-600 hover:bg-[#000021] hover:text-[#00F2FF]"}`
-                        }>
-
+                      to={createPageUrl(item.page)}
+                      className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-150 hover:scale-105 ${
+                        collapsed ? "justify-center" : ""
+                      } ${
+                        isActive
+                          ? "bg-[#000021] text-[#00F2FF] font-medium"
+                          : "text-gray-600 hover:bg-[#000021] hover:text-[#00F2FF]"
+                      }`}
+                    >
                       <Icon
-                          className={`w-[18px] h-[18px] flex-shrink-0 ${
-                          isActive ? "text-[#00F2FF]" : ""}`
-                          }
-                          strokeWidth={1.7} />
-
+                        className={`w-[18px] h-[18px] flex-shrink-0 ${
+                          isActive ? "text-[#00F2FF]" : ""
+                        }`}
+                        strokeWidth={1.7}
+                      />
                       {!collapsed && <span>{item.name}</span>}
                     </Link>
                   </TooltipTrigger>
-                  {collapsed &&
+                  {collapsed && (
                     <TooltipContent side="right" className="text-xs">
                       {item.name}
                     </TooltipContent>
-                    }
-                </Tooltip>);
-
-              })}
+                  )}
+                </Tooltip>
+              );
+            })}
           </nav>
 
           {/* User */}
@@ -271,48 +271,48 @@ export default function Layout({ children, currentPageName }) {
             <Tooltip>
               <TooltipTrigger asChild>
                 <Link
-                    to={createPageUrl("Profile")}
-                    className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-gray-600 hover:bg-[#000021] hover:text-[#00F2FF] transition-all hover:scale-105 ${
-                    collapsed ? "justify-center" : ""}`
-                    }>
-
+                  to={createPageUrl("Profile")}
+                  className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-gray-600 hover:bg-[#000021] hover:text-[#00F2FF] transition-all hover:scale-105 ${
+                    collapsed ? "justify-center" : ""
+                  }`}
+                >
                   <div className="w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0">
                     <User className="w-3.5 h-3.5 text-gray-500" strokeWidth={1.8} />
                   </div>
-                  {!collapsed &&
+                  {!collapsed && (
                     <span className="truncate text-xs">
                       {user?.full_name || user?.email || "Profile"}
                     </span>
-                    }
+                  )}
                 </Link>
               </TooltipTrigger>
-              {collapsed &&
+              {collapsed && (
                 <TooltipContent side="right" className="text-xs">
                   Profile
                 </TooltipContent>
-                }
+              )}
             </Tooltip>
-            {!collapsed &&
+            {!collapsed && (
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-3 px-3 py-2 rounded-lg text-xs text-gray-400 hover:text-red-500 hover:bg-red-50/50 transition-all w-full mt-1">
-
+                className="flex items-center gap-3 px-3 py-2 rounded-lg text-xs text-gray-400 hover:text-red-500 hover:bg-red-50/50 transition-all w-full mt-1"
+              >
                 <LogOut className="w-3.5 h-3.5" strokeWidth={1.8} />
                 Sign out
               </button>
-              }
+            )}
           </div>
 
           {/* Collapse Toggle */}
           <button
-              onClick={() => setCollapsed(!collapsed)}
-              className="absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full border border-gray-200 bg-white shadow-sm flex items-center justify-center hover:bg-gray-50 transition-colors z-10">
-
-            {collapsed ?
-              <ChevronRight className="w-3 h-3 text-gray-500" /> :
-
+            onClick={() => setCollapsed(!collapsed)}
+            className="absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full border border-gray-200 bg-white shadow-sm flex items-center justify-center hover:bg-gray-50 transition-colors z-10"
+          >
+            {collapsed ? (
+              <ChevronRight className="w-3 h-3 text-gray-500" />
+            ) : (
               <ChevronLeft className="w-3 h-3 text-gray-500" />
-              }
+            )}
           </button>
         </aside>
 
@@ -320,6 +320,6 @@ export default function Layout({ children, currentPageName }) {
         <main className="flex-1 overflow-auto">{children}</main>
       </div>
     </TooltipProvider>
-    </ThemeProvider>);
-
+    </ThemeProvider>
+  );
 }
