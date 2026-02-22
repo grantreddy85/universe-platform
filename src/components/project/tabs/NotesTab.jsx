@@ -87,15 +87,31 @@ export default function NotesTab({ project }) {
     queryClient.invalidateQueries({ queryKey: ["project-validations", project.id] });
   };
 
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setUploadingImage(true);
+    const { file_url } = await base44.integrations.Core.UploadFile({ file });
+    const newUrls = [...(form.image_urls || []), file_url];
+    setForm((prev) => ({ ...prev, image_urls: newUrls }));
+    setIsDirty(true);
+    setUploadingImage(false);
+  };
+
+  const removeImage = (url) => {
+    setForm((prev) => ({ ...prev, image_urls: prev.image_urls.filter((u) => u !== url) }));
+    setIsDirty(true);
+  };
+
   const openNote = (note) => {
     setSelectedNote(note);
-    setForm({ title: note.title, content: note.content || "" });
+    setForm({ title: note.title, content: note.content || "", image_urls: note.image_urls || [] });
     setIsDirty(false);
   };
 
   const openNew = () => {
     setSelectedNote("new");
-    setForm({ title: "", content: "" });
+    setForm({ title: "", content: "", image_urls: [] });
     setIsDirty(false);
   };
 
