@@ -41,6 +41,7 @@ export default function NotesTab({ project }) {
   const [assistantOpen, setAssistantOpen] = useState(false);
   const [showQueryDialog, setShowQueryDialog] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
+  const [lightboxUrl, setLightboxUrl] = useState(null);
   const queryClient = useQueryClient();
 
   const { data: notes = [], isLoading } = useQuery({
