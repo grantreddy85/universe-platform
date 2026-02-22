@@ -44,6 +44,16 @@ export default function ProjectCard({ project }) {
         {project.field && (
           <span className="bg-gray-50 px-2 py-0.5 rounded text-gray-500">{project.field}</span>
         )}
+        <span className={`ml-auto flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium ${
+          project.visibility_setting === "private"
+            ? "bg-gray-100 text-gray-500"
+            : "bg-blue-50 text-blue-500"
+        }`}>
+          {project.visibility_setting === "private"
+            ? <><Lock className="w-2.5 h-2.5" /> Private</>
+            : <><Globe className="w-2.5 h-2.5" /> Shared</>
+          }
+        </span>
       </div>
     </Link>
   );
