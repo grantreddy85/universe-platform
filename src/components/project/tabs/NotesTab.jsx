@@ -324,8 +324,45 @@ export default function NotesTab({ project }) {
               onChange={(e) => handleFormChange("content", e.target.value)}
               placeholder="Start writing your note here..."
               className="w-full border-none shadow-none bg-transparent px-0 resize-none focus-visible:ring-0 text-sm text-gray-700 placeholder:text-gray-300 leading-relaxed"
-              style={{ minHeight: "calc(100vh - 280px)" }}
+              style={{ minHeight: "calc(100vh - 380px)" }}
             />
+
+            {/* Attachments */}
+            <div className="mt-6 border-t border-gray-100 pt-5">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
+                  <Image className="w-3.5 h-3.5" /> Attachments
+                </span>
+                <label className="cursor-pointer">
+                  <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
+                  <span className="inline-flex items-center gap-1 text-xs text-blue-600 hover:text-blue-700 font-medium">
+                    {uploadingImage ? (
+                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    ) : (
+                      <ImagePlus className="w-3.5 h-3.5" />
+                    )}
+                    {uploadingImage ? "Uploading..." : "Add image"}
+                  </span>
+                </label>
+              </div>
+              {form.image_urls && form.image_urls.length > 0 ? (
+                <div className="grid grid-cols-2 gap-3">
+                  {form.image_urls.map((url, i) => (
+                    <div key={i} className="relative group rounded-lg overflow-hidden border border-gray-100">
+                      <img src={url} alt={`attachment-${i}`} className="w-full h-40 object-cover" />
+                      <button
+                        onClick={() => removeImage(url)}
+                        className="absolute top-1.5 right-1.5 w-6 h-6 rounded-full bg-black/50 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-xs text-gray-300">No attachments yet. Add graphs, charts or images.</p>
+              )}
+            </div>
           </div>
         </div>
       )}
