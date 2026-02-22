@@ -66,8 +66,8 @@ export default function OverviewTab({ project, onTabChange }) {
   return (
     <div className="p-6 lg:p-8 space-y-6">
       {/* Research Progress Guidance */}
-      <ResearchProgress 
-        projectStatus={Object.keys({ draft: 1, active: 2, validation: 3, validated: 4, tokenised: 5 })[Object.keys({ draft: 1, active: 2, validation: 3, validated: 4, tokenised: 5 }).indexOf(project.status)] || 1}
+      <ResearchProgress
+        counts={{ notes, hypotheses, workflows, labRequests, validations, assets }}
         onTabChange={onTabChange}
       />
 
