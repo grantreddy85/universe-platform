@@ -72,7 +72,7 @@ export default function OverviewTab({ project, onTabChange }) {
     <div className="p-6 lg:p-8 space-y-6">
       {/* Research Progress Guidance */}
       <ResearchProgress
-        counts={{ notes, hypotheses, workflows, labRequests, validations, assets }}
+        counts={{ notes, hypotheses, workflows, labRequests, validations, assets, vaultDocs }}
         onTabChange={onTabChange}
       />
 
