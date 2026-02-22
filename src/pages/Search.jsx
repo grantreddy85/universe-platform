@@ -367,7 +367,7 @@ export default function Search() {
           <div className="text-center mb-12">
             <div className="inline-flex items-center gap-3 mb-3">
               <UniVerseLogo className="w-12 h-12" />
-              <h1 className="text-4xl font-semibold tracking-tight text-gray-900">UniVerse</h1>
+              <h1 className="text-5xl font-medium tracking-tight text-[#525153]" style={{ fontFamily: "'Funnel Display', sans-serif" }}>UniVerse</h1>
             </div>
             <p className="text-sm text-gray-400">Research Infrastructure Operating System</p>
           </div>
