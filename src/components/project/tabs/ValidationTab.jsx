@@ -148,6 +148,18 @@ export default function ValidationTab({ project }) {
               <div className="whitespace-pre-wrap text-gray-700 leading-relaxed text-sm">
                 {expandedNote.content}
               </div>
+              {expandedNote.image_urls?.length > 0 && (
+                <div className="mt-8 border-t border-gray-100 pt-6">
+                  <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Attachments</p>
+                  <div className="grid grid-cols-2 gap-3">
+                    {expandedNote.image_urls.map((url, i) => (
+                      <a key={i} href={url} target="_blank" rel="noopener noreferrer">
+                        <img src={url} alt={`attachment-${i}`} className="w-full h-40 object-cover rounded-lg border border-gray-100 hover:opacity-90 transition-opacity" />
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
           <ValidationAssistant
