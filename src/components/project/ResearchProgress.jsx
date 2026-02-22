@@ -4,6 +4,16 @@ import { Button } from "@/components/ui/button";
 
 const STAGES = [
   {
+    id: "vault",
+    name: "Build Knowledge Base",
+    description: "Upload unpublished data, papers and results to your RAG vault",
+    tab: "vault",
+    icon: "🗄️",
+    check: ({ vaultDocs }) => vaultDocs.length > 0,
+    hint: "Upload at least one document to seed your AI knowledge base",
+    cta: "Go to Vault",
+  },
+  {
     id: "notes",
     name: "Observation & Notes",
     description: "Capture your initial observations and research context",
@@ -20,7 +30,7 @@ const STAGES = [
     tab: "vault",
     icon: "💡",
     check: ({ hypotheses }) => hypotheses.length > 0,
-    hint: "Define at least one hypothesis in the Vault",
+    hint: "Define at least one hypothesis — the AI can help based on your Vault",
     cta: "Go to Vault",
   },
   {
