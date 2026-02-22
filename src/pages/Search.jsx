@@ -376,25 +376,46 @@ export default function Search() {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                if (input.trim()) {
+                if (input.trim() || attachedFiles.length > 0) {
                   createNewChat();
                   sendMessage();
                 }
               }}
             >
+              {attachedFiles.length > 0 && (
+                <div className="flex flex-wrap gap-2 mb-2">
+                  {attachedFiles.map((f) => (
+                    <div key={f.url} className="flex items-center gap-1.5 bg-blue-50 border border-blue-100 rounded-lg px-2.5 py-1 text-xs text-blue-700">
+                      {f.url.match(/\.(png|jpg|jpeg|gif|webp)$/i) ? <ImageIcon className="w-3 h-3" /> : <Paperclip className="w-3 h-3" />}
+                      <span className="max-w-[120px] truncate">{f.name}</span>
+                      <button type="button" onClick={() => removeAttachment(f.url)} className="ml-0.5 hover:text-red-500"><X className="w-3 h-3" /></button>
+                    </div>
+                  ))}
+                </div>
+              )}
               <div className="relative">
                 <Input
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="Enter your question or topic..."
-                  className="h-14 pl-5 pr-14 text-base rounded-xl border-gray-200 bg-white shadow-sm hover:border-gray-300 focus:border-blue-400 focus:ring-blue-400/20 transition-all"
+                  className="h-14 pl-5 pr-24 text-base rounded-xl border-gray-200 bg-white shadow-sm hover:border-gray-300 focus:border-blue-400 focus:ring-blue-400/20 transition-all"
                 />
-                <button
-                  type="submit"
-                  className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg bg-blue-600 hover:bg-blue-700 flex items-center justify-center transition-colors"
-                >
-                  <Send className="w-4 h-4 text-white" />
-                </button>
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={uploadingFile}
+                    className="w-8 h-8 rounded-lg bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors text-gray-500"
+                  >
+                    {uploadingFile ? <Loader2 className="w-4 h-4 animate-spin" /> : <Paperclip className="w-4 h-4" />}
+                  </button>
+                  <button
+                    type="submit"
+                    className="w-8 h-8 rounded-lg bg-blue-600 hover:bg-blue-700 flex items-center justify-center transition-colors"
+                  >
+                    <Send className="w-4 h-4 text-white" />
+                  </button>
+                </div>
               </div>
             </form>
           </div>
