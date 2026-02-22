@@ -146,10 +146,37 @@ export default function Search() {
     localStorage.setItem("search_conversations", JSON.stringify(updated));
   };
 
+  const handleFileAttach = async (file) => {
+    if (!file) return;
+    setUploadingFile(true);
+    const { file_url } = await base44.integrations.Core.UploadFile({ file });
+    setAttachedFiles((prev) => [...prev, { name: file.name, url: file_url }]);
+    setUploadingFile(false);
+  };
+
+  const handleFileInputChange = (e) => {
+    const file = e.target.files[0];
+    if (file) handleFileAttach(file);
+    e.target.value = "";
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const file = e.dataTransfer.files[0];
+    if (file) handleFileAttach(file);
+  };
+
+  const removeAttachment = (url) => {
+    setAttachedFiles((prev) => prev.filter((f) => f.url !== url));
+  };
+
   const sendMessage = async () => {
-    if (!input.trim() || loading) return;
+    if ((!input.trim() && attachedFiles.length === 0) || loading) return;
     const text = input.trim();
+    const files = [...attachedFiles];
     setInput("");
+    setAttachedFiles([]);
 
     if (!activeTab) {
       createNewChat();
