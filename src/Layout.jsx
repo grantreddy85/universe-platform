@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, createContext, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { createPageUrl } from "./utils";
 import { base44 } from "@/api/base44Client";
@@ -21,6 +21,10 @@ import UniVerseLogo from "@/components/UniVerseLogo";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
+// Theme Context
+const ThemeContext = createContext();
+export const useTheme = () => useContext(ThemeContext);
+
 const navItems = [
   { name: "Research", icon: Search, page: "Search" },
   { name: "Home", icon: Home, page: "Home" },
@@ -30,6 +34,48 @@ const navItems = [
   { name: "Labs", icon: FlaskConical, page: "Labs" },
   { name: "Marketplace", icon: Store, page: null, external: true },
 ];
+
+function ThemeProvider({ children }) {
+  const [theme, setTheme] = useState(() => {
+    const saved = localStorage.getItem('app_theme');
+    return saved ? JSON.parse(saved) : {
+      fontFamily: 'Funnel Sans',
+      primaryColor: '#1a1a1a',
+      secondaryColor: '#ff6b35',
+      accentColor: '#00d4aa',
+      neutralColor: '#f8f9fa',
+      fontScale: 1.0,
+      themeMode: 'light'
+    };
+  });
+
+  useEffect(() => {
+    localStorage.setItem('app_theme', JSON.stringify(theme));
+    
+    // Apply CSS variables to document root
+    const root = document.documentElement;
+    root.style.setProperty('--font-family', theme.fontFamily);
+    root.style.setProperty('--primary', theme.primaryColor);
+    root.style.setProperty('--secondary', theme.secondaryColor);
+    root.style.setProperty('--accent', theme.accentColor);
+    root.style.setProperty('--neutral', theme.neutralColor);
+    root.style.setProperty('--font-scale', theme.fontScale);
+    
+    // Apply to body immediately
+    document.body.style.fontFamily = `'${theme.fontFamily}', sans-serif`;
+    document.body.style.fontSize = `${theme.fontScale}rem`;
+  }, [theme]);
+
+  const updateTheme = (updates) => {
+    setTheme(prev => ({ ...prev, ...updates }));
+  };
+
+  return (
+    <ThemeContext.Provider value={{ theme, updateTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
+}
 
 export default function Layout({ children, currentPageName }) {
   const [collapsed, setCollapsed] = useState(false);
@@ -66,8 +112,9 @@ export default function Layout({ children, currentPageName }) {
   };
 
   return (
-    <TooltipProvider delayDuration={0}>
-      <div className="flex h-screen bg-[#fafbfc]">
+    <ThemeProvider>
+      <TooltipProvider delayDuration={0}>
+        <div className="flex h-screen bg-[#fafbfc]">
         {/* Sidebar */}
         <aside
           className={`relative flex flex-col border-r border-gray-200/80 bg-white transition-all duration-300 ease-in-out ${
@@ -273,5 +320,6 @@ export default function Layout({ children, currentPageName }) {
         <main className="flex-1 overflow-auto">{children}</main>
       </div>
     </TooltipProvider>
+    </ThemeProvider>
   );
 }
