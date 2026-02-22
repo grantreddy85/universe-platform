@@ -28,6 +28,8 @@ export default function Home() {
     base44.auth.me().then(setUser).catch(() => {});
   }, []);
 
+  const subscriptionStatus = user?.subscription_status || "free";
+
   const { data: projects = [] } = useQuery({
     queryKey: ["projects"],
     queryFn: () => base44.entities.Project.list("-updated_date", 6),
