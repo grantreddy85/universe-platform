@@ -38,7 +38,6 @@ export default function NotesTab({ project }) {
   const [isDirty, setIsDirty] = useState(false);
   const [assistantOpen, setAssistantOpen] = useState(false);
   const [showQueryDialog, setShowQueryDialog] = useState(false);
-  const isNew = selectedNote === "new";
   const queryClient = useQueryClient();
 
   const { data: notes = [], isLoading } = useQuery({
