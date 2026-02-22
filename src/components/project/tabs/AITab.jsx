@@ -460,6 +460,24 @@ export default function AITab({ project }) {
 
         {/* Input */}
         <div className="border-t border-gray-100 p-4 bg-white">
+          {/* Attached files preview */}
+          {attachedFiles.length > 0 && (
+            <div className="flex flex-wrap gap-2 mb-2">
+              {attachedFiles.map((f) => (
+                <div key={f.url} className="flex items-center gap-1.5 bg-blue-50 border border-blue-100 rounded-lg px-2.5 py-1 text-xs text-blue-700">
+                  {f.url.match(/\.(png|jpg|jpeg|gif|webp)$/i) ? (
+                    <Image className="w-3 h-3" />
+                  ) : (
+                    <Paperclip className="w-3 h-3" />
+                  )}
+                  <span className="max-w-[120px] truncate">{f.name}</span>
+                  <button onClick={() => removeAttachment(f.url)} className="ml-0.5 hover:text-red-500">
+                    <X className="w-3 h-3" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -467,6 +485,18 @@ export default function AITab({ project }) {
             }}
             className="flex items-center gap-2"
           >
+            <input ref={fileInputRef} type="file" accept="image/*,.pdf,.csv,.xlsx,.txt" className="hidden" onChange={handleFileAttach} />
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              className="h-10 w-10 text-gray-400 hover:text-blue-600 flex-shrink-0"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={uploadingFile || loading}
+              title="Attach file"
+            >
+              {uploadingFile ? <Loader2 className="w-4 h-4 animate-spin" /> : <Paperclip className="w-4 h-4" />}
+            </Button>
             <Input
               value={input}
               onChange={(e) => setInput(e.target.value)}
@@ -478,7 +508,7 @@ export default function AITab({ project }) {
               type="submit"
               size="icon"
               className="h-10 w-10 bg-blue-600 hover:bg-blue-700"
-              disabled={!input.trim() || loading}
+              disabled={(!input.trim() && attachedFiles.length === 0) || loading}
             >
               <Send className="w-4 h-4" />
             </Button>
