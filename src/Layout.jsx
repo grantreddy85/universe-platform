@@ -15,13 +15,11 @@ import {
   ChevronDown,
   LogOut,
   Search,
-  MessageSquare,
-  Settings
+  MessageSquare
 } from "lucide-react";
 import UniVerseLogo from "@/components/UniVerseLogo";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import SettingsMenu from "@/components/SettingsMenu";
 
 // Theme Context
 const ThemeContext = createContext();
@@ -84,7 +82,6 @@ export default function Layout({ children, currentPageName }) {
   const [user, setUser] = useState(null);
   const [showChatDropdown, setShowChatDropdown] = useState(true);
   const [activeChats, setActiveChats] = useState([]);
-  const [settingsOpen, setSettingsOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -320,31 +317,7 @@ export default function Layout({ children, currentPageName }) {
         </aside>
 
         {/* Main Content */}
-        <main className="flex-1 overflow-auto">
-          {/* Settings Button - Top Right */}
-          <div className="fixed top-4 right-6 z-30">
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => setSettingsOpen(true)}
-                  className="w-9 h-9 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-gray-900 transition-colors"
-                >
-                  <Settings className="w-[18px] h-[18px]" strokeWidth={1.7} />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent side="left" className="text-xs">
-                Theme Settings
-              </TooltipContent>
-            </Tooltip>
-          </div>
-
-          {children}
-        </main>
-
-        {/* Settings Menu */}
-        <SettingsMenu open={settingsOpen} onClose={() => setSettingsOpen(false)} />
+        <main className="flex-1 overflow-auto">{children}</main>
       </div>
     </TooltipProvider>
     </ThemeProvider>
