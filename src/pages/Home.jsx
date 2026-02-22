@@ -245,5 +245,12 @@ export default function Home() {
         <MarketplaceBar />
       </div>
     </div>
+    <TabAIPanel
+      tabName="Projects"
+      contextData={projectsContext}
+      isOpen={aiPanelOpen}
+      onToggle={() => setAiPanelOpen(false)}
+    />
+    </div>
   );
 }
