@@ -244,13 +244,13 @@ export default function Home() {
       <div className="mt-8">
         <MarketplaceBar />
       </div>
-    </div>
+    </div>{/* end scrollable content */}
     <TabAIPanel
       tabName="Projects"
       contextData={projectsContext}
       isOpen={aiPanelOpen}
       onToggle={() => setAiPanelOpen(false)}
     />
-    </div>
+    </div>{/* end flex container */}
   );
 }
