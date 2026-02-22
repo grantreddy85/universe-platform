@@ -471,7 +471,21 @@ export default function Search() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div
+      className={`min-h-screen bg-gray-50 flex flex-col transition-colors ${isDragging ? "bg-blue-50" : ""}`}
+      onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+      onDragLeave={() => setIsDragging(false)}
+      onDrop={handleDrop}
+    >
+      {isDragging && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none">
+          <div className="bg-white border-2 border-dashed border-blue-400 rounded-2xl px-12 py-8 shadow-xl text-center">
+            <Paperclip className="w-8 h-8 text-blue-400 mx-auto mb-2" />
+            <p className="text-sm font-medium text-blue-600">Drop to attach file</p>
+          </div>
+        </div>
+      )}
+      <input ref={fileInputRef} type="file" accept="image/*,.pdf,.csv,.xlsx,.txt" className="hidden" onChange={handleFileInputChange} />
       {/* Tabs */}
       <div className="bg-white border-b border-gray-200 px-6 py-3">
         <div className="flex items-center gap-2 overflow-x-auto">
