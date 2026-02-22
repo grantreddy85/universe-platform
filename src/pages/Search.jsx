@@ -560,7 +560,22 @@ export default function Search() {
                   }`}
                 >
                   {msg.role === "user" ? (
-                    <p className="leading-relaxed whitespace-pre-wrap">{msg.content}</p>
+                    <div>
+                      <p className="leading-relaxed whitespace-pre-wrap">{msg.content}</p>
+                      {msg.file_urls?.length > 0 && (
+                        <div className="mt-2 flex flex-wrap gap-2">
+                          {msg.file_urls.map((url, i) => (
+                            url.match(/\.(png|jpg|jpeg|gif|webp)$/i) ? (
+                              <img key={i} src={url} alt="attachment" className="max-h-40 rounded-lg border border-white/20 object-cover" />
+                            ) : (
+                              <a key={i} href={url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-xs underline opacity-80">
+                                <Paperclip className="w-3 h-3" /> File {i + 1}
+                              </a>
+                            )
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   ) : (
                     <>
                       <ReactMarkdown className="prose prose-sm prose-gray max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
