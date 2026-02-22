@@ -119,7 +119,7 @@ export default function AITab({ project }) {
   };
 
   const openSummarizeDialog = () => {
-    setSelectedConvos(conversations.map((c) => c.id));
+    setSelectedConvos(activeConversation ? [activeConversation.id] : []);
     setSummarizeTitle("");
     setSummarizeFormat("research_paper");
     setShowSummarizeDialog(true);
