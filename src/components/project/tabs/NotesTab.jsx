@@ -351,7 +351,12 @@ export default function NotesTab({ project }) {
                 <div className="grid grid-cols-2 gap-3">
                   {form.image_urls.map((url, i) => (
                     <div key={i} className="relative group rounded-lg overflow-hidden border border-gray-100">
-                      <img src={url} alt={`attachment-${i}`} className="w-full h-40 object-cover" />
+                      <img
+                        src={url}
+                        alt={`attachment-${i}`}
+                        className="w-full h-40 object-cover cursor-zoom-in"
+                        onClick={() => setLightboxUrl(url)}
+                      />
                       <button
                         onClick={() => removeImage(url)}
                         className="absolute top-1.5 right-1.5 w-6 h-6 rounded-full bg-black/50 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
