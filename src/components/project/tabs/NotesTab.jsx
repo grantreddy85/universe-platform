@@ -36,10 +36,11 @@ const sourceLabel = {
 
 export default function NotesTab({ project }) {
   const [selectedNote, setSelectedNote] = useState(null);
-  const [form, setForm] = useState({ title: "", content: "" });
+  const [form, setForm] = useState({ title: "", content: "", image_urls: [] });
   const [isDirty, setIsDirty] = useState(false);
   const [assistantOpen, setAssistantOpen] = useState(false);
   const [showQueryDialog, setShowQueryDialog] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
   const queryClient = useQueryClient();
 
   const { data: notes = [], isLoading } = useQuery({
