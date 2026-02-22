@@ -305,6 +305,7 @@ export default function AITab({ project }) {
     await base44.agents.addMessage(convo, {
       role: "user",
       content: contextStr,
+      file_urls: files.map(f => f.url),
     });
 
     setTimeout(() => unsubscribe(), 60000);
