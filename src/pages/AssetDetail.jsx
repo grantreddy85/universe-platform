@@ -127,11 +127,11 @@ export default function AssetDetail() {
       <div className="bg-white border-b border-gray-100 px-8 py-5">
         <div className="max-w-5xl mx-auto">
           <button
-            onClick={() => navigate(-1)}
+            onClick={() => navigate(createPageUrl("ProjectDetail") + `?id=${projectId}&tab=assets`)}
             className="flex items-center gap-1.5 text-xs text-gray-400 hover:text-gray-700 transition-colors mb-4"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            Back to Project
+            Back to Assets
           </button>
           <div className="flex items-start justify-between">
             <div className="flex items-center gap-4">
