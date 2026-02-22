@@ -123,7 +123,7 @@ export default function Layout({ children, currentPageName }) {
         >
           {/* Logo */}
           <div className="flex items-center gap-2.5 px-5 h-16 border-b border-gray-100">
-            <UniVerseLogo className="w-8 h-8 flex-shrink-0" allowUpload={true} />
+            <UniVerseLogo className="w-8 h-8 flex-shrink-0" />
             {!collapsed && (
               <span className="text-[15px] font-semibold tracking-tight text-gray-900">
                 UniVerse
