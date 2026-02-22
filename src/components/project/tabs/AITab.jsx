@@ -231,7 +231,7 @@ export default function AITab({ project }) {
     setLoading(true);
 
     // Fetch all project data for context
-    const [notes, documents, hypotheses, cohorts, workflows, validations, assets] = await Promise.all([
+    const [notes, documents, hypotheses, cohorts, workflows, validations, assets, labServices] = await Promise.all([
       base44.entities.Note.filter({ project_id: project.id }, "-created_date", 50),
       base44.entities.ProjectDocument.filter({ project_id: project.id }, "-created_date", 50),
       base44.entities.Hypothesis.filter({ project_id: project.id }, "-created_date", 50),
@@ -239,6 +239,7 @@ export default function AITab({ project }) {
       base44.entities.Workflow.filter({ project_id: project.id }, "-created_date", 50),
       base44.entities.ValidationRequest.filter({ project_id: project.id }, "-created_date", 50),
       base44.entities.Asset.filter({ project_id: project.id }, "-created_date", 50),
+      base44.entities.LabService.list("-created_date", 50),
     ]);
 
     // Build context string
