@@ -95,8 +95,11 @@ export default function Home() {
 
   const firstName = user?.full_name?.split(" ")[0] || "Researcher";
 
+  const projectsContext = projects.map(p => `- ${p.title} (${p.status}): ${p.description || ""}`).join("\n");
+
   return (
-    <div className="min-h-screen p-6 lg:p-10 max-w-7xl mx-auto">
+    <div className="flex h-full min-h-screen">
+    <div className="flex-1 p-6 lg:p-10 max-w-7xl mx-auto overflow-auto">
       {/* Header */}
       <div className="mb-10">
         <h1 className="text-2xl font-semibold text-gray-900 tracking-tight">
