@@ -290,6 +290,18 @@ export default function AITab({ project }) {
       contextStr += `\n`;
     }
 
+    if (labServices.length > 0) {
+      contextStr += `=== AVAILABLE LAB SERVICES (${labServices.length}) ===\n`;
+      contextStr += `These are real-world lab services available on the platform that can be used to validate hypotheses or run experiments:\n`;
+      labServices.forEach(s => {
+        contextStr += `- "${s.name}" [${s.category}]: ${s.description?.substring(0, 200) || 'No description'}`;
+        if (s.capabilities?.length > 0) contextStr += ` | Capabilities: ${s.capabilities.slice(0, 3).join(', ')}`;
+        if (s.turnaround_days) contextStr += ` | Turnaround: ${s.turnaround_days} days`;
+        contextStr += `\n`;
+      });
+      contextStr += `\nWhen the user asks what to do next, how to validate, or what experiments to run, proactively recommend specific lab services from this list that are relevant to the research context.\n\n`;
+    }
+
     contextStr += `User Question: ${text}`;
 
     const unsubscribe = base44.agents.subscribeToConversation(
