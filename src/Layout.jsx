@@ -172,7 +172,7 @@ export default function Layout({ children, currentPageName }) {
                           } ${
                             isActive
                               ? "bg-blue-50/80 text-blue-600 font-medium"
-                              : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                              : "text-gray-600 hover:bg-[#000021] hover:text-[#00F2FF]"
                           }`}
                         >
                           {/* Main click area → go to landing */}
@@ -215,7 +215,7 @@ export default function Layout({ children, currentPageName }) {
                                   window.dispatchEvent(new CustomEvent("research_switch_chat", { detail: { chatId: chat.id } }));
                                   setShowChatDropdown(false);
                                 }}
-                                className="w-full flex items-center gap-2 px-2 py-1.5 rounded-lg text-xs text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors text-left truncate"
+                                className="w-full flex items-center gap-2 px-2 py-1.5 rounded-lg text-xs text-gray-600 hover:bg-[#000021] hover:text-[#00F2FF] transition-colors text-left truncate"
                               >
                                 <MessageSquare className="w-3 h-3 flex-shrink-0 text-gray-400" />
                                 <span className="truncate">{chat.name}</span>
@@ -272,7 +272,7 @@ export default function Layout({ children, currentPageName }) {
               <TooltipTrigger asChild>
                 <Link
                   to={createPageUrl("Profile")}
-                  className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-all ${
+                  className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-gray-600 hover:bg-[#000021] hover:text-[#00F2FF] transition-all ${
                     collapsed ? "justify-center" : ""
                   }`}
                 >
