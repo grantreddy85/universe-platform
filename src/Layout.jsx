@@ -167,12 +167,12 @@ export default function Layout({ children, currentPageName }) {
                     <TooltipTrigger asChild>
                       <div className="relative">
                         <div
-                          className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-150 cursor-pointer ${
+                          className={`flex items-center gap-3 px-3 py-2.5 text-sm transition-all duration-150 cursor-pointer ${
                             collapsed ? "justify-center" : ""
                           } ${
                             isActive
-                              ? "bg-blue-50/80 text-blue-600 font-medium"
-                              : "text-gray-600 hover:bg-[#000021] hover:text-[#00F2FF]"
+                              ? "text-blue-600 font-medium"
+                              : "text-gray-600 hover:text-[#00F2FF]"
                           }`}
                         >
                           {/* Main click area → go to landing */}
@@ -184,10 +184,14 @@ export default function Layout({ children, currentPageName }) {
                               setShowChatDropdown(false);
                             }}
                           >
-                            <Icon
-                              className={`w-[18px] h-[18px] flex-shrink-0 ${isActive ? "text-blue-600" : ""}`}
-                              strokeWidth={1.7}
-                            />
+                            <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
+                              isActive ? "bg-blue-50" : "hover:bg-[#000021]"
+                            }`}>
+                              <Icon
+                                className={`w-[18px] h-[18px] flex-shrink-0 ${isActive ? "text-blue-600" : ""}`}
+                                strokeWidth={1.7}
+                              />
+                            </div>
                             {!collapsed && <span>{item.name}</span>}
                           </div>
                           {/* Chevron to open dropdown — only when there are active chats */}
@@ -239,20 +243,24 @@ export default function Layout({ children, currentPageName }) {
                   <TooltipTrigger asChild>
                     <Link
                       to={createPageUrl(item.page)}
-                      className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-150 ${
+                      className={`flex items-center gap-3 px-3 py-2.5 text-sm transition-all duration-150 ${
                         collapsed ? "justify-center" : ""
                       } ${
                         isActive
-                          ? "bg-blue-50/80 text-blue-600 font-medium"
-                          : "text-gray-600 hover:bg-[#000021] hover:text-[#00F2FF]"
+                          ? "text-blue-600 font-medium"
+                          : "text-gray-600 hover:text-[#00F2FF]"
                       }`}
                     >
-                      <Icon
-                        className={`w-[18px] h-[18px] flex-shrink-0 ${
-                          isActive ? "text-blue-600" : ""
-                        }`}
-                        strokeWidth={1.7}
-                      />
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
+                        isActive ? "bg-blue-50" : "hover:bg-[#000021]"
+                      }`}>
+                        <Icon
+                          className={`w-[18px] h-[18px] flex-shrink-0 ${
+                            isActive ? "text-blue-600" : ""
+                          }`}
+                          strokeWidth={1.7}
+                        />
+                      </div>
                       {!collapsed && <span>{item.name}</span>}
                     </Link>
                   </TooltipTrigger>
@@ -272,11 +280,11 @@ export default function Layout({ children, currentPageName }) {
               <TooltipTrigger asChild>
                 <Link
                   to={createPageUrl("Profile")}
-                  className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-gray-600 hover:bg-[#000021] hover:text-[#00F2FF] transition-all ${
+                  className={`flex items-center gap-3 px-3 py-2.5 text-sm text-gray-600 hover:text-[#00F2FF] transition-all ${
                     collapsed ? "justify-center" : ""
                   }`}
                 >
-                  <div className="w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0">
+                  <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0 hover:bg-[#000021] transition-colors">
                     <User className="w-3.5 h-3.5 text-gray-500" strokeWidth={1.8} />
                   </div>
                   {!collapsed && (
