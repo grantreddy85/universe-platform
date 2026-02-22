@@ -335,72 +335,70 @@ export default function AITab({ project }) {
   return (
     <div className="flex flex-col h-[calc(100vh-220px)]">
       {/* Top Session Tabs */}
-      <div className="border-b border-gray-100 bg-white px-6 py-3 flex items-center justify-between gap-4 overflow-x-auto">
-        <div className="flex items-center gap-2">
-          {activeConversation && (
-            <div className="flex items-center gap-2">
-              {editingConvoId === activeConversation.id ? (
-                <div className="flex items-center gap-1 bg-white border border-blue-300 rounded-lg px-2 py-1">
-                  <Input
-                    value={editingName}
-                    onChange={(e) => setEditingName(e.target.value)}
-                    className="h-6 text-xs border-0 p-0"
-                    autoFocus
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        updateConversationName(activeConversation.id, editingName);
-                      } else if (e.key === "Escape") {
-                        setEditingConvoId(null);
-                        setEditingName("");
-                      }
-                    }}
-                  />
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-5 w-5 flex-shrink-0"
-                    onClick={() => updateConversationName(activeConversation.id, editingName)}
-                  >
-                    <Check className="w-3 h-3" />
-                  </Button>
-                </div>
-              ) : (
-                <div className="flex items-center gap-2 px-3 py-1.5 bg-blue-50 border border-blue-200 rounded-lg group">
-                  <span className="text-sm font-medium text-blue-600">{activeConversation.metadata?.name || "Session"}</span>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-4 w-4 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setEditingConvoId(activeConversation.id);
-                      setEditingName(activeConversation.metadata?.name || "");
-                    }}
-                  >
-                    <Pencil className="w-3 h-3" />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-4 w-4 flex-shrink-0 hover:text-red-600 opacity-0 group-hover:opacity-100 transition-opacity"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      deleteConversation(activeConversation.id);
-                    }}
-                  >
-                    <X className="w-3 h-3" />
-                  </Button>
-                </div>
-              )}
-            </div>
-          )}
+      <div className="border-b border-gray-100 bg-white px-4 py-2 flex items-center justify-between gap-2">
+        <div className="flex items-center gap-1 overflow-x-auto flex-1 min-w-0">
+          {conversations.map((convo) => {
+            const isActive = activeConversation?.id === convo.id;
+            const isEditing = editingConvoId === convo.id;
+            return (
+              <div
+                key={convo.id}
+                onClick={() => !isEditing && switchConversation(convo)}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs cursor-pointer flex-shrink-0 group transition-all ${
+                  isActive
+                    ? "bg-blue-50 border border-blue-200 text-blue-700 font-medium"
+                    : "border border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-200"
+                }`}
+              >
+                {isEditing ? (
+                  <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
+                    <Input
+                      value={editingName}
+                      onChange={(e) => setEditingName(e.target.value)}
+                      className="h-5 text-xs border-0 p-0 w-32"
+                      autoFocus
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") updateConversationName(convo.id, editingName);
+                        else if (e.key === "Escape") { setEditingConvoId(null); setEditingName(""); }
+                      }}
+                    />
+                    <Button variant="ghost" size="icon" className="h-4 w-4 flex-shrink-0" onClick={() => updateConversationName(convo.id, editingName)}>
+                      <Check className="w-3 h-3" />
+                    </Button>
+                  </div>
+                ) : (
+                  <>
+                    <span className="max-w-[160px] truncate">{convo.metadata?.name || "Session"}</span>
+                    {isActive && (
+                      <>
+                        <Button
+                          variant="ghost" size="icon"
+                          className="h-4 w-4 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                          onClick={(e) => { e.stopPropagation(); setEditingConvoId(convo.id); setEditingName(convo.metadata?.name || ""); }}
+                        >
+                          <Pencil className="w-3 h-3" />
+                        </Button>
+                        <Button
+                          variant="ghost" size="icon"
+                          className="h-4 w-4 flex-shrink-0 hover:text-red-600 opacity-0 group-hover:opacity-100 transition-opacity"
+                          onClick={(e) => { e.stopPropagation(); deleteConversation(convo.id); }}
+                        >
+                          <X className="w-3 h-3" />
+                        </Button>
+                      </>
+                    )}
+                  </>
+                )}
+              </div>
+            );
+          })}
           <Button
             onClick={() => setShowNewSessionDialog(true)}
             variant="outline"
             size="sm"
-            className="text-xs"
+            className="text-xs flex-shrink-0 ml-1"
           >
-            <Plus className="w-3 h-3 mr-1.5" />
+            <Plus className="w-3 h-3 mr-1" />
             New Session
           </Button>
         </div>
@@ -412,7 +410,7 @@ export default function AITab({ project }) {
             className="text-xs text-blue-600 hover:bg-blue-50 flex-shrink-0"
           >
             <FileText className="w-3 h-3 mr-1.5" />
-            Summarize Sessions
+            Summarize
           </Button>
         )}
       </div>
