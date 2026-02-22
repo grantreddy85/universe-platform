@@ -227,7 +227,7 @@ export default function AITab({ project }) {
       return;
     }
 
-    setMessages((prev) => [...prev, { role: "user", content: text }]);
+    setMessages((prev) => [...prev, { role: "user", content: text, file_urls: files.map(f => f.url) }]);
     setLoading(true);
 
     // Fetch all project data for context
