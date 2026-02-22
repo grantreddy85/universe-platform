@@ -227,8 +227,13 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Marketplace Bar */}
+      {/* Ecosystem Banner */}
       <div className="mt-8">
+        <EcosystemBanner projects={projects} subscriptionStatus={subscriptionStatus} />
+      </div>
+
+      {/* Marketplace Bar */}
+      <div className="mt-4">
         <MarketplaceBar />
       </div>
     </div>
