@@ -17,7 +17,6 @@ import { Button } from "@/components/ui/button";
 import StatsCard from "../components/home/StatsCard";
 import ProjectCard from "../components/home/ProjectCard";
 import ActivityItem from "../components/home/ActivityItem";
-import LabActivitySection from "../components/home/LabActivitySection";
 import MarketplaceBar from "../components/home/MarketplaceBar";
 import EcosystemBanner from "../components/home/EcosystemBanner";
 
@@ -60,34 +59,6 @@ export default function Home() {
     queryFn: () => base44.entities.LabService.list(),
   });
 
-  // Mock marketplace feed data (placeholder until Marketplace is implemented)
-  const marketplaceFeed = [
-    {
-      id: 1,
-      projectTitle: "Neural Pathway Mapping in C. elegans",
-      amount: "$2.5M",
-      investors: 12,
-      date: "2026-02-15",
-      category: "Neuroscience",
-    },
-    {
-      id: 2,
-      projectTitle: "CRISPR-Based Gene Therapy for Rare Diseases",
-      amount: "$4.8M",
-      investors: 23,
-      date: "2026-02-14",
-      category: "Gene Therapy",
-    },
-    {
-      id: 3,
-      projectTitle: "Microbiome Analysis for Personalized Medicine",
-      amount: "$1.9M",
-      investors: 8,
-      date: "2026-02-13",
-      category: "Precision Health",
-    },
-  ];
-
   const activeValidations = validations.filter(
     (v) => v.status === "in_review" || v.status === "running"
   ).length;
@@ -118,47 +89,50 @@ export default function Home() {
 
       {/* Projects + Activity */}
       <div className="grid lg:grid-cols-3 gap-8">
-        {/* Projects */}
-        <div className="lg:col-span-2">
-          <div className="flex items-center justify-between mb-5">
-            <h2 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">
-              Continue Research
-            </h2>
-            <div className="flex items-center gap-2">
+        {/* Left: Projects + Marketplace Bar */}
+        <div className="lg:col-span-2 flex flex-col gap-6">
+          <div>
+            <div className="flex items-center justify-between mb-5">
+              <h2 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">
+                Continue Research
+              </h2>
               <Link to={createPageUrl("Projects")}>
                 <Button variant="ghost" size="sm" className="text-xs text-gray-500 hover:text-gray-900">
                   View All <ArrowRight className="w-3 h-3 ml-1" />
                 </Button>
               </Link>
             </div>
+
+            {projects.length === 0 ? (
+              <div className="bg-white rounded-xl border border-dashed border-gray-200 p-12 text-center">
+                <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center mx-auto mb-4">
+                  <Sparkles className="w-5 h-5 text-blue-500" />
+                </div>
+                <h3 className="text-sm font-semibold text-gray-900 mb-1">Start your first project</h3>
+                <p className="text-xs text-gray-400 mb-5 max-w-xs mx-auto">
+                  Create a project to begin structuring your research, uploading literature, and generating hypotheses.
+                </p>
+                <Link to={createPageUrl("Projects")}>
+                  <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-xs">
+                    <Plus className="w-3.5 h-3.5 mr-1.5" />
+                    New Project
+                  </Button>
+                </Link>
+              </div>
+            ) : (
+              <div className="grid sm:grid-cols-2 gap-4">
+                {projects.slice(0, 4).map((project) => (
+                  <ProjectCard key={project.id} project={project} />
+                ))}
+              </div>
+            )}
           </div>
 
-          {projects.length === 0 ? (
-            <div className="bg-white rounded-xl border border-dashed border-gray-200 p-12 text-center">
-              <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center mx-auto mb-4">
-                <Sparkles className="w-5 h-5 text-blue-500" />
-              </div>
-              <h3 className="text-sm font-semibold text-gray-900 mb-1">Start your first project</h3>
-              <p className="text-xs text-gray-400 mb-5 max-w-xs mx-auto">
-                Create a project to begin structuring your research, uploading literature, and generating hypotheses.
-              </p>
-              <Link to={createPageUrl("Projects")}>
-                <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-xs">
-                  <Plus className="w-3.5 h-3.5 mr-1.5" />
-                  New Project
-                </Button>
-              </Link>
-            </div>
-          ) : (
-            <div className="grid sm:grid-cols-2 gap-4">
-              {projects.slice(0, 4).map((project) => (
-                <ProjectCard key={project.id} project={project} />
-              ))}
-            </div>
-          )}
+          {/* Marketplace Bar - below project cards, same width */}
+          <MarketplaceBar />
         </div>
 
-        {/* Activity */}
+        {/* Right: Activity */}
         <div className="space-y-6">
           {/* Recent Activity */}
           <div>
@@ -230,11 +204,6 @@ export default function Home() {
       {/* Ecosystem Banner */}
       <div className="mt-8">
         <EcosystemBanner projects={projects} subscriptionStatus={subscriptionStatus} />
-      </div>
-
-      {/* Marketplace Bar */}
-      <div className="mt-4">
-        <MarketplaceBar />
       </div>
     </div>
   );
