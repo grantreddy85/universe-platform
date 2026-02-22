@@ -16,9 +16,10 @@ import AssetsTab from "../components/project/tabs/AssetsTab";
 import LabsTab from "../components/project/tabs/LabsTab";
 
 export default function ProjectDetail() {
-  const [activeTab, setActiveTab] = useState("overview");
   const urlParams = new URLSearchParams(window.location.search);
   const projectId = urlParams.get("id");
+  const initialTab = urlParams.get("tab") || "overview";
+  const [activeTab, setActiveTab] = useState(initialTab);
 
   const { data: project, isLoading } = useQuery({
     queryKey: ["project", projectId],
