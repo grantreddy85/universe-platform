@@ -46,6 +46,10 @@ export default function Search() {
   const [summarizing, setSummarizing] = useState(false);
   const [saveDestination, setSaveDestination] = useState("");
   const [newProjectName, setNewProjectName] = useState("");
+  const [attachedFiles, setAttachedFiles] = useState([]);
+  const [uploadingFile, setUploadingFile] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const fileInputRef = useRef(null);
   const messagesEndRef = useRef(null);
   const queryClient = useQueryClient();
   const location = useLocation();
