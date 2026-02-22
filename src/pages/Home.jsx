@@ -13,7 +13,6 @@ import {
   Sparkles,
   FlaskConical
 } from "lucide-react";
-import TabAIPanel from "../components/project/tabs/TabAIPanel";
 import { Button } from "@/components/ui/button";
 import StatsCard from "../components/home/StatsCard";
 import ProjectCard from "../components/home/ProjectCard";
@@ -23,7 +22,6 @@ import MarketplaceBar from "../components/home/MarketplaceBar";
 
 export default function Home() {
   const [user, setUser] = useState(null);
-  const [aiPanelOpen, setAiPanelOpen] = useState(false);
 
   useEffect(() => {
     base44.auth.me().then(setUser).catch(() => {});
@@ -95,30 +93,16 @@ export default function Home() {
 
   const firstName = user?.full_name?.split(" ")[0] || "Researcher";
 
-  const projectsContext = projects.map(p => `- ${p.title} (${p.status}): ${p.description || ""}`).join("\n");
-
   return (
-    <div className="flex h-full min-h-screen">
-    <div className="flex-1 p-6 lg:p-10 max-w-7xl mx-auto overflow-auto">
+    <div className="min-h-screen p-6 lg:p-10 max-w-7xl mx-auto">
       {/* Header */}
-      <div className="mb-10 flex items-start justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold text-gray-900 tracking-tight">
-            Welcome back, {firstName}
-          </h1>
-          <p className="text-sm text-gray-400 mt-1">
-            Resume your research or start something new.
-          </p>
-        </div>
-        {!aiPanelOpen && (
-          <button
-            onClick={() => setAiPanelOpen(true)}
-            className="flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-700 border border-blue-200 hover:border-blue-300 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors"
-          >
-            <Sparkles className="w-3.5 h-3.5" />
-            Notes Guide
-          </button>
-        )}
+      <div className="mb-10">
+        <h1 className="text-2xl font-semibold text-gray-900 tracking-tight">
+          Welcome back, {firstName}
+        </h1>
+        <p className="text-sm text-gray-400 mt-1">
+          Resume your research or start something new.
+        </p>
       </div>
 
       {/* Stats */}
@@ -244,13 +228,6 @@ export default function Home() {
       <div className="mt-8">
         <MarketplaceBar />
       </div>
-    </div>{/* end scrollable content */}
-    <TabAIPanel
-      tabName="Projects"
-      contextData={projectsContext}
-      isOpen={aiPanelOpen}
-      onToggle={() => setAiPanelOpen(false)}
-    />
-    </div>{/* end flex container */}
+    </div>
   );
 }
