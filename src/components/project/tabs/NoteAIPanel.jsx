@@ -17,6 +17,11 @@ export default function NoteAIPanel({ note, onClose }) {
     setMessages((prev) => [...prev, { role: "user", content: userMessage }]);
     setLoading(true);
 
+    const hasFiles = note.image_urls?.length > 0;
+    const fileNote = hasFiles
+      ? `\n\nAttached files (${note.image_urls.length}): please analyse them as part of your response if relevant.`
+      : "";
+
     const response = await base44.integrations.Core.InvokeLLM({
       prompt: `You are an AI assistant helping a researcher analyse a note.
 
@@ -24,11 +29,12 @@ Note Title: "${note.title}"
 Note Content:
 """
 ${note.content || "(empty)"}
-"""
+"""${fileNote}
 
 User question: ${userMessage}
 
-Answer clearly and concisely, referencing the note content where relevant.`,
+Answer clearly and concisely, referencing the note content and any attached files where relevant.`,
+      file_urls: hasFiles ? note.image_urls : undefined,
     });
 
     setMessages((prev) => [...prev, { role: "assistant", content: response }]);
