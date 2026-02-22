@@ -61,6 +61,14 @@ export default function NewProjectDialog({ open, onOpenChange, onSubmit, isSubmi
               className="text-sm h-24 resize-none"
             />
           </div>
+          <div className="space-y-1.5">
+            <Label className="text-xs font-medium text-gray-500">Visibility</Label>
+            <VisibilitySelector
+              value={form.visibility_setting}
+              onChange={(v) => setForm({ ...form, visibility_setting: v })}
+              subscribed={subscribed}
+            />
+          </div>
           <DialogFooter className="pt-2">
             <Button type="button" variant="ghost" size="sm" onClick={() => onOpenChange(false)}>
               Cancel
