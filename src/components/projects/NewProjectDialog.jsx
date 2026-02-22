@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -10,9 +10,16 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { base44 } from "@/api/base44Client";
+import VisibilitySelector from "./VisibilitySelector";
 
 export default function NewProjectDialog({ open, onOpenChange, onSubmit, isSubmitting }) {
-  const [form, setForm] = useState({ title: "", description: "", field: "" });
+  const [form, setForm] = useState({ title: "", description: "", field: "", visibility_setting: "platform_shared" });
+  const [subscribed, setSubscribed] = useState(false);
+
+  useEffect(() => {
+    base44.auth.me().then(u => setSubscribed(u?.subscription_status === "subscribed")).catch(() => {});
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
