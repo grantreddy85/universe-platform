@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../../utils";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Clock } from "lucide-react";
+import { ArrowRight, Clock, Globe, Lock } from "lucide-react";
 import { format } from "date-fns";
 
 const statusStyles = {

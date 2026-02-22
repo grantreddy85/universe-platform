@@ -19,6 +19,7 @@ import ProjectCard from "../components/home/ProjectCard";
 import ActivityItem from "../components/home/ActivityItem";
 import LabActivitySection from "../components/home/LabActivitySection";
 import MarketplaceBar from "../components/home/MarketplaceBar";
+import EcosystemBanner from "../components/home/EcosystemBanner";
 
 export default function Home() {
   const [user, setUser] = useState(null);

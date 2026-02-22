@@ -48,6 +48,7 @@
  * The mainPage value must match a key in the PAGES object exactly.
  */
 import AssetDetail from './pages/AssetDetail';
+import Home from './pages/Home';
 import Labs from './pages/Labs';
 import Profile from './pages/Profile';
 import ProjectDetail from './pages/ProjectDetail';
@@ -57,12 +58,12 @@ import Tokenisation from './pages/Tokenisation';
 import ValidatedAssets from './pages/ValidatedAssets';
 import Validations from './pages/Validations';
 import Workspace from './pages/Workspace';
-import Home from './pages/Home';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
     "AssetDetail": AssetDetail,
+    "Home": Home,
     "Labs": Labs,
     "Profile": Profile,
     "ProjectDetail": ProjectDetail,
@@ -72,7 +73,6 @@ export const PAGES = {
     "ValidatedAssets": ValidatedAssets,
     "Validations": Validations,
     "Workspace": Workspace,
-    "Home": Home,
 }
 
 export const pagesConfig = {
