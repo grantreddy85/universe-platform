@@ -244,7 +244,7 @@ export default function Layout({ children, currentPageName }) {
                       } ${
                         isActive
                           ? "bg-blue-50/80 text-blue-600 font-medium"
-                          : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                          : "text-gray-600 hover:bg-[#000021] hover:text-[#00F2FF]"
                       }`}
                     >
                       <Icon
