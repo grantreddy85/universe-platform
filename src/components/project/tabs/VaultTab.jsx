@@ -2,37 +2,20 @@ import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
-  Upload,
-  FileText,
-  Search,
-  Filter,
-  MoreHorizontal,
-  Download,
-  Trash2,
-  Sparkles,
-  Brain,
-  BookOpen,
-  Database,
-  Loader2,
-  ChevronDown,
-  ChevronUp,
+  Upload, FileText, Search, Filter, MoreHorizontal,
+  Download, Trash2, Sparkles, Brain, BookOpen, Database,
+  Loader2, ChevronDown, ChevronUp,
 } from "lucide-react";
 import TabAIPanel from "./TabAIPanel";
+import VaultSidebar from "./VaultSidebar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { format } from "date-fns";
 
@@ -44,13 +27,7 @@ const typeColors = {
   other: "bg-gray-50 text-gray-600",
 };
 
-const typeIcons = {
-  pdf: "📄",
-  csv: "📊",
-  dataset: "🗄️",
-  image: "🖼️",
-  other: "📎",
-};
+const typeIcons = { pdf: "📄", csv: "📊", dataset: "🗄️", image: "🖼️", other: "📎" };
 
 function DocCard({ doc, onDelete }) {
   const [expanded, setExpanded] = useState(false);
@@ -81,12 +58,7 @@ function DocCard({ doc, onDelete }) {
         </div>
         <div className="flex items-center gap-1">
           {doc.summary && (
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-7 w-7 text-gray-400"
-              onClick={() => setExpanded(!expanded)}
-            >
+            <Button variant="ghost" size="icon" className="h-7 w-7 text-gray-400" onClick={() => setExpanded(!expanded)}>
               {expanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
             </Button>
           )}
@@ -100,14 +72,12 @@ function DocCard({ doc, onDelete }) {
               {doc.file_url && (
                 <DropdownMenuItem asChild>
                   <a href={doc.file_url} target="_blank" rel="noopener noreferrer">
-                    <Download className="w-3.5 h-3.5 mr-2" />
-                    Download
+                    <Download className="w-3.5 h-3.5 mr-2" /> Download
                   </a>
                 </DropdownMenuItem>
               )}
               <DropdownMenuItem className="text-red-600" onClick={() => onDelete(doc.id)}>
-                <Trash2 className="w-3.5 h-3.5 mr-2" />
-                Delete
+                <Trash2 className="w-3.5 h-3.5 mr-2" /> Delete
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -135,6 +105,7 @@ function DocCard({ doc, onDelete }) {
 }
 
 export default function VaultTab({ project }) {
+  const [selectedVaultId, setSelectedVaultId] = useState(null); // null = all
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState("all");
   const [uploading, setUploading] = useState(false);
@@ -142,10 +113,14 @@ export default function VaultTab({ project }) {
   const [aiOpen, setAiOpen] = useState(false);
   const queryClient = useQueryClient();
 
+  const { data: vaults = [] } = useQuery({
+    queryKey: ["vaults", project.id],
+    queryFn: () => base44.entities.Vault.filter({ project_id: project.id }, "created_date", 50),
+  });
+
   const { data: documents = [], isLoading } = useQuery({
     queryKey: ["project-docs", project.id],
-    queryFn: () =>
-      base44.entities.ProjectDocument.filter({ project_id: project.id }, "-created_date", 100),
+    queryFn: () => base44.entities.ProjectDocument.filter({ project_id: project.id }, "-created_date", 200),
   });
 
   const deleteMutation = useMutation({
@@ -153,10 +128,26 @@ export default function VaultTab({ project }) {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["project-docs", project.id] }),
   });
 
-  const updateMutation = useMutation({
-    mutationFn: ({ id, data }) => base44.entities.ProjectDocument.update(id, data),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["project-docs", project.id] }),
+  // Count docs per vault
+  const docCounts = documents.reduce((acc, doc) => {
+    const key = doc.vault_id || "__none__";
+    acc[key] = (acc[key] || 0) + 1;
+    return acc;
+  }, {});
+
+  // Filter documents by selected vault
+  const vaultFiltered = selectedVaultId === null
+    ? documents
+    : documents.filter((d) => d.vault_id === selectedVaultId);
+
+  const filtered = vaultFiltered.filter((d) => {
+    const matchSearch = d.title?.toLowerCase().includes(search.toLowerCase()) ||
+      d.summary?.toLowerCase().includes(search.toLowerCase());
+    const matchType = typeFilter === "all" || d.file_type === typeFilter;
+    return matchSearch && matchType;
   });
+
+  const indexedCount = vaultFiltered.filter((d) => d.summary).length;
 
   const handleUpload = async (e) => {
     const file = e.target.files?.[0];
@@ -172,42 +163,37 @@ export default function VaultTab({ project }) {
       : ["json", "tsv", "xlsx"].includes(ext) ? "dataset"
       : "other";
 
-    const doc = await base44.entities.ProjectDocument.create({
+    const docData = {
       project_id: project.id,
       title: file.name,
       file_url,
       file_type: fileType,
-    });
+    };
+    if (selectedVaultId) docData.vault_id = selectedVaultId;
 
+    const doc = await base44.entities.ProjectDocument.create(docData);
     queryClient.invalidateQueries({ queryKey: ["project-docs", project.id] });
     e.target.value = "";
 
-    // Auto-process (AI indexing)
     setProcessingId(doc.id);
-    await processDocument(doc, file_url, fileType);
+    await processDocument(doc, file_url);
     setProcessingId(null);
     setUploading(false);
   };
 
-  const processDocument = async (doc, file_url, fileType) => {
+  const processDocument = async (doc, file_url) => {
     const result = await base44.integrations.Core.InvokeLLM({
       prompt: `You are indexing a research document for a RAG knowledge base. 
 The document is titled: "${doc.title}" and is part of the research project: "${project.title}" (field: ${project.field || "research"}).
-
-Analyse the document and return a structured summary that will be used to:
-1. Help researchers quickly understand what's in this document
-2. Power AI-assisted search and retrieval
-3. Connect this document to hypotheses, experiments, and findings
-
-Be concise but informative. Focus on scientific/research content.`,
+Analyse the document and return a structured summary for AI-assisted search and retrieval.`,
       file_urls: [file_url],
       response_json_schema: {
         type: "object",
         properties: {
-          summary: { type: "string", description: "2-4 sentence summary of the document's research content" },
-          key_findings: { type: "array", items: { type: "string" }, description: "Up to 5 key findings or data points" },
-          methodology: { type: "string", description: "Research methodology if identifiable (e.g. PCR, meta-analysis, in vitro, computational)" },
-          keywords: { type: "array", items: { type: "string" }, description: "Up to 8 scientific keywords" },
+          summary: { type: "string" },
+          key_findings: { type: "array", items: { type: "string" } },
+          methodology: { type: "string" },
+          keywords: { type: "array", items: { type: "string" } },
         },
       },
     });
@@ -221,34 +207,33 @@ Be concise but informative. Focus on scientific/research content.`,
     queryClient.invalidateQueries({ queryKey: ["project-docs", project.id] });
   };
 
-  const reprocessDocument = async (doc) => {
-    setProcessingId(doc.id);
-    await processDocument(doc, doc.file_url, doc.file_type);
-    setProcessingId(null);
-  };
-
-  const filtered = documents.filter((d) => {
-    const matchSearch = d.title?.toLowerCase().includes(search.toLowerCase()) ||
-      d.summary?.toLowerCase().includes(search.toLowerCase());
-    const matchType = typeFilter === "all" || d.file_type === typeFilter;
-    return matchSearch && matchType;
-  });
-
-  const indexedCount = documents.filter(d => d.summary).length;
+  const selectedVault = vaults.find((v) => v.id === selectedVaultId);
+  const vaultLabel = selectedVault ? selectedVault.name : "All Documents";
 
   return (
     <div className="flex h-full">
-      <div className="flex-1 p-6 lg:p-8 overflow-y-auto">
+      {/* Vault sidebar */}
+      <VaultSidebar
+        projectId={project.id}
+        vaults={vaults}
+        selectedVaultId={selectedVaultId}
+        onSelect={setSelectedVaultId}
+        docCounts={docCounts}
+      />
 
+      {/* Main area */}
+      <div className="flex-1 p-6 lg:p-8 overflow-y-auto">
         {/* Header */}
         <div className="flex items-start justify-between mb-6">
           <div>
             <h2 className="text-sm font-semibold text-gray-900 uppercase tracking-wider flex items-center gap-2">
               <Database className="w-4 h-4 text-blue-500" />
-              Knowledge Vault
+              {vaultLabel}
             </h2>
             <p className="text-xs text-gray-400 mt-1">
-              Your private RAG knowledge base — upload unpublished data, papers, and results. The AI co-pilot learns from these.
+              {selectedVaultId
+                ? `Documents in this vault. AI co-pilot learns from everything indexed here.`
+                : "All documents across all vaults in this project."}
             </p>
           </div>
           <div className="flex items-center gap-2 flex-shrink-0">
@@ -262,7 +247,7 @@ Be concise but informative. Focus on scientific/research content.`,
               Ask AI
             </Button>
             <label>
-              <input type="file" className="hidden" onChange={handleUpload} disabled={uploading || processingId} />
+              <input type="file" className="hidden" onChange={handleUpload} disabled={uploading || !!processingId} />
               <Button
                 size="sm"
                 className="bg-blue-600 hover:bg-blue-700 text-xs cursor-pointer"
@@ -271,7 +256,7 @@ Be concise but informative. Focus on scientific/research content.`,
               >
                 <span>
                   {uploading ? <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" /> : <Upload className="w-3.5 h-3.5 mr-1.5" />}
-                  {uploading ? "Uploading..." : "Upload"}
+                  {uploading ? "Uploading..." : selectedVaultId ? `Upload to ${selectedVault?.name}` : "Upload"}
                 </span>
               </Button>
             </label>
@@ -279,10 +264,10 @@ Be concise but informative. Focus on scientific/research content.`,
         </div>
 
         {/* Stats bar */}
-        {documents.length > 0 && (
+        {vaultFiltered.length > 0 && (
           <div className="grid grid-cols-3 gap-3 mb-6">
             <div className="bg-white rounded-lg border border-gray-100 p-3 text-center">
-              <p className="text-lg font-bold text-gray-900">{documents.length}</p>
+              <p className="text-lg font-bold text-gray-900">{vaultFiltered.length}</p>
               <p className="text-[10px] text-gray-400 mt-0.5">Documents</p>
             </div>
             <div className="bg-white rounded-lg border border-gray-100 p-3 text-center">
@@ -291,7 +276,7 @@ Be concise but informative. Focus on scientific/research content.`,
             </div>
             <div className="bg-white rounded-lg border border-gray-100 p-3 text-center">
               <p className="text-lg font-bold text-blue-600">
-                {documents.length > 0 ? Math.round((indexedCount / documents.length) * 100) : 0}%
+                {vaultFiltered.length > 0 ? Math.round((indexedCount / vaultFiltered.length) * 100) : 0}%
               </p>
               <p className="text-[10px] text-gray-400 mt-0.5">Coverage</p>
             </div>
@@ -304,7 +289,7 @@ Be concise but informative. Focus on scientific/research content.`,
             <Loader2 className="w-4 h-4 text-blue-500 animate-spin flex-shrink-0" />
             <div>
               <p className="text-xs font-medium text-blue-700">Indexing document…</p>
-              <p className="text-[10px] text-blue-500">AI is extracting key findings, methodology and keywords for your knowledge base.</p>
+              <p className="text-[10px] text-blue-500">AI is extracting key findings, methodology and keywords.</p>
             </div>
           </div>
         )}
@@ -349,22 +334,18 @@ Be concise but informative. Focus on scientific/research content.`,
           <div className="text-center py-16 bg-white rounded-xl border border-dashed border-gray-200">
             <BookOpen className="w-8 h-8 text-gray-200 mx-auto mb-3" />
             <p className="text-sm font-medium text-gray-400 mb-1">
-              {documents.length === 0 ? "Your knowledge vault is empty" : "No documents match your search"}
+              {vaultFiltered.length === 0 ? "This vault is empty" : "No documents match your search"}
             </p>
             <p className="text-xs text-gray-300 max-w-xs mx-auto">
-              {documents.length === 0
-                ? "Upload research papers, datasets, lab results, or any unpublished data. The AI will index everything automatically."
+              {vaultFiltered.length === 0
+                ? "Upload research papers, datasets, lab results, or any unpublished data."
                 : "Try a different search term or filter."}
             </p>
           </div>
         ) : (
           <div className="space-y-2">
             {filtered.map((doc) => (
-              <DocCard
-                key={doc.id}
-                doc={doc}
-                onDelete={(id) => deleteMutation.mutate(id)}
-              />
+              <DocCard key={doc.id} doc={doc} onDelete={(id) => deleteMutation.mutate(id)} />
             ))}
           </div>
         )}
@@ -372,20 +353,15 @@ Be concise but informative. Focus on scientific/research content.`,
 
       <TabAIPanel
         tabName="Knowledge Vault"
-        contextData={documents.map(d => ({
-          title: d.title,
-          type: d.file_type,
-          summary: d.summary,
-          methodology: d.methodology,
-          keywords: d.tags,
+        contextData={vaultFiltered.map((d) => ({
+          title: d.title, type: d.file_type, summary: d.summary,
+          methodology: d.methodology, keywords: d.tags,
         }))}
         isOpen={aiOpen}
         onToggle={() => setAiOpen(!aiOpen)}
         systemPrompt={`You are the AI co-pilot for the research project "${project.title}". 
-You have access to the project's Knowledge Vault — a RAG knowledge base of ${documents.length} documents.
-Use the document summaries and metadata below to answer questions about the project's research base, 
-help identify connections between documents, suggest hypotheses, and assist with experiment design.
-Always ground your answers in the actual documents present in the vault.`}
+You have access to the ${selectedVault ? `"${selectedVault.name}" vault` : "full knowledge vault"} with ${vaultFiltered.length} documents.
+Use the document summaries and metadata to answer questions, identify connections, and suggest hypotheses.`}
       />
     </div>
   );
