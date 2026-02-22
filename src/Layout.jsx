@@ -125,7 +125,7 @@ export default function Layout({ children, currentPageName }) {
           <div className="flex items-center gap-2.5 px-5 h-16 border-b border-gray-100">
             <UniVerseLogo className="w-8 h-8 flex-shrink-0" allowUpload={true} />
             {!collapsed &&
-              <span className="text-[#525153] text-xl font-medium tracking-tight" style={{ fontFamily: "'Funnel Display', sans-serif" }}>
+              <span className="text-[#525153] text-2xl font-normal tracking-tight" style={{ fontFamily: "'Funnel Display', sans-serif" }}>
                 UniVerse
               </span>
               }
