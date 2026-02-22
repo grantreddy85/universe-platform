@@ -55,6 +55,79 @@ export default function Profile() {
         )}
       </div>
 
+      {/* Subscription & Visibility */}
+      <div className="bg-white rounded-xl border border-gray-100 p-6 mb-6">
+        <h3 className="text-sm font-semibold text-gray-900 mb-4">Platform Access</h3>
+
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <div className={`w-9 h-9 rounded-lg flex items-center justify-center ${
+              user.subscription_status === "subscribed" ? "bg-violet-50" : "bg-blue-50"
+            }`}>
+              {user.subscription_status === "subscribed"
+                ? <Lock className="w-4 h-4 text-violet-600" />
+                : <Globe className="w-4 h-4 text-blue-600" />
+              }
+            </div>
+            <div>
+              <p className="text-sm font-medium text-gray-800">
+                {user.subscription_status === "subscribed" ? "Private Subscription" : "Free — Ecosystem Contributor"}
+              </p>
+              <p className="text-xs text-gray-400">
+                {user.subscription_status === "subscribed"
+                  ? "Your projects can be kept private."
+                  : "Shared projects contribute to platform-wide research. Free forever."}
+              </p>
+            </div>
+          </div>
+          <Badge className={user.subscription_status === "subscribed"
+            ? "bg-violet-100 text-violet-700 text-[10px]"
+            : "bg-blue-100 text-blue-700 text-[10px]"
+          }>
+            {user.subscription_status === "subscribed" ? "Subscribed" : "Free"}
+          </Badge>
+        </div>
+
+        {user.subscription_status !== "subscribed" ? (
+          <div className="border border-dashed border-gray-200 rounded-lg p-4">
+            <p className="text-xs font-semibold text-gray-700 mb-1">Upgrade to Private Subscription</p>
+            <p className="text-xs text-gray-400 mb-3">Keep any of your projects fully private while still accessing the full UniVerse platform.</p>
+            <ul className="text-[11px] text-gray-500 space-y-1 mb-3">
+              <li className="flex items-center gap-1.5"><CheckCircle2 className="w-3 h-3 text-emerald-500" /> Full data privacy for all projects</li>
+              <li className="flex items-center gap-1.5"><CheckCircle2 className="w-3 h-3 text-emerald-500" /> Unlimited private vault & assets</li>
+              <li className="flex items-center gap-1.5"><CheckCircle2 className="w-3 h-3 text-emerald-500" /> Still collaborate with ecosystem users</li>
+            </ul>
+            <Button
+              size="sm"
+              className="bg-violet-600 hover:bg-violet-700 text-xs"
+              onClick={async () => {
+                await base44.auth.updateMe({ subscription_status: "subscribed", subscription_started: new Date().toISOString().split("T")[0] });
+                const updated = await base44.auth.me();
+                setUser(updated);
+              }}
+            >
+              Subscribe (Demo)
+            </Button>
+          </div>
+        ) : (
+          <div className="flex items-center justify-between">
+            <p className="text-xs text-gray-400">
+              {user.subscription_started ? `Active since ${format(new Date(user.subscription_started), "MMMM yyyy")}` : "Active subscription"}
+            </p>
+            <button
+              className="text-xs text-red-400 hover:text-red-600 transition-colors"
+              onClick={async () => {
+                await base44.auth.updateMe({ subscription_status: "free" });
+                const updated = await base44.auth.me();
+                setUser(updated);
+              }}
+            >
+              Cancel subscription
+            </button>
+          </div>
+        )}
+      </div>
+
       {/* Stats */}
       <div className="grid grid-cols-3 gap-4">
         <div className="bg-white rounded-xl border border-gray-100 p-5 text-center">
