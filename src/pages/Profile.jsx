@@ -35,54 +35,33 @@ export default function Profile() {
   if (!user) return null;
 
   return (
-    <div className="min-h-screen p-6 lg:p-10 max-w-3xl mx-auto">
-      <div className="mb-10">
-        <h1 className="text-2xl font-semibold text-gray-900 tracking-tight">Profile</h1>
-      </div>
-
-      {/* User Info Card */}
-      <div className="bg-white rounded-xl border border-gray-100 p-6 mb-6">
-        <div className="flex items-center gap-4 mb-6">
-          <div className="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0">
-            <User className="w-8 h-8 text-blue-500" />
-          </div>
-          <div>
-            <h2 className="text-xl font-semibold text-gray-900">
-              {user.full_name || "Researcher"}
-            </h2>
-            <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">Researcher</p>
-          </div>
-        </div>
-
-        {/* Profile Details */}
-        <div className="space-y-3">
-          <div className="flex items-center gap-2 text-sm">
-            <User className="w-4 h-4 text-gray-400" />
-            <span className="font-medium text-gray-700">Full Name</span>
-            <span className="text-gray-600 ml-auto">{user.full_name || "Not set"}</span>
-          </div>
-          <div className="flex items-center gap-2 text-sm">
-            <Building className="w-4 h-4 text-gray-400" />
-            <span className="font-medium text-gray-700">Organization</span>
-            <span className="text-gray-600 ml-auto">{user.organization || "Not set"}</span>
-          </div>
-          <div className="flex items-center gap-2 text-sm">
-            <Link2 className="w-4 h-4 text-gray-400" />
-            <span className="font-medium text-gray-700">ORCID</span>
-            <span className="text-gray-600 ml-auto">{user.orcid_id || "Not set"}</span>
-          </div>
-          <div className="flex items-center gap-2 text-sm">
-            <Mail className="w-4 h-4 text-gray-400" />
-            <span className="font-medium text-gray-700">Email</span>
-            <span className="text-gray-600 ml-auto">{user.email}</span>
-          </div>
-          <div className="flex items-center gap-2 text-sm">
-            <Phone className="w-4 h-4 text-gray-400" />
-            <span className="font-medium text-gray-700">Phone</span>
-            <span className="text-gray-600 ml-auto">{user.phone || "Not set"}</span>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800">
+      {/* Profile Header */}
+      <div className="bg-gradient-to-b from-slate-900 via-blue-900 to-slate-800 px-6 lg:px-10 pt-6 pb-8">
+        <div className="max-w-5xl mx-auto bg-white rounded-2xl p-6 shadow-lg">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0">
+                <User className="w-8 h-8 text-blue-500" />
+              </div>
+              <div>
+                <h1 className="text-lg font-semibold text-gray-900">
+                  {user.full_name || "Researcher"}
+                </h1>
+                <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">Researcher</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <Button size="sm" variant="outline" className="text-xs">
+                Profile Settings
+              </Button>
+            </div>
           </div>
         </div>
       </div>
+
+      {/* Main Content */}
+      <div className="px-6 lg:px-10 py-8 max-w-5xl mx-auto">
 
       {/* ORCID */}
       <div className="bg-white rounded-xl border border-gray-100 p-6 mb-6">
