@@ -76,6 +76,31 @@ body {
 [class*="price"],
 [class*="amount"],
 input[type="number"],
-.numeric {
+.numeric,
+/* Common UI elements that display numbers */
+.text-2xl,
+.text-3xl,
+.text-4xl,
+.text-5xl,
+[class*="font-semibold"],
+[class*="font-bold"],
+/* Badge and pill components often contain counts */
+[class*="badge"],
+[class*="rounded-full"],
+/* Table cells and data displays */
+td,
+th,
+/* Specific patterns */
+span[class*="text-"],
+p[class*="text-2xl"],
+p[class*="text-3xl"],
+div[class*="text-2xl"],
+div[class*="text-3xl"] {
+  font-variant-numeric: tabular-nums;
+}
+
+/* More aggressive targeting for numeric display */
+.text-2xl:has-text,
+.font-semibold:has-text {
   font-family: 'IBM Plex Mono', monospace !important;
 }
