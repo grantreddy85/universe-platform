@@ -184,44 +184,44 @@ export default function Profile() {
         {/* Invite User */}
         {user.role === "admin" && (
           <div className="bg-white rounded-xl border border-gray-100 p-6 mb-6">
-          <div className="flex items-center gap-2 mb-4">
-            <UserPlus className="w-4 h-4 text-gray-500" />
-            <h3 className="text-sm font-semibold text-gray-900">Invite a Researcher</h3>
+            <div className="flex items-center gap-2 mb-4">
+              <UserPlus className="w-4 h-4 text-gray-500" />
+              <h3 className="text-sm font-semibold text-gray-900">Invite a Researcher</h3>
+            </div>
+            <p className="text-xs text-gray-400 mb-4">Send an invitation email so they can sign up and start their own fresh account.</p>
+            <div className="flex gap-2">
+              <Input
+                type="email"
+                placeholder="colleague@university.edu"
+                value={inviteEmail}
+                onChange={(e) => { setInviteEmail(e.target.value); setInviteStatus(null); }}
+                className="text-sm"
+              />
+              <Button
+                size="sm"
+                disabled={!inviteEmail || inviting}
+                onClick={async () => {
+                  setInviting(true);
+                  try {
+                    await base44.users.inviteUser(inviteEmail, "user");
+                    setInviteStatus("success");
+                    setInviteEmail("");
+                  } catch {
+                    setInviteStatus("error");
+                  } finally {
+                    setInviting(false);
+                  }
+                }}
+                className="flex items-center gap-1.5 whitespace-nowrap bg-[#000021] text-[#00F2FF] hover:bg-[#000021]/90"
+              >
+                <Send className="w-3.5 h-3.5" />
+                {inviting ? "Sending…" : "Send Invite"}
+              </Button>
+            </div>
+            {inviteStatus === "success" && <p className="text-xs text-emerald-600 mt-2">Invitation sent successfully!</p>}
+            {inviteStatus === "error" && <p className="text-xs text-red-500 mt-2">Failed to send invite. Please check the email and try again.</p>}
           </div>
-          <p className="text-xs text-gray-400 mb-4">Send an invitation email so they can sign up and start their own fresh account.</p>
-          <div className="flex gap-2">
-            <Input
-              type="email"
-              placeholder="colleague@university.edu"
-              value={inviteEmail}
-              onChange={(e) => { setInviteEmail(e.target.value); setInviteStatus(null); }}
-              className="text-sm"
-            />
-            <Button
-              size="sm"
-              disabled={!inviteEmail || inviting}
-              onClick={async () => {
-                setInviting(true);
-                try {
-                  await base44.users.inviteUser(inviteEmail, "user");
-                  setInviteStatus("success");
-                  setInviteEmail("");
-                } catch {
-                  setInviteStatus("error");
-                } finally {
-                  setInviting(false);
-                }
-              }}
-              className="flex items-center gap-1.5 whitespace-nowrap bg-[#000021] text-[#00F2FF] hover:bg-[#000021]/90"
-            >
-              <Send className="w-3.5 h-3.5" />
-              {inviting ? "Sending…" : "Send Invite"}
-            </Button>
-          </div>
-          {inviteStatus === "success" && <p className="text-xs text-emerald-600 mt-2">Invitation sent successfully!</p>}
-          {inviteStatus === "error" && <p className="text-xs text-red-500 mt-2">Failed to send invite. Please check the email and try again.</p>}
-        </div>
-      )}
+        )}
 
       {/* Stats */}
       <div className="bg-white rounded-xl border border-gray-100 p-6">
