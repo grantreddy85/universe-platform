@@ -34,8 +34,18 @@ export default function ProjectCard({ project }) {
   return (
     <Link
       to={createPageUrl(`ProjectDetail?id=${project.id}`)}
-      className="group block bg-white rounded-xl border border-gray-100 p-5 hover:shadow-md hover:border-gray-200 transition-all duration-200">
+      className="group block bg-white rounded-xl border border-gray-100 hover:shadow-md hover:border-gray-200 transition-all duration-200 overflow-hidden">
 
+      {/* Cover image */}
+      <div className="h-28 overflow-hidden bg-gray-100">
+        <img
+          src={getFieldImage(project.field)}
+          alt={project.title}
+          className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-300"
+        />
+      </div>
+
+      <div className="p-4">
       <div className="flex items-start justify-between mb-3">
         <Badge
           variant="secondary"
