@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
-import { Loader2, Sparkles, Download, Twitter, Linkedin, Pencil, Check, X } from "lucide-react";
+import { Loader2, Sparkles, Download, Twitter, Linkedin, Pencil, Check, X, Save } from "lucide-react";
 
 // Editable text cell – click to edit inline
 function EditableText({ value, onChange, className, multiline = false }) {
