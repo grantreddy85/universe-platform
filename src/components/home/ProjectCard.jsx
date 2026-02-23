@@ -7,11 +7,16 @@ import { format } from "date-fns";
 
 const FIELD_IMAGES = {
   biology:       "https://images.unsplash.com/photo-1576086213369-97a306d36557?w=600&q=80",
-  chemistry:     "https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=600&q=80",
-  genomics:      "https://images.unsplash.com/photo-1614935151651-0bea6508db6b?w=600&q=80",
+  chemistry:     "https://images.unsplash.com/photo-1603126857599-f6e157fa2fe6?w=600&q=80",
+  hydrazone:     "https://images.unsplash.com/photo-1603126857599-f6e157fa2fe6?w=600&q=80",
+  synthesis:     "https://images.unsplash.com/photo-1603126857599-f6e157fa2fe6?w=600&q=80",
+  genomics:      "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=600&q=80",
+  crispr:        "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=600&q=80",
+  gene:          "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=600&q=80",
+  dna:           "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=600&q=80",
   neuroscience:  "https://images.unsplash.com/photo-1559757175-5700dde675bc?w=600&q=80",
-  physics:       "https://images.unsplash.com/photo-1636466497217-26a8cbeaf0aa?w=600&q=80",
-  immunology:    "https://images.unsplash.com/photo-1583912086096-8c60d75a53f9?w=600&q=80",
+  physics:       "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=600&q=80",
+  immunology:    "https://images.unsplash.com/photo-1576086213369-97a306d36557?w=600&q=80",
   oncology:      "https://images.unsplash.com/photo-1530026186672-2cd00ffc50fe?w=600&q=80",
   default:       "https://images.unsplash.com/photo-1581093458791-9f3c3900df4b?w=600&q=80",
 };
