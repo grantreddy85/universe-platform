@@ -55,12 +55,22 @@ export default function CohortAssistantDialog({
     setIsLoading(true);
     setStage("recommending");
 
-    const prompt = `Based on this research question or requirement: "${question}"
+    const projectContext = project ? `
+Project Context:
+- Title: ${project.title}
+- Description: ${project.description || "No description"}
+- Field: ${project.field || "Not specified"}
+- Tags: ${project.tags?.join(", ") || "None"}
+- Status: ${project.status}` : "";
+
+    const prompt = `${projectContext}
+
+Based on this research question or requirement: "${question}"
     
-Recommend a cohort specification with:
+Recommend a cohort specification that aligns with the project goals (if provided) with:
 1. Key filters (age groups, organism types, data types, phenotypes, etc.) - be specific with values
 2. Target sample size (realistic number)
-3. Brief reasoning (1-2 sentences why this specification fits)
+3. Brief reasoning (1-2 sentences why this specification fits the project)
 
 Format your response as JSON with these fields:
 {
