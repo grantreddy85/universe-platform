@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, FlaskConical, MoreHorizontal, Trash2, Sparkles } from "lucide-react";
+import { Plus, FlaskConical, MoreHorizontal, Trash2, Sparkles, Search } from "lucide-react";
 import TabAIPanel from "./TabAIPanel";
 import CohortFilters from "@/components/cohorts/CohortFilters";
 import StudyFinderPanel from "@/components/cohorts/StudyFinderPanel";
