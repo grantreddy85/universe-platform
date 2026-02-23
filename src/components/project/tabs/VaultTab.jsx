@@ -154,34 +154,36 @@ export default function VaultTab({ project }) {
     if (files.length === 0) return;
     setUploading(true);
 
-    for (const file of files) {
-      const { file_url } = await base44.integrations.Core.UploadFile({ file });
-      const ext = file.name.split(".").pop()?.toLowerCase();
-      const fileType =
-        ext === "pdf" ? "pdf"
-        : ext === "csv" ? "csv"
-        : ["jpg", "jpeg", "png", "webp"].includes(ext) ? "image"
-        : ["json", "tsv", "xlsx"].includes(ext) ? "dataset"
-        : "other";
+    try {
+      for (const file of files) {
+        const { file_url } = await base44.integrations.Core.UploadFile({ file });
+        const ext = file.name.split(".").pop()?.toLowerCase();
+        const fileType =
+          ext === "pdf" ? "pdf"
+          : ext === "csv" ? "csv"
+          : ["jpg", "jpeg", "png", "webp"].includes(ext) ? "image"
+          : ["json", "tsv", "xlsx"].includes(ext) ? "dataset"
+          : "other";
 
-      const docData = {
-        project_id: project.id,
-        title: file.name,
-        file_url,
-        file_type: fileType,
-      };
-      if (selectedVaultId) docData.vault_id = selectedVaultId;
+        const docData = {
+          project_id: project.id,
+          title: file.name,
+          file_url,
+          file_type: fileType,
+        };
+        if (selectedVaultId) docData.vault_id = selectedVaultId;
 
-      const doc = await base44.entities.ProjectDocument.create(docData);
-      queryClient.invalidateQueries({ queryKey: ["project-docs", project.id] });
-      
-      setProcessingIds((prev) => [...prev, doc.id]);
-      await processDocument(doc, file_url);
-      setProcessingIds((prev) => prev.filter((id) => id !== doc.id));
+        const doc = await base44.entities.ProjectDocument.create(docData);
+        queryClient.invalidateQueries({ queryKey: ["project-docs", project.id] });
+        
+        setProcessingIds((prev) => [...prev, doc.id]);
+        await processDocument(doc, file_url);
+        setProcessingIds((prev) => prev.filter((id) => id !== doc.id));
+      }
+    } finally {
+      e.target.value = "";
+      setUploading(false);
     }
-    
-    e.target.value = "";
-    setUploading(false);
   };
 
   const processDocument = async (doc, file_url) => {
