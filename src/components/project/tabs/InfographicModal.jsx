@@ -46,16 +46,22 @@ export default function InfographicModal({ asset, project, open, onClose, inline
   const [infographic, setInfographic] = useState(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [editMode, setEditMode] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [savedConfirm, setSavedConfirm] = useState(false);
   const printRef = useRef(null);
 
-  // Load persisted infographic from asset metadata on open
+  // Load persisted infographic from asset metadata on open — always fetch fresh from DB
   useEffect(() => {
     if ((open || inline) && asset) {
-      if (asset.metadata?.infographic) {
-        setInfographic(asset.metadata.infographic);
-      } else {
-        generate();
-      }
+      setInfographic(null);
+      base44.entities.Asset.filter({ project_id: asset.project_id }).then((results) => {
+        const fresh = results.find((a) => a.id === asset.id);
+        if (fresh?.metadata?.infographic) {
+          setInfographic(fresh.metadata.infographic);
+        } else {
+          generate();
+        }
+      });
     }
   }, [open, inline, asset?.id]);
 
