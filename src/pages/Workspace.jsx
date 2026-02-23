@@ -65,14 +65,19 @@ export default function Workspace() {
   const [form, setForm] = useState({ title: "", type: "note", content: "" });
   const queryClient = useQueryClient();
 
+  const [userEmail, setUserEmail] = useState(null);
+  useEffect(() => { base44.auth.me().then((u) => setUserEmail(u.email)).catch(() => {}); }, []);
+
   const { data: items = [], isLoading } = useQuery({
-    queryKey: ["workspace-items"],
-    queryFn: () => base44.entities.WorkspaceItem.list("-created_date", 100),
+    queryKey: ["workspace-items", userEmail],
+    queryFn: () => base44.entities.WorkspaceItem.filter({ created_by: userEmail }, "-created_date", 100),
+    enabled: !!userEmail,
   });
 
   const { data: projects = [] } = useQuery({
-    queryKey: ["projects-list"],
-    queryFn: () => base44.entities.Project.list("title", 100),
+    queryKey: ["projects-list", userEmail],
+    queryFn: () => base44.entities.Project.filter({ created_by: userEmail }, "title", 100),
+    enabled: !!userEmail,
   });
 
   const createMutation = useMutation({
