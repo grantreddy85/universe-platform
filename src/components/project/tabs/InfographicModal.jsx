@@ -51,15 +51,11 @@ export default function InfographicModal({ asset, project, open, onClose, inline
   // Load persisted infographic from asset metadata on open
   useEffect(() => {
     if ((open || inline) && asset) {
-      // Always fetch fresh from DB to avoid stale prop
-      base44.entities.Asset.filter({ id: asset.id }).then((results) => {
-        const fresh = results[0];
-        if (fresh?.metadata?.infographic) {
-          setInfographic(fresh.metadata.infographic);
-        } else if (!infographic) {
-          generate();
-        }
-      });
+      if (asset.metadata?.infographic) {
+        setInfographic(asset.metadata.infographic);
+      } else {
+        generate();
+      }
     }
   }, [open, inline, asset?.id]);
 
