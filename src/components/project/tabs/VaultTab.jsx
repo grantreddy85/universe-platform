@@ -287,11 +287,11 @@ Analyse the document and return a structured summary for AI-assisted search and 
         )}
 
         {/* Processing banner */}
-        {processingId && (
+        {processingIds.length > 0 && (
           <div className="mb-4 flex items-center gap-3 p-3 bg-blue-50 rounded-lg border border-blue-100">
             <Loader2 className="w-4 h-4 text-blue-500 animate-spin flex-shrink-0" />
             <div>
-              <p className="text-xs font-medium text-blue-700">Indexing document…</p>
+              <p className="text-xs font-medium text-blue-700">Indexing {processingIds.length} document{processingIds.length > 1 ? 's' : ''}…</p>
               <p className="text-[10px] text-blue-500">AI is extracting key findings, methodology and keywords.</p>
             </div>
           </div>
