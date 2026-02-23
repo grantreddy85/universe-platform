@@ -75,10 +75,12 @@ export default function ProjectDetail() {
   const ActiveComponent = tabComponents[activeTab] || OverviewTab;
 
   return (
-    <div className="min-h-screen bg-[#fafbfc]">
+    <div className="flex flex-col h-screen bg-[#fafbfc] overflow-hidden">
       <ProjectHeader project={project} />
       <ProjectTabs activeTab={activeTab} onTabChange={setActiveTab} tabCounts={tabCounts} />
-      <ActiveComponent project={project} onTabChange={setActiveTab} />
+      <div className="flex-1 overflow-auto">
+        <ActiveComponent project={project} onTabChange={setActiveTab} />
+      </div>
     </div>
   );
 }
