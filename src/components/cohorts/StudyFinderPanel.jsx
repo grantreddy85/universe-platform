@@ -123,16 +123,18 @@ Focus on real, verifiable studies. Use real NCT IDs and PMIDs where possible.`;
   const tabs = ["overview", "studies"];
 
   return (
-    <div className="w-[400px] flex-shrink-0 border-l border-gray-100 bg-[#fafbfc] flex flex-col h-full">
+    <div className={`flex-shrink-0 border-l border-gray-100 bg-[#fafbfc] flex flex-col h-full ${isEmbedded ? "flex-1" : "w-[400px]"}`}>
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 bg-white">
         <div className="flex items-center gap-2">
           <Search className="w-4 h-4 text-blue-500" />
           <span className="text-sm font-semibold text-gray-800">Study Finder</span>
         </div>
-        <button onClick={onClose} className="text-gray-400 hover:text-gray-600 p-1">
-          <X className="w-4 h-4" />
-        </button>
+        {!isEmbedded && (
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 p-1">
+            <X className="w-4 h-4" />
+          </button>
+        )}
       </div>
 
       {/* Filter summary */}
