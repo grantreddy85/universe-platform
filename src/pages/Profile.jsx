@@ -245,23 +245,47 @@ export default function Profile() {
       )}
 
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-4">
-        <div className="bg-white rounded-xl border border-gray-100 p-5 text-center">
-          <FolderKanban className="w-5 h-5 text-blue-500 mx-auto mb-2" />
-          <p className="text-xl font-semibold text-gray-900">{projects.length}</p>
-          <p className="text-xs text-gray-400">Projects</p>
-        </div>
-        <div className="bg-white rounded-xl border border-gray-100 p-5 text-center">
-          <Box className="w-5 h-5 text-emerald-500 mx-auto mb-2" />
-          <p className="text-xl font-semibold text-gray-900">{assets.length}</p>
-          <p className="text-xs text-gray-400">Assets</p>
-        </div>
-        <div className="bg-white rounded-xl border border-gray-100 p-5 text-center">
-          <Shield className="w-5 h-5 text-violet-500 mx-auto mb-2" />
-          <p className="text-xl font-semibold text-gray-900">
-            {assets.filter((a) => a.status === "validated" || a.status === "tokenised").length}
-          </p>
-          <p className="text-xs text-gray-400">Validated</p>
+      <div className="bg-white rounded-xl border border-gray-100 p-6">
+        <h3 className="text-sm font-semibold text-gray-900 mb-4">Overview</h3>
+        <div className="grid grid-cols-4 gap-4">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
+              <FolderKanban className="w-4 h-4 text-blue-500" />
+            </div>
+            <div>
+              <p className="text-xs text-gray-500 uppercase tracking-wide">Active Projects</p>
+              <p className="text-lg font-semibold text-gray-900">{projects.length}</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-lg bg-amber-50 flex items-center justify-center flex-shrink-0">
+              <Box className="w-4 h-4 text-amber-500" />
+            </div>
+            <div>
+              <p className="text-xs text-gray-500 uppercase tracking-wide">In Validation</p>
+              <p className="text-lg font-semibold text-gray-900">0</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-lg bg-emerald-50 flex items-center justify-center flex-shrink-0">
+              <Shield className="w-4 h-4 text-emerald-500" />
+            </div>
+            <div>
+              <p className="text-xs text-gray-500 uppercase tracking-wide">Validated Assets</p>
+              <p className="text-lg font-semibold text-gray-900">
+                {assets.filter((a) => a.status === "validated" || a.status === "tokenised").length}
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-lg bg-violet-50 flex items-center justify-center flex-shrink-0">
+              <Box className="w-4 h-4 text-violet-500" />
+            </div>
+            <div>
+              <p className="text-xs text-gray-500 uppercase tracking-wide">Tokenised</p>
+              <p className="text-lg font-semibold text-gray-900">0</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
