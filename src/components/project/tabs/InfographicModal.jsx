@@ -357,7 +357,7 @@ Make everything scientifically credible and relevant to the asset/project contex
   );
 
   return (
-    <div className="bg-white rounded-xl border border-gray-100 p-5">
+    <div className="bg-white rounded-xl border border-gray-100 p-5" style={{ maxWidth: 620 }}>
       {toolbar}
       {editMode && infographic && (
         <p className="text-[11px] text-blue-500 mb-2 px-1">Click any text on the infographic to edit it. Changes save automatically.</p>
