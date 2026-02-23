@@ -335,7 +335,7 @@ export default function AITab({ project }) {
   return (
     <div className="flex flex-col h-[calc(100vh-220px)]">
       {/* Top Session Tabs */}
-      <div className="border-b border-gray-100 bg-white px-4 py-2 flex items-center justify-between gap-2 sticky top-[41px] z-10">
+      <div className="border-b border-gray-100 bg-white px-4 py-2 flex items-center justify-between gap-2 sticky top-0 z-10">
         <div className="flex items-center gap-1 overflow-x-auto flex-1 min-w-0">
           {conversations.map((convo) => {
             const isActive = activeConversation?.id === convo.id;
