@@ -20,31 +20,28 @@ export default function UniVerseLogo({ className = "w-8 h-8" }) {
 
   return (
     <svg
-      viewBox="0 0 100 100"
+      viewBox="0 0 60 60"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}>
 
-      <defs>
-        <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#00D4FF" />
-          <stop offset="100%" stopColor="#0099CC" />
-        </linearGradient>
-      </defs>
-      {/* Left arrow */}
+      {/* Left chevron - pointing left */}
       <path
-        d="M10 50 L35 25 L35 40 L25 50 L35 60 L35 75 Z"
-        fill="url(#logoGradient)" />
+        d="M 35 10 L 15 30 L 35 50"
+        stroke="#3B82F6"
+        strokeWidth="6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none" />
 
-      {/* Right arrow */}
+      {/* Right chevron - pointing right */}
       <path
-        d="M45 20 L70 45 L55 45 L55 80 L45 80 Z"
-        fill="url(#logoGradient)"
-        opacity="0.85" />
-
-      <path
-        d="M55 45 L80 70 L65 70 L55 60 Z"
-        fill="url(#logoGradient)" />
+        d="M 25 10 L 45 30 L 25 50"
+        stroke="#3B82F6"
+        strokeWidth="6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none" />
 
     </svg>);
 
