@@ -142,6 +142,54 @@ Provide concise, insightful responses tailored to this research context.`;
             </div>
           </div>
         )}
+        
+        {(suggestedFilters || suggestedCohort) && !isLoading && (
+          <div className="space-y-2">
+            {suggestedFilters && (
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                <p className="text-xs font-medium text-blue-900 mb-2">Suggested Filters:</p>
+                <div className="space-y-1 mb-2">
+                  {suggestedFilters.map((filter) => (
+                    <div key={filter} className="text-xs text-blue-800">{filter}</div>
+                  ))}
+                </div>
+                <Button
+                  size="sm"
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-xs h-7"
+                  onClick={() => {
+                    onSetFilters?.(suggestedFilters);
+                    setSuggestedFilters(null);
+                  }}
+                >
+                  Apply Filters
+                </Button>
+              </div>
+            )}
+            
+            {suggestedCohort && (
+              <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-3">
+                <p className="text-xs font-medium text-emerald-900 mb-2">Suggested Cohort:</p>
+                <div className="text-xs text-emerald-800 mb-2">
+                  <p><strong>{suggestedCohort.name}</strong></p>
+                  {suggestedCohort.sample_size && (
+                    <p>Sample Size: {suggestedCohort.sample_size}</p>
+                  )}
+                </div>
+                <Button
+                  size="sm"
+                  className="w-full bg-emerald-600 hover:bg-emerald-700 text-xs h-7"
+                  onClick={() => {
+                    onCreateCohort?.(suggestedCohort);
+                    setSuggestedCohort(null);
+                  }}
+                >
+                  Create Cohort
+                </Button>
+              </div>
+            )}
+          </div>
+        )}
+        
         <div ref={messagesEndRef} />
       </div>
 
