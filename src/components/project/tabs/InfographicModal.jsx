@@ -320,6 +320,18 @@ Make everything scientifically credible and relevant to the asset/project contex
           Regenerate
         </Button>
         {infographic && (
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleManualSave}
+            className={`text-xs ${savedConfirm ? "text-green-600 border-green-300" : ""}`}
+            disabled={isSaving}
+          >
+            {isSaving ? <Loader2 className="w-3.5 h-3.5 mr-1 animate-spin" /> : savedConfirm ? <Check className="w-3.5 h-3.5 mr-1" /> : <Save className="w-3.5 h-3.5 mr-1" />}
+            {savedConfirm ? "Saved!" : "Save"}
+          </Button>
+        )}
+        {infographic && (
           <>
             <Button variant="outline" size="sm" onClick={handleDownload} className="text-xs">
               <Download className="w-3.5 h-3.5 mr-1" />
