@@ -69,6 +69,11 @@ export default function CohortsTab({ project }) {
 
   return (
     <div className="flex h-full">
+    <CohortFilters
+      selected={activeFilters}
+      onToggle={toggleFilter}
+      onClear={() => setActiveFilters([])}
+    />
     <div className="flex-1 p-6 lg:p-8 overflow-y-auto">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">Cohorts</h2>
