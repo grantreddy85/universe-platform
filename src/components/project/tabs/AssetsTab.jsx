@@ -160,7 +160,7 @@ export default function AssetsTab({ project }) {
               {asset.description && (
                 <p className="text-xs text-gray-500 mb-3 line-clamp-2">{asset.description}</p>
               )}
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-wrap">
                 <Badge
                   variant="secondary"
                   className={`text-[10px] uppercase ${statusStyles[asset.status] || statusStyles.draft}`}
@@ -172,6 +172,15 @@ export default function AssetsTab({ project }) {
                     <Users className="w-3 h-3" />
                     {asset.attribution.length} contributor{asset.attribution.length !== 1 ? "s" : ""}
                   </span>
+                )}
+                {asset.metadata?.infographic && (
+                  <button
+                    onClick={(e) => { e.stopPropagation(); setInfographicAsset(asset); }}
+                    className="flex items-center gap-1 text-[10px] text-blue-500 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 rounded px-1.5 py-0.5 transition-colors"
+                  >
+                    <Sparkles className="w-2.5 h-2.5" />
+                    View Infographic
+                  </button>
                 )}
               </div>
             </div>
