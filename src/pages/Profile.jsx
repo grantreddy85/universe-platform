@@ -108,8 +108,8 @@ export default function Profile() {
         )}
       </div>
 
-      {/* Subscription & Visibility */}
-      <div className="bg-white rounded-xl border border-gray-100 p-6 mb-6">
+        {/* Subscription & Visibility */}
+        <div className="bg-white rounded-xl border border-gray-100 p-6 mb-6">
         <h3 className="text-sm font-semibold text-gray-900 mb-4">Platform Access</h3>
 
         <div className="flex items-center justify-between mb-4">
