@@ -82,6 +82,7 @@ export default function ProjectCard({ project }) {
           }
         </span>
       </div>
+      </div>
     </Link>);
 
 }
