@@ -137,7 +137,7 @@ function FilterGroup({ group, selected, onToggle }) {
   );
 }
 
-export default function CohortFilters({ selected, onToggle, onClear }) {
+export default function CohortFilters({ selected, onToggle, onClear, sampleSize, onSampleSizeChange }) {
   return (
     <div className="w-56 flex-shrink-0 bg-white border-r border-gray-100 overflow-y-auto">
       <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
@@ -148,6 +148,19 @@ export default function CohortFilters({ selected, onToggle, onClear }) {
           </button>
         )}
       </div>
+      
+      {/* Sample Size Filter */}
+      <div className="border-b border-gray-100 px-4 py-3">
+        <Label className="text-xs font-semibold text-gray-500 uppercase tracking-wider block mb-2">Sample Size</Label>
+        <Input
+          type="number"
+          placeholder="Target n"
+          value={sampleSize || ""}
+          onChange={(e) => onSampleSizeChange(e.target.value)}
+          className="text-sm"
+        />
+      </div>
+
       {FILTER_GROUPS.map((group) => (
         <FilterGroup key={group.key} group={group} selected={selected} onToggle={onToggle} />
       ))}
