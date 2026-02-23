@@ -63,9 +63,13 @@ export default function Search() {
     }).catch(() => {});
   }, []);
 
+  const [userEmail, setUserEmail] = React.useState(null);
+  useEffect(() => { base44.auth.me().then((u) => setUserEmail(u.email)).catch(() => {}); }, []);
+
   const { data: projects = [] } = useQuery({
-    queryKey: ["projects-list"],
-    queryFn: () => base44.entities.Project.list("title", 100)
+    queryKey: ["projects-list", userEmail],
+    queryFn: () => base44.entities.Project.filter({ created_by: userEmail }, "title", 100),
+    enabled: !!userEmail,
   });
 
   // Reset to landing page when Research tab is clicked
