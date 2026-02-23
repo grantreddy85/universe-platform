@@ -92,12 +92,15 @@ export default function ValidationTab({ project }) {
               size="sm"
               onClick={async () => {
                 const note = expandedNote;
+                const validation = validations.find(v => getLinkedNote(v)?.id === note.id || v.note_id === note.id);
                 await base44.entities.Asset.create({
                   project_id: project.id,
                   title: note.title,
                   type: "publication",
                   description: note.content?.slice(0, 300),
                   status: "validated",
+                  linked_assets: validation ? [validation.id] : [],
+                  file_url: note.id,  // store note id for documentation lookup
                 });
                 queryClient.invalidateQueries({ queryKey: ["project-assets", project.id] });
                 setExpandedNote(null);
