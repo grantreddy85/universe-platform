@@ -768,9 +768,9 @@ export default function Search() {
                <select
                 value={saveDestination}
                 onChange={(e) => setSaveDestination(e.target.value)}
-                className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-400/30 focus:border-blue-400 bg-white">
+                className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-400/30 focus:border-blue-400 bg-white text-gray-700">
 
-                 <option value="">Select project</option>
+                 <option value="" disabled>Select destination...</option>
                  {projects.map((proj) =>
                 <option key={proj.id} value={`project_${proj.id}`}>
                      {proj.title}
