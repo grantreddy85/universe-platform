@@ -71,7 +71,7 @@ export default function Home() {
     <div className="min-h-screen p-6 lg:p-10 max-w-7xl mx-auto">
       {/* Header */}
       <div className="mb-10">
-        <h1 className="text-[525153] text-2xl font-semibold tracking-tight">
+        <h1 className="text-[#525153] text-2xl font-semibold tracking-tight">
           Welcome back, {firstName}
         </h1>
         <p className="text-sm text-gray-400 mt-1">
@@ -93,7 +93,7 @@ export default function Home() {
         <div className="lg:col-span-2 flex flex-col gap-6">
           <div>
             <div className="flex items-center justify-between mb-5">
-              <h2 className="text-[525153] text-sm font-semibold uppercase tracking-wider">CONTINUE RESEARCH
+              <h2 className="text-[#525153] text-sm font-semibold uppercase tracking-wider">CONTINUE RESEARCH
 
               </h2>
               <Link to={createPageUrl("Projects")}>
@@ -136,8 +136,8 @@ export default function Home() {
         <div className="space-y-6">
           {/* Recent Activity */}
           <div>
-            <h2 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-5">
-              Recent Activity
+            <h2 className="text-[#525153] mb-5 text-sm font-semibold uppercase tracking-wider">RECENT ACTIVITY
+
             </h2>
             <div className="bg-white rounded-xl border border-gray-100 p-5">
               {activities.length === 0 ?
@@ -157,9 +157,9 @@ export default function Home() {
           {/* Lab Activity */}
           <div>
             <div className="flex items-center justify-between mb-5">
-              <h2 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">Lab Activity</h2>
+              <h2 className="text-[#525153] text-sm font-semibold uppercase tracking-wider">LAB ACTIVITY</h2>
               <Link to={createPageUrl("Labs")}>
-                <Button variant="ghost" size="sm" className="text-xs text-gray-500 hover:text-gray-900">
+                <Button variant="ghost" size="sm" className="text-[#525153] px-3 text-xs font-medium rounded-md inline-flex items-center justify-center gap-2 whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-accent h-8 hover:text-gray-900">
                   View Labs <ArrowRight className="w-3 h-3 ml-1" />
                 </Button>
               </Link>
