@@ -163,7 +163,7 @@ export default function Profile() {
                   setInviting(false);
                 }
               }}
-              className="flex items-center gap-1.5 whitespace-nowrap"
+              className="flex items-center gap-1.5 whitespace-nowrap bg-[#000021] text-[#00F2FF] hover:bg-[#000021]/90"
             >
               <Send className="w-3.5 h-3.5" />
               {inviting ? "Sending…" : "Send Invite"}
