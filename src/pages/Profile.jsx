@@ -16,7 +16,10 @@ export default function Profile() {
   const [orcidSaving, setOrcidSaving] = useState(false);
 
   useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => {});
+    base44.auth.me().then((u) => {
+      setUser(u);
+      setOrcidInput(u?.orcid_id || "");
+    }).catch(() => {});
   }, []);
 
   const { data: projects = [] } = useQuery({
