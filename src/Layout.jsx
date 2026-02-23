@@ -82,10 +82,16 @@ export default function Layout({ children, currentPageName }) {
   const [user, setUser] = useState(null);
   const [showChatDropdown, setShowChatDropdown] = useState(true);
   const [activeChats, setActiveChats] = useState([]);
+  const [customLogoUrl, setCustomLogoUrl] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => {});
+    base44.auth.me().then((userData) => {
+      setUser(userData);
+      if (userData?.custom_logo_url) {
+        setCustomLogoUrl(userData.custom_logo_url);
+      }
+    }).catch(() => {});
   }, []);
 
   // Load active chats from localStorage whenever Research is active
@@ -123,7 +129,11 @@ export default function Layout({ children, currentPageName }) {
 
           {/* Logo */}
           <div className="flex items-center gap-2.5 px-5 h-16 border-b border-gray-100">
-            <UniVerseLogo className="w-8 h-8 flex-shrink-0" allowUpload={true} />
+            {customLogoUrl ? (
+              <img src={customLogoUrl} alt="Logo" className="w-8 h-8 flex-shrink-0 object-contain" />
+            ) : (
+              <UniVerseLogo className="w-8 h-8 flex-shrink-0" allowUpload={true} />
+            )}
             {!collapsed &&
               <span className="text-[#525153] text-2xl font-normal tracking-tight" style={{ fontFamily: "'Funnel Display', sans-serif" }}>
                 UniVerse
