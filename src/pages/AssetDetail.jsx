@@ -91,6 +91,17 @@ export default function AssetDetail() {
     enabled: !!projectId,
   });
 
+  // Find the validation that published this asset and load its linked note
+  const linkedValidation = validations.find((v) => v.id === asset?.linked_assets?.[0] || asset?.linked_assets?.includes(v.id));
+  const linkedNoteId = linkedValidation?.note_id;
+
+  const { data: linkedNote } = useQuery({
+    queryKey: ["note", linkedNoteId],
+    queryFn: () => base44.entities.Note.filter({ id: linkedNoteId }),
+    enabled: !!linkedNoteId,
+    select: (data) => data[0],
+  });
+
   const updateMutation = useMutation({
     mutationFn: (data) => base44.entities.Asset.update(assetId, data),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["asset", assetId] }),
