@@ -75,7 +75,7 @@ function StudyCard({ study, onAskAbout }) {
   );
 }
 
-export default function StudyFinderPanel({ activeFilters, project, onAskAboutStudy, onClose }) {
+export default function StudyFinderPanel({ activeFilters, project, onAskAboutStudy, onClose, isEmbedded }) {
   const [results, setResults] = useState(null);
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("overview");
