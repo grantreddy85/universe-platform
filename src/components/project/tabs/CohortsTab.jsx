@@ -120,6 +120,12 @@ export default function CohortsTab({ project }) {
       isOpen={true}
       onToggle={() => { setAiOpen(!aiOpen); setStudyAiContext(null); }}
       onRecommendCohort={() => setShowAssistant(true)}
+      onSetFilters={(filters) => {
+        setActiveFilters(filters);
+      }}
+      onCreateCohort={(cohortData) => {
+        createMutation.mutate(cohortData);
+      }}
     />
   </div>
   );
