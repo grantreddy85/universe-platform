@@ -250,16 +250,16 @@ Analyse the document and return a structured summary for AI-assisted search and 
               Ask AI
             </Button>
             <label>
-              <input type="file" className="hidden" onChange={handleUpload} disabled={uploading || !!processingId} />
+              <input type="file" multiple className="hidden" onChange={handleUpload} disabled={uploading || processingIds.length > 0} />
               <Button
                 size="sm"
                 className="bg-blue-600 hover:bg-blue-700 text-xs cursor-pointer"
-                disabled={uploading || !!processingId}
+                disabled={uploading || processingIds.length > 0}
                 asChild
               >
                 <span>
-                  {uploading ? <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" /> : <Upload className="w-3.5 h-3.5 mr-1.5" />}
-                  {uploading ? "Uploading..." : selectedVaultId ? `Upload to ${selectedVault?.name}` : "Upload"}
+                  {uploading || processingIds.length > 0 ? <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" /> : <Upload className="w-3.5 h-3.5 mr-1.5" />}
+                  {uploading ? "Uploading..." : processingIds.length > 0 ? `Indexing ${processingIds.length}...` : selectedVaultId ? `Upload to ${selectedVault?.name}` : "Upload"}
                 </span>
               </Button>
             </label>
