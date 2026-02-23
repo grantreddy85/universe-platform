@@ -21,9 +21,9 @@ const FIELD_IMAGES = {
   default:       "https://images.unsplash.com/photo-1581093458791-9f3c3900df4b?w=600&q=80",
 };
 
-function getFieldImage(field) {
-  if (!field) return FIELD_IMAGES.default;
-  const key = Object.keys(FIELD_IMAGES).find(k => field.toLowerCase().includes(k));
+function getFieldImage(field, title = "") {
+  const text = `${field || ""} ${title || ""}`.toLowerCase();
+  const key = Object.keys(FIELD_IMAGES).find(k => text.includes(k));
   return key ? FIELD_IMAGES[key] : FIELD_IMAGES.default;
 }
 
