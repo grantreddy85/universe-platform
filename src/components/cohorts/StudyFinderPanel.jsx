@@ -85,6 +85,12 @@ export default function StudyFinderPanel({ activeFilters, project, onAskAboutStu
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("overview");
 
+  React.useEffect(() => {
+    if (isEmbedded && activeFilters.length > 0) {
+      handleSearch();
+    }
+  }, [activeFilters]);
+
   const filterSummary = activeFilters.map(f => {
     const [, val] = f.split(":");
     return val;
