@@ -243,11 +243,19 @@ export default function CohortsTab({ project }) {
         </DialogContent>
       </Dialog>
     </div>
+    {studyFinderOpen && (
+      <StudyFinderPanel
+        activeFilters={activeFilters}
+        project={project}
+        onAskAboutStudy={handleAskAboutStudy}
+        onClose={() => setStudyFinderOpen(false)}
+      />
+    )}
     <TabAIPanel
       tabName="Cohorts"
-      contextData={cohorts}
+      contextData={studyAiContext ? { cohorts, focusStudy: studyAiContext } : cohorts}
       isOpen={aiOpen}
-      onToggle={() => setAiOpen(!aiOpen)}
+      onToggle={() => { setAiOpen(!aiOpen); setStudyAiContext(null); }}
     />
   </div>
   );
