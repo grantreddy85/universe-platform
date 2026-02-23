@@ -21,14 +21,19 @@ const statusConfig = {
 };
 
 export default function ValidatedAssets() {
+  const [userEmail, setUserEmail] = useState(null);
+  useEffect(() => { base44.auth.me().then((u) => setUserEmail(u.email)).catch(() => {}); }, []);
+
   const { data: allAssets = [], isLoading } = useQuery({
-    queryKey: ["assets"],
-    queryFn: () => base44.entities.Asset.list("-created_date"),
+    queryKey: ["assets", userEmail],
+    queryFn: () => base44.entities.Asset.filter({ created_by: userEmail }, "-created_date"),
+    enabled: !!userEmail,
   });
 
   const { data: projects = [] } = useQuery({
-    queryKey: ["projects"],
-    queryFn: () => base44.entities.Project.list(),
+    queryKey: ["projects", userEmail],
+    queryFn: () => base44.entities.Project.filter({ created_by: userEmail }),
+    enabled: !!userEmail,
   });
 
   const validatedAssets = allAssets.filter(
