@@ -61,7 +61,6 @@ export default function CohortsTab({ project }) {
       base44.entities.Cohort.create({
         ...data,
         project_id: project.id,
-        sample_size: data.sample_size ? Number(data.sample_size) : undefined,
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["project-cohorts", project.id] });
