@@ -63,10 +63,25 @@ Provide concise, insightful responses tailored to this research context.`;
 
     const response = await base44.integrations.Core.InvokeLLM({ prompt });
     
-    // Check if response suggests filters or cohort creation
-    if (tabName === "Cohorts" && (response.includes("filter") || response.includes("cohort"))) {
-      setSuggestedFilters(null);
-      setSuggestedCohort(null);
+    // Extract suggested filters and cohort from response
+    if (tabName === "Cohorts") {
+      const filterMatch = response.match(/SUGGESTED_FILTERS:\s*(\[.*?\])/);
+      const cohortMatch = response.match(/SUGGESTED_COHORT:\s*(\{.*?\})/);
+      
+      if (filterMatch) {
+        try {
+          setSuggestedFilters(JSON.parse(filterMatch[1]));
+        } catch (e) {
+          setSuggestedFilters(null);
+        }
+      }
+      if (cohortMatch) {
+        try {
+          setSuggestedCohort(JSON.parse(cohortMatch[1]));
+        } catch (e) {
+          setSuggestedCohort(null);
+        }
+      }
     }
     
     setMessages((prev) => [...prev, { role: "assistant", content: response }]);
