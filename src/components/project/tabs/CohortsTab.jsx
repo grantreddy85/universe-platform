@@ -66,7 +66,7 @@ export default function CohortsTab({ project }) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["project-cohorts", project.id] });
       setShowNew(false);
-      setForm({ name: "", organism: "", strain: "", sample_size: "" });
+      setForm({ name: "" });
     },
   });
 
