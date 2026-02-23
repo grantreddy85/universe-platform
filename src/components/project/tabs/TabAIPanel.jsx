@@ -100,6 +100,20 @@ Provide concise, insightful responses tailored to this research context.`;
         <div ref={messagesEndRef} />
       </div>
 
+      {/* Actions */}
+      {tabName === "Cohorts" && onRecommendCohort && (
+        <div className="border-t border-gray-100 p-3">
+          <Button
+            onClick={onRecommendCohort}
+            size="sm"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-xs"
+          >
+            <Sparkles className="w-3.5 h-3.5 mr-2" />
+            Recommend Cohort
+          </Button>
+        </div>
+      )}
+
       {/* Input */}
       <div className="border-t border-gray-100 p-3">
         <div className="flex gap-2">
