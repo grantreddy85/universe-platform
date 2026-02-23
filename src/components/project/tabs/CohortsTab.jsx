@@ -4,7 +4,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus, FlaskConical, MoreHorizontal, Trash2, Sparkles } from "lucide-react";
 import TabAIPanel from "./TabAIPanel";
 import CohortFilters from "@/components/cohorts/CohortFilters";
-import StudyFinder from "@/components/cohorts/StudyFinder";
+import StudyFinderPanel from "@/components/cohorts/StudyFinderPanel";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -36,6 +36,13 @@ export default function CohortsTab({ project }) {
   const [form, setForm] = useState({ name: "", organism: "", strain: "", sample_size: "" });
   const [aiOpen, setAiOpen] = useState(false);
   const [activeFilters, setActiveFilters] = useState([]);
+  const [studyFinderOpen, setStudyFinderOpen] = useState(false);
+  const [studyAiContext, setStudyAiContext] = useState(null);
+
+  const handleAskAboutStudy = (study) => {
+    setStudyAiContext(study);
+    setAiOpen(true);
+  };
 
   const toggleFilter = (key) => {
     setActiveFilters((prev) =>
@@ -157,8 +164,6 @@ export default function CohortsTab({ project }) {
           ))}
         </div>
       )}
-
-      <StudyFinder activeFilters={activeFilters} />
 
       <Dialog open={showNew} onOpenChange={setShowNew}>
         <DialogContent className="sm:max-w-md">
