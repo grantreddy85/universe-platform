@@ -76,14 +76,19 @@ export default function Home() {
 
   return (
     <div className="min-h-screen p-6 lg:p-10 max-w-7xl mx-auto">
-      {/* Header */}
-      <div className="mb-10">
-        <h1 className="text-[#525153] text-2xl font-semibold tracking-tight">
-          Welcome back, {firstName}
-        </h1>
-        <p className="text-sm text-gray-400 mt-1">
-          Resume your research or start something new.
-        </p>
+      {/* Header / Profile */}
+      <div className="mb-10 flex items-center gap-5">
+        <div className="w-14 h-14 rounded-full bg-[#000021] flex items-center justify-center flex-shrink-0 text-[#00F2FF] text-xl font-semibold">
+          {user?.full_name?.charAt(0)?.toUpperCase() || "R"}
+        </div>
+        <div>
+          <h1 className="text-[#525153] text-2xl font-semibold tracking-tight">
+            Welcome back, {firstName}
+          </h1>
+          <p className="text-sm text-gray-400 mt-0.5">
+            {user?.role ? user.role.charAt(0).toUpperCase() + user.role.slice(1) : "Researcher"} · Resume your research or start something new.
+          </p>
+        </div>
       </div>
 
       {/* Stats */}
