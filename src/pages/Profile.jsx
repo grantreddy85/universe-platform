@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
-import { User, Mail, Calendar, FolderKanban, Box, Shield, Globe, Lock, CheckCircle2 } from "lucide-react";
+import { User, Mail, Calendar, FolderKanban, Box, Shield, Globe, Lock, CheckCircle2, UserPlus, Send } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { format } from "date-fns";
 
 export default function Profile() {
