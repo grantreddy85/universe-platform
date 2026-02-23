@@ -107,11 +107,11 @@ export default function CohortsTab({ project }) {
             Notes Guide
           </Button>
           <Button
-            onClick={() => setShowNew(true)}
+            onClick={() => setShowAssistant(true)}
             size="sm"
             className="bg-blue-600 hover:bg-blue-700 text-xs"
           >
-            <Plus className="w-3.5 h-3.5 mr-1.5" />
+            <Sparkles className="w-3.5 h-3.5 mr-1.5" />
             New Cohort
           </Button>
         </div>
