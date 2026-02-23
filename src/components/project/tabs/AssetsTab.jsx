@@ -119,61 +119,82 @@ export default function AssetsTab({ project }) {
       ) : (
         <div className="grid sm:grid-cols-2 gap-4">
           {assets.map((asset) => (
-            <div
-              key={asset.id}
-              className="bg-white rounded-xl border border-gray-100 p-5 hover:border-gray-200 hover:shadow-sm transition-all cursor-pointer"
-              onClick={() => navigate(createPageUrl("AssetDetail") + `?id=${asset.id}&project_id=${project.id}`)}
-            >
-              <div className="flex items-start justify-between mb-3">
-                <div className="flex items-center gap-2">
-                  <span className="text-lg">{typeIcons[asset.type] || "📦"}</span>
-                  <div>
-                    <h3 className="text-sm font-semibold text-gray-900">{asset.title}</h3>
-                    <p className="text-[11px] text-gray-400 capitalize">
-                      {asset.type?.replace(/_/g, " ")}
-                    </p>
+            <div key={asset.id} className="bg-white rounded-xl border border-gray-100 hover:border-gray-200 hover:shadow-sm transition-all">
+              {/* Card header — click to navigate */}
+              <div
+                className="p-5 cursor-pointer"
+                onClick={() => navigate(createPageUrl("AssetDetail") + `?id=${asset.id}&project_id=${project.id}`)}
+              >
+                <div className="flex items-start justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg">{typeIcons[asset.type] || "📦"}</span>
+                    <div>
+                      <h3 className="text-sm font-semibold text-gray-900">{asset.title}</h3>
+                      <p className="text-[11px] text-gray-400 capitalize">
+                        {asset.type?.replace(/_/g, " ")}
+                      </p>
+                    </div>
                   </div>
-                </div>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon" className="h-7 w-7 text-gray-400" onClick={(e) => e.stopPropagation()}>
-                      <MoreHorizontal className="w-4 h-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    {(asset.type === "publication" || asset.type === "validation_report") && (
-                      <DropdownMenuItem onClick={(e) => { e.stopPropagation(); setInfographicAsset(asset); }}>
-                        <Sparkles className="w-3.5 h-3.5 mr-2 text-blue-500" />
-                        Generate Infographic
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="icon" className="h-7 w-7 text-gray-400" onClick={(e) => e.stopPropagation()}>
+                        <MoreHorizontal className="w-4 h-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      {(asset.type === "publication" || asset.type === "validation_report") && (
+                        <DropdownMenuItem onClick={(e) => { e.stopPropagation(); setInfographicAsset(infographicAsset?.id === asset.id ? null : asset); }}>
+                          <Sparkles className="w-3.5 h-3.5 mr-2 text-blue-500" />
+                          {asset.metadata?.infographic ? "View Infographic" : "Generate Infographic"}
+                        </DropdownMenuItem>
+                      )}
+                      <DropdownMenuItem
+                        className="text-red-600"
+                        onClick={(e) => { e.stopPropagation(); deleteMutation.mutate(asset.id); }}
+                      >
+                        <Trash2 className="w-3.5 h-3.5 mr-2" />
+                        Delete
                       </DropdownMenuItem>
-                    )}
-                    <DropdownMenuItem
-                      className="text-red-600"
-                      onClick={(e) => { e.stopPropagation(); deleteMutation.mutate(asset.id); }}
-                    >
-                      <Trash2 className="w-3.5 h-3.5 mr-2" />
-                      Delete
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-              {asset.description && (
-                <p className="text-xs text-gray-500 mb-3 line-clamp-2">{asset.description}</p>
-              )}
-              <div className="flex items-center gap-2">
-                <Badge
-                  variant="secondary"
-                  className={`text-[10px] uppercase ${statusStyles[asset.status] || statusStyles.draft}`}
-                >
-                  {asset.status || "draft"}
-                </Badge>
-                {asset.attribution?.length > 0 && (
-                  <span className="flex items-center gap-1 text-[11px] text-gray-400">
-                    <Users className="w-3 h-3" />
-                    {asset.attribution.length} contributor{asset.attribution.length !== 1 ? "s" : ""}
-                  </span>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+                {asset.description && (
+                  <p className="text-xs text-gray-500 mb-3 line-clamp-2">{asset.description}</p>
                 )}
+                <div className="flex items-center gap-2">
+                  <Badge
+                    variant="secondary"
+                    className={`text-[10px] uppercase ${statusStyles[asset.status] || statusStyles.draft}`}
+                  >
+                    {asset.status || "draft"}
+                  </Badge>
+                  {asset.attribution?.length > 0 && (
+                    <span className="flex items-center gap-1 text-[11px] text-gray-400">
+                      <Users className="w-3 h-3" />
+                      {asset.attribution.length} contributor{asset.attribution.length !== 1 ? "s" : ""}
+                    </span>
+                  )}
+                  {asset.metadata?.infographic && (
+                    <span className="flex items-center gap-1 text-[11px] text-blue-500 ml-auto">
+                      <Sparkles className="w-3 h-3" />
+                      Infographic saved
+                    </span>
+                  )}
+                </div>
               </div>
+
+              {/* Inline infographic panel */}
+              {infographicAsset?.id === asset.id && (
+                <div className="border-t border-gray-100 p-4" onClick={(e) => e.stopPropagation()}>
+                  <InfographicModal
+                    asset={asset}
+                    project={project}
+                    open={true}
+                    onClose={() => setInfographicAsset(null)}
+                    inline={true}
+                  />
+                </div>
+              )}
             </div>
           ))}
         </div>
