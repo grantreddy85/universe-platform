@@ -88,17 +88,25 @@ export default function StudyFinderPanel({ activeFilters, project, onAskAboutStu
   const handleSearch = async () => {
     setLoading(true);
     setResults(null);
-    const prompt = `You are a biomedical research assistant. Find real, existing studies from ClinicalTrials.gov and PubMed that match the following cohort criteria: ${filterSummary || "human clinical research"}.
+    const prompt = `You are a biomedical research assistant. Find real, existing studies from multiple sources matching these cohort criteria: ${filterSummary || "human clinical research"}.
+
+Search from these sources:
+- ClinicalTrials.gov (clinical trials)
+- PubMed (peer-reviewed articles)
+- bioRxiv (preprints on biology)
+- medRxiv (preprints on medicine)
+- PubMed Central (PMC articles)
+- Europe PMC (additional publications)
 
 Return a JSON object with:
-- "stats": { "total_studies": number, "clinical_trials": number, "pubmed_papers": number, "total_participants": number, "date_range": string }
+- "stats": { "total_studies": number, "clinical_trials": number, "pubmed_papers": number, "preprints": number, "total_participants": number, "date_range": string }
 - "phase_distribution": array of { "name": string, "value": number } — study phases
 - "disease_distribution": array of { "name": string, "value": number } — disease/condition categories found
 - "year_distribution": array of { "year": string, "count": number } — publications per year (last 10 years)
 - "top_institutions": array of { "name": string, "count": number } — top contributing institutions
-- "studies": array of up to 10 objects, each with: { "source": "ClinicalTrials"|"PubMed", "title": string, "authors": string, "year": string|number, "journal": string, "status": string, "summary": string, "n": string, "url": string, "pmid_or_nct": string }
+- "studies": array of up to 15 objects, each with: { "source": "ClinicalTrials"|"PubMed"|"bioRxiv"|"medRxiv"|"PMC"|"EuropePMC", "title": string, "authors": string, "year": string|number, "journal": string, "status": string, "summary": string, "n": string, "url": string, "pmid_or_nct": string }
 
-Focus on real, verifiable studies. Use real NCT IDs and PMIDs where possible.`;
+Focus on real, verifiable studies with actual identifiers (NCT IDs, PMIDs, DOIs).`;
 
     const res = await base44.integrations.Core.InvokeLLM({
       prompt,
@@ -192,7 +200,7 @@ Focus on real, verifiable studies. Use real NCT IDs and PMIDs where possible.`;
         {loading && (
           <div className="flex flex-col items-center justify-center py-20 text-gray-400 gap-3">
             <Loader2 className="w-6 h-6 animate-spin text-blue-400" />
-            <p className="text-xs">Searching ClinicalTrials.gov & PubMed…</p>
+            <p className="text-xs">Searching multiple scientific sources…</p>
           </div>
         )}
 
@@ -205,6 +213,7 @@ Focus on real, verifiable studies. Use real NCT IDs and PMIDs where possible.`;
                   { label: "Total Studies", val: results.stats.total_studies?.toLocaleString() },
                   { label: "Clinical Trials", val: results.stats.clinical_trials?.toLocaleString() },
                   { label: "PubMed Papers", val: results.stats.pubmed_papers?.toLocaleString() },
+                  { label: "Preprints", val: results.stats.preprints?.toLocaleString() },
                   { label: "Participants", val: results.stats.total_participants?.toLocaleString() },
                 ].map(s => s.val && (
                   <div key={s.label} className="bg-white rounded-lg border border-gray-100 p-3">
@@ -303,7 +312,7 @@ Focus on real, verifiable studies. Use real NCT IDs and PMIDs where possible.`;
           <div className="flex flex-col items-center justify-center py-20 text-center gap-3">
             <BookOpen className="w-8 h-8 text-gray-200" />
             <p className="text-xs text-gray-400 max-w-[200px]">
-              Select filters and click <strong>Find Studies</strong> to discover matching research from ClinicalTrials.gov and PubMed.
+              Select filters and click <strong>Find Studies</strong> to discover matching research across multiple scientific sources.
             </p>
           </div>
         )}
