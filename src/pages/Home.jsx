@@ -88,6 +88,16 @@ export default function Home() {
           <p className="text-sm text-gray-400 mt-0.5">
             {user?.role ? user.role.charAt(0).toUpperCase() + user.role.slice(1) : "Researcher"} · Resume your research or start something new.
           </p>
+          {user?.orcid_id && (
+            <a
+              href={`https://orcid.org/${user.orcid_id}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 text-[11px] text-[#A6CE39] hover:underline mt-1"
+            >
+              <span className="font-bold">iD</span> orcid.org/{user.orcid_id}
+            </a>
+          )}
         </div>
       </div>
 
