@@ -81,8 +81,8 @@ export default function ProjectCard({ project }) {
           <><Globe className="w-2.5 h-2.5" /> Shared</>
           }
         </span>
+        </div>
       </div>
-      </div>
-    </Link>);
-
+    </Link>
+  );
 }
