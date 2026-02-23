@@ -49,10 +49,19 @@ export default function Search() {
   const [attachedFiles, setAttachedFiles] = useState([]);
   const [uploadingFile, setUploadingFile] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+  const [customLogoUrl, setCustomLogoUrl] = useState(null);
   const fileInputRef = useRef(null);
   const messagesEndRef = useRef(null);
   const queryClient = useQueryClient();
   const location = useLocation();
+
+  useEffect(() => {
+    base44.auth.me().then((user) => {
+      if (user?.custom_logo_url) {
+        setCustomLogoUrl(user.custom_logo_url);
+      }
+    }).catch(() => {});
+  }, []);
 
   const { data: projects = [] } = useQuery({
     queryKey: ["projects-list"],
