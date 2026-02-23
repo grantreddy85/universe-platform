@@ -176,44 +176,18 @@ export default function CohortsTab({ project }) {
         </div>
       )}
 
-      <Dialog open={showNew} onOpenChange={setShowNew}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="text-lg font-semibold">New Cohort</DialogTitle>
-          </DialogHeader>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              if (!form.name.trim()) return;
-              createMutation.mutate(form);
-            }}
-            className="space-y-4 mt-2"
-          >
-            <div className="space-y-1.5">
-             <Label className="text-xs font-medium text-gray-500">Name *</Label>
-             <Input
-               value={form.name}
-               onChange={(e) => setForm({ ...form, name: e.target.value })}
-               placeholder="Cohort name"
-               className="text-sm"
-             />
-            </div>
-            <DialogFooter className="pt-2">
-              <Button type="button" variant="ghost" size="sm" onClick={() => setShowNew(false)}>
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                size="sm"
-                className="bg-blue-600 hover:bg-blue-700 text-xs"
-                disabled={!form.name.trim() || createMutation.isPending}
-              >
-                {createMutation.isPending ? "Creating..." : "Create Cohort"}
-              </Button>
-            </DialogFooter>
-          </form>
-        </DialogContent>
-      </Dialog>
+      <CohortAssistantDialog
+        open={showAssistant}
+        onOpenChange={setShowAssistant}
+        activeFilters={activeFilters}
+        onFiltersApply={(filters, size) => {
+          setActiveFilters(filters);
+          setSampleSize(size);
+        }}
+        onCohortCreated={(cohortData) => {
+          createMutation.mutate(cohortData);
+        }}
+      />
     </div>
     {studyFinderOpen && (
       <StudyFinderPanel
