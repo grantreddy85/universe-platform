@@ -81,6 +81,8 @@ export default function CohortsTab({ project }) {
       selected={activeFilters}
       onToggle={toggleFilter}
       onClear={() => setActiveFilters([])}
+      sampleSize={sampleSize}
+      onSampleSizeChange={setSampleSize}
     />
     <div className="flex-1 p-6 lg:p-8 overflow-y-auto">
       <div className="flex items-center justify-between mb-6">
