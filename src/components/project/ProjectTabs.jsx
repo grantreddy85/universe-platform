@@ -25,7 +25,7 @@ const tabs = [
 
 export default function ProjectTabs({ activeTab, onTabChange, tabCounts = {} }) {
   return (
-    <div className="border-b border-gray-100 bg-white px-6 lg:px-10">
+    <div className="border-b border-gray-100 bg-white px-6 lg:px-10 sticky top-0 z-20">
       <nav className="flex gap-0 -mb-px overflow-x-auto">
         {tabs.map((tab) => {
           const Icon = tab.icon;
