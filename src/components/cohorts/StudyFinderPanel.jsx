@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Search, ExternalLink, BookOpen, FlaskConical, Loader2, MessageSquare, X, ChevronDown, ChevronUp } from "lucide-react";
+import { Search, ExternalLink, BookOpen, FlaskConical, Loader2, MessageSquare, X, ChevronDown, ChevronUp, Plus } from "lucide-react";
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, Legend
