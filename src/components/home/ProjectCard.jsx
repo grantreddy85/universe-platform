@@ -44,7 +44,7 @@ export default function ProjectCard({ project }) {
       {/* Cover image */}
       <div className="h-28 overflow-hidden bg-gray-100">
         <img
-          src={getFieldImage(project.field)}
+          src={getFieldImage(project.field, project.title)}
           alt={project.title}
           className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-300"
         />
