@@ -89,64 +89,74 @@ export default function CohortsTab({ project }) {
         <h2 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">Studies & Cohorts</h2>
       </div>
 
-      {isLoading ? (
-        <div className="space-y-3">
-          {[1, 2].map((i) => (
-            <div key={i} className="bg-white rounded-lg border border-gray-100 p-5 animate-pulse">
-              <div className="h-4 w-40 bg-gray-100 rounded" />
+      <div className="grid grid-cols-3 gap-6 h-full">
+        {/* Left: Defined Cohorts */}
+        <div className="col-span-1 space-y-3 max-h-96 overflow-y-auto">
+          <h3 className="text-xs font-semibold text-gray-600 uppercase tracking-wider mb-3">Defined Cohorts</h3>
+          {isLoading ? (
+            <div className="space-y-2">
+              {[1, 2].map((i) => (
+                <div key={i} className="bg-white rounded-lg border border-gray-100 p-4 animate-pulse">
+                  <div className="h-3 w-24 bg-gray-100 rounded" />
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-      ) : cohorts.length === 0 ? (
-        <div className="text-center py-16 bg-white rounded-xl border border-dashed border-gray-200">
-          <FlaskConical className="w-8 h-8 text-gray-200 mx-auto mb-3" />
-          <p className="text-sm text-gray-400">No cohorts defined yet.</p>
-        </div>
-      ) : (
-        <div className="space-y-3">
-          {cohorts.map((cohort) => (
-            <div
-              key={cohort.id}
-              className="bg-white rounded-lg border border-gray-100 p-5 hover:border-gray-200 transition-colors"
-            >
-              <div className="flex items-start justify-between">
-                <div>
-                  <div className="flex items-center gap-2 mb-1">
-                    <h3 className="text-sm font-semibold text-gray-900">{cohort.name}</h3>
-                    <Badge
-                      variant="secondary"
-                      className={`text-[10px] uppercase ${statusStyles[cohort.status] || statusStyles.draft}`}
-                    >
-                      {cohort.status || "draft"}
-                    </Badge>
-                  </div>
-                  <div className="flex items-center gap-4 text-xs text-gray-400 mt-1">
-                    {cohort.organism && <span>Organism: {cohort.organism}</span>}
-                    {cohort.strain && <span>Strain: {cohort.strain}</span>}
-                    {cohort.sample_size && <span>n = {cohort.sample_size}</span>}
+          ) : cohorts.length === 0 ? (
+            <div className="text-center py-8 bg-white rounded-lg border border-dashed border-gray-200">
+              <FlaskConical className="w-6 h-6 text-gray-200 mx-auto mb-2" />
+              <p className="text-xs text-gray-400">No cohorts yet</p>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {cohorts.map((cohort) => (
+                <div
+                  key={cohort.id}
+                  className="bg-white rounded-lg border border-gray-100 p-3 hover:border-gray-200 transition-colors"
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex-1 min-w-0">
+                      <h4 className="text-xs font-semibold text-gray-900 truncate">{cohort.name}</h4>
+                      <Badge
+                        variant="secondary"
+                        className={`text-[8px] uppercase mt-1 ${statusStyles[cohort.status] || statusStyles.draft}`}
+                      >
+                        {cohort.status || "draft"}
+                      </Badge>
+                    </div>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon" className="h-5 w-5 text-gray-400 flex-shrink-0">
+                          <MoreHorizontal className="w-3 h-3" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem
+                          className="text-red-600"
+                          onClick={() => deleteMutation.mutate(cohort.id)}
+                        >
+                          <Trash2 className="w-3.5 h-3.5 mr-2" />
+                          Delete
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </div>
                 </div>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon" className="h-7 w-7 text-gray-400">
-                      <MoreHorizontal className="w-4 h-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem
-                      className="text-red-600"
-                      onClick={() => deleteMutation.mutate(cohort.id)}
-                    >
-                      <Trash2 className="w-3.5 h-3.5 mr-2" />
-                      Delete
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
+              ))}
             </div>
-          ))}
+          )}
         </div>
-      )}
+
+        {/* Center: Study Finder */}
+        <div className="col-span-1">
+          <StudyFinderPanel
+            activeFilters={activeFilters}
+            project={project}
+            onAskAboutStudy={handleAskAboutStudy}
+            onClose={() => {}}
+            isEmbedded={true}
+          />
+        </div>
+      </div>
 
       <CohortAssistantDialog
         open={showAssistant}
