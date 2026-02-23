@@ -5,6 +5,7 @@ import { Plus, FlaskConical, MoreHorizontal, Trash2, Sparkles, Search } from "lu
 import TabAIPanel from "./TabAIPanel";
 import CohortFilters from "@/components/cohorts/CohortFilters";
 import StudyFinderPanel from "@/components/cohorts/StudyFinderPanel";
+import CohortAssistantDialog from "@/components/cohorts/CohortAssistantDialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
