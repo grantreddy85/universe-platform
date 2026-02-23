@@ -31,7 +31,28 @@ const statusStyles = {
   tokenised: "bg-violet-50 text-violet-600",
 };
 
-export default function ProjectHeader({ project }) {
+export default function ProjectHeader({ project, onProjectUpdated }) {
+  const [editOpen, setEditOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [editedDescription, setEditedDescription] = useState(project.description || "");
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+  const handleUpdateDescription = async () => {
+    await base44.entities.Project.update(project.id, {
+      description: editedDescription,
+    });
+    queryClient.invalidateQueries({ queryKey: ["project", project.id] });
+    onProjectUpdated?.();
+    setEditOpen(false);
+  };
+
+  const handleDeleteProject = async () => {
+    await base44.entities.Project.delete(project.id);
+    queryClient.invalidateQueries({ queryKey: ["projects"] });
+    navigate(createPageUrl("Projects"));
+  };
+
   return (
     <div className="border-b border-gray-100 bg-white px-6 lg:px-10 py-5">
       <Link
@@ -60,7 +81,72 @@ export default function ProjectHeader({ project }) {
             <p className="text-sm text-gray-400 mt-1 max-w-2xl">{project.description}</p>
           )}
         </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon" className="text-gray-400 hover:text-gray-600">
+              <MoreHorizontal className="w-4 h-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={() => setEditOpen(true)}>
+              <Edit2 className="w-3.5 h-3.5 mr-2" />
+              Edit Description
+            </DropdownMenuItem>
+            <DropdownMenuItem className="text-red-600" onClick={() => setDeleteOpen(true)}>
+              <Trash2 className="w-3.5 h-3.5 mr-2" />
+              Delete Project
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
+
+      {/* Edit Description Dialog */}
+      <Dialog open={editOpen} onOpenChange={setEditOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit Description</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <Label htmlFor="description">Project Description</Label>
+              <Textarea
+                id="description"
+                value={editedDescription}
+                onChange={(e) => setEditedDescription(e.target.value)}
+                className="mt-2"
+                rows={4}
+                placeholder="Enter project description..."
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setEditOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleUpdateDescription}>Save Changes</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Project Dialog */}
+      <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Delete Project</DialogTitle>
+          </DialogHeader>
+          <p className="text-sm text-gray-600">
+            Are you sure you want to delete <strong>{project.title}</strong>? This action cannot be undone.
+          </p>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setDeleteOpen(false)}>
+              Cancel
+            </Button>
+            <Button variant="destructive" onClick={handleDeleteProject}>
+              Delete Project
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
