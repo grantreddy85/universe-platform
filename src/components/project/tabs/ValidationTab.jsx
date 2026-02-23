@@ -99,8 +99,8 @@ export default function ValidationTab({ project }) {
                   type: "publication",
                   description: note.content?.slice(0, 300),
                   status: "validated",
+                  note_id: note.id,
                   linked_assets: validation ? [validation.id] : [],
-                  file_url: note.id,  // store note id for documentation lookup
                 });
                 queryClient.invalidateQueries({ queryKey: ["project-assets", project.id] });
                 setExpandedNote(null);
