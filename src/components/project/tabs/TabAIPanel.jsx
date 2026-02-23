@@ -48,7 +48,11 @@ ${availableFilters}`
 
 ${filterInfo}
 
-When suggesting cohorts or discussing filters, recommend specific filter selections that would help find relevant studies and cohorts for this project. Suggest combinations that align with the project's research goals.`;
+When suggesting cohorts or discussing filters, recommend specific filter selections that would help find relevant studies and cohorts for this project. Suggest combinations that align with the project's research goals.
+
+You can offer to apply filters or create cohorts. When you suggest filters or a cohort, format your suggestion like this:
+SUGGESTED_FILTERS: ["age:30-45 Yr", "organism:Homo Sapiens", "data_type:RNA-Seq"]
+SUGGESTED_COHORT: {"name": "Adult Humans RNA-Seq", "sample_size": 150}`;
     }
 
     prompt += `${tabName} context:${context}
