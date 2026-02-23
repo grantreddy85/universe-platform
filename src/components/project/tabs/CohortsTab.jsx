@@ -36,6 +36,7 @@ export default function CohortsTab({ project }) {
   const [form, setForm] = useState({ name: "" });
   const [aiOpen, setAiOpen] = useState(false);
   const [activeFilters, setActiveFilters] = useState([]);
+  const [sampleSize, setSampleSize] = useState("");
   const [studyFinderOpen, setStudyFinderOpen] = useState(false);
   const [studyAiContext, setStudyAiContext] = useState(null);
 
