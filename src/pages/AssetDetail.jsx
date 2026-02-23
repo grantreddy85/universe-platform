@@ -183,35 +183,64 @@ export default function AssetDetail() {
         {/* Left: Research Lineage */}
         <div className="col-span-2 space-y-6">
 
-          {/* Research Components */}
-          <div className="bg-white rounded-xl border border-gray-100 p-6">
-            <h2 className="text-sm font-semibold text-gray-700 mb-4">Research Lineage</h2>
-            <p className="text-xs text-gray-400 mb-5">All research components from this project that underpin this asset.</p>
-            {components.length === 0 ? (
-              <p className="text-xs text-gray-300 text-center py-8">No components found in this project yet.</p>
-            ) : (
-              <div className="space-y-2">
-                {components.map((comp) => {
-                  const cfg = typeIcons[comp._kind] || typeIcons.publication;
-                  const Ico = cfg.icon;
-                  return (
-                    <div key={comp.id} className="flex items-center gap-3 p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors">
-                      <div className={`w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 ${cfg.bg}`}>
-                        <Ico className={`w-3.5 h-3.5 ${cfg.color}`} />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-xs font-medium text-gray-800 truncate">{comp.title}</p>
-                        <p className="text-[10px] text-gray-400">{comp.label}</p>
-                      </div>
-                      <Badge variant="outline" className="text-[10px] capitalize flex-shrink-0">
-                        {comp.status || "draft"}
-                      </Badge>
-                    </div>
-                  );
-                })}
+          {/* Source Documentation */}
+          {linkedNote ? (
+            <div className="bg-white rounded-xl border border-gray-100 p-6">
+              <div className="flex items-center gap-2 mb-4">
+                <FileSearch className="w-4 h-4 text-blue-500" />
+                <h2 className="text-sm font-semibold text-gray-700">Source Documentation</h2>
               </div>
-            )}
-          </div>
+              <p className="text-xs text-gray-400 mb-4">The original research note that was validated and published as this asset.</p>
+              <div className="rounded-lg bg-gray-50 border border-gray-100 p-4">
+                <h3 className="text-sm font-semibold text-gray-800 mb-2">{linkedNote.title}</h3>
+                <p className="text-xs text-gray-500 text-gray-400 mb-3">{new Date(linkedNote.created_date).toLocaleDateString()}</p>
+                <div className="whitespace-pre-wrap text-xs text-gray-600 leading-relaxed max-h-64 overflow-y-auto">
+                  {linkedNote.content}
+                </div>
+                {linkedNote.image_urls?.length > 0 && (
+                  <div className="mt-4 border-t border-gray-100 pt-4">
+                    <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-2">Attachments</p>
+                    <div className="grid grid-cols-2 gap-2">
+                      {linkedNote.image_urls.map((url, i) => (
+                        <a key={i} href={url} target="_blank" rel="noopener noreferrer">
+                          <img src={url} alt={`attachment-${i}`} className="w-full h-28 object-cover rounded-lg border border-gray-100 hover:opacity-90 transition-opacity" />
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          ) : (
+            <div className="bg-white rounded-xl border border-gray-100 p-6">
+              <h2 className="text-sm font-semibold text-gray-700 mb-4">Research Lineage</h2>
+              <p className="text-xs text-gray-400 mb-5">All research components from this project that underpin this asset.</p>
+              {components.length === 0 ? (
+                <p className="text-xs text-gray-300 text-center py-8">No components found in this project yet.</p>
+              ) : (
+                <div className="space-y-2">
+                  {components.map((comp) => {
+                    const cfg = typeIcons[comp._kind] || typeIcons.publication;
+                    const Ico = cfg.icon;
+                    return (
+                      <div key={comp.id} className="flex items-center gap-3 p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors">
+                        <div className={`w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 ${cfg.bg}`}>
+                          <Ico className={`w-3.5 h-3.5 ${cfg.color}`} />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs font-medium text-gray-800 truncate">{comp.title}</p>
+                          <p className="text-[10px] text-gray-400">{comp.label}</p>
+                        </div>
+                        <Badge variant="outline" className="text-[10px] capitalize flex-shrink-0">
+                          {comp.status || "draft"}
+                        </Badge>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Attribution */}
           {asset.attribution?.length > 0 && (
