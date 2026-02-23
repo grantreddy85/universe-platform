@@ -20,28 +20,22 @@ export default function UniVerseLogo({ className = "w-8 h-8" }) {
 
   return (
     <svg
-      viewBox="0 0 60 60"
+      viewBox="0 0 100 100"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}>
 
-      {/* Left chevron - pointing left */}
+      {/* Left chevron */}
       <path
-        d="M 35 10 L 15 30 L 35 50"
-        stroke="#3B82F6"
-        strokeWidth="6"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        fill="none" />
+        d="M 20 35 L 40 50 L 20 65"
+        fill="#1E3A8A"
+        stroke="none" />
 
-      {/* Right chevron - pointing right */}
+      {/* Right chevron */}
       <path
-        d="M 25 10 L 45 30 L 25 50"
-        stroke="#3B82F6"
-        strokeWidth="6"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        fill="none" />
+        d="M 45 35 L 65 50 L 45 65"
+        fill="#3B82F6"
+        stroke="none" />
 
     </svg>);
 
