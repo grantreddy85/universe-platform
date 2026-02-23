@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { ChevronLeft, Send, Loader2, Sparkles } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 
-export default function TabAIPanel({ tabName, contextData, isOpen, onToggle }) {
+export default function TabAIPanel({ tabName, contextData, isOpen, onToggle, onRecommendCohort }) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
