@@ -102,6 +102,7 @@ export default function CohortsTab({ project }) {
         open={showAssistant}
         onOpenChange={setShowAssistant}
         activeFilters={activeFilters}
+        project={project}
         onFiltersApply={(filters, size) => {
           setActiveFilters(filters);
           setSampleSize(size);
