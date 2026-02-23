@@ -150,34 +150,37 @@ export default function VaultTab({ project }) {
   const indexedCount = vaultFiltered.filter((d) => d.summary).length;
 
   const handleUpload = async (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
     setUploading(true);
 
-    const { file_url } = await base44.integrations.Core.UploadFile({ file });
-    const ext = file.name.split(".").pop()?.toLowerCase();
-    const fileType =
-      ext === "pdf" ? "pdf"
-      : ext === "csv" ? "csv"
-      : ["jpg", "jpeg", "png", "webp"].includes(ext) ? "image"
-      : ["json", "tsv", "xlsx"].includes(ext) ? "dataset"
-      : "other";
+    for (const file of files) {
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      const ext = file.name.split(".").pop()?.toLowerCase();
+      const fileType =
+        ext === "pdf" ? "pdf"
+        : ext === "csv" ? "csv"
+        : ["jpg", "jpeg", "png", "webp"].includes(ext) ? "image"
+        : ["json", "tsv", "xlsx"].includes(ext) ? "dataset"
+        : "other";
 
-    const docData = {
-      project_id: project.id,
-      title: file.name,
-      file_url,
-      file_type: fileType,
-    };
-    if (selectedVaultId) docData.vault_id = selectedVaultId;
+      const docData = {
+        project_id: project.id,
+        title: file.name,
+        file_url,
+        file_type: fileType,
+      };
+      if (selectedVaultId) docData.vault_id = selectedVaultId;
 
-    const doc = await base44.entities.ProjectDocument.create(docData);
-    queryClient.invalidateQueries({ queryKey: ["project-docs", project.id] });
+      const doc = await base44.entities.ProjectDocument.create(docData);
+      queryClient.invalidateQueries({ queryKey: ["project-docs", project.id] });
+      
+      setProcessingIds((prev) => [...prev, doc.id]);
+      await processDocument(doc, file_url);
+      setProcessingIds((prev) => prev.filter((id) => id !== doc.id));
+    }
+    
     e.target.value = "";
-
-    setProcessingId(doc.id);
-    await processDocument(doc, file_url);
-    setProcessingId(null);
     setUploading(false);
   };
 
