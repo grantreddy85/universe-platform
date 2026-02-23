@@ -139,10 +139,10 @@ Format your response as JSON with these fields:
         {stage === "question" && (
           <div className="space-y-4 mt-4">
             <div className="space-y-2">
-              <Label className="text-sm font-medium">What cohort do you need?</Label>
-              <p className="text-xs text-gray-500">
-                Ask me anything about your research needs and I'll recommend a cohort specification.
-              </p>
+               <Label className="text-sm font-medium">What cohort do you need?</Label>
+               <p className="text-xs text-gray-500">
+                 {project ? `I understand your project context. Ask me anything about your research needs for "${project.title}" and I'll recommend a cohort specification.` : "Ask me anything about your research needs and I'll recommend a cohort specification."}
+               </p>
               <Textarea
                 value={question}
                 onChange={(e) => setQuestion(e.target.value)}
