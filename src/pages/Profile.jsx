@@ -40,28 +40,48 @@ export default function Profile() {
         <h1 className="text-2xl font-semibold text-gray-900 tracking-tight">Profile</h1>
       </div>
 
-      {/* User Info */}
+      {/* User Info Card */}
       <div className="bg-white rounded-xl border border-gray-100 p-6 mb-6">
-        <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-full bg-blue-50 flex items-center justify-center">
-            <User className="w-6 h-6 text-blue-500" />
+        <div className="flex items-center gap-4 mb-6">
+          <div className="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0">
+            <User className="w-8 h-8 text-blue-500" />
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-gray-900">
+            <h2 className="text-xl font-semibold text-gray-900">
               {user.full_name || "Researcher"}
             </h2>
-            <div className="flex items-center gap-1 text-sm text-gray-400">
-              <Mail className="w-3.5 h-3.5" />
-              {user.email}
-            </div>
+            <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">Researcher</p>
           </div>
         </div>
-        {user.created_date && (
-          <p className="text-xs text-gray-400 mt-4 flex items-center gap-1">
-            <Calendar className="w-3 h-3" />
-            Member since {format(new Date(user.created_date), "MMMM yyyy")}
-          </p>
-        )}
+
+        {/* Profile Details */}
+        <div className="space-y-3">
+          <div className="flex items-center gap-2 text-sm">
+            <User className="w-4 h-4 text-gray-400" />
+            <span className="font-medium text-gray-700">Full Name</span>
+            <span className="text-gray-600 ml-auto">{user.full_name || "Not set"}</span>
+          </div>
+          <div className="flex items-center gap-2 text-sm">
+            <Building className="w-4 h-4 text-gray-400" />
+            <span className="font-medium text-gray-700">Organization</span>
+            <span className="text-gray-600 ml-auto">{user.organization || "Not set"}</span>
+          </div>
+          <div className="flex items-center gap-2 text-sm">
+            <Link2 className="w-4 h-4 text-gray-400" />
+            <span className="font-medium text-gray-700">ORCID</span>
+            <span className="text-gray-600 ml-auto">{user.orcid_id || "Not set"}</span>
+          </div>
+          <div className="flex items-center gap-2 text-sm">
+            <Mail className="w-4 h-4 text-gray-400" />
+            <span className="font-medium text-gray-700">Email</span>
+            <span className="text-gray-600 ml-auto">{user.email}</span>
+          </div>
+          <div className="flex items-center gap-2 text-sm">
+            <Phone className="w-4 h-4 text-gray-400" />
+            <span className="font-medium text-gray-700">Phone</span>
+            <span className="text-gray-600 ml-auto">{user.phone || "Not set"}</span>
+          </div>
+        </div>
       </div>
 
       {/* ORCID */}
