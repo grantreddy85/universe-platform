@@ -25,17 +25,26 @@ export default function UniVerseLogo({ className = "w-8 h-8" }) {
       xmlns="http://www.w3.org/2000/svg"
       className={className}>
 
-      {/* Left chevron */}
+      <defs>
+        <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#00D4FF" />
+          <stop offset="100%" stopColor="#0099CC" />
+        </linearGradient>
+      </defs>
+      {/* Left arrow */}
       <path
-        d="M 20 35 L 40 50 L 20 65"
-        fill="#1E3A8A"
-        stroke="none" />
+        d="M10 50 L35 25 L35 40 L25 50 L35 60 L35 75 Z"
+        fill="url(#logoGradient)" />
 
-      {/* Right chevron */}
+      {/* Right arrow */}
       <path
-        d="M 45 35 L 65 50 L 45 65"
-        fill="#3B82F6"
-        stroke="none" />
+        d="M45 20 L70 45 L55 45 L55 80 L45 80 Z"
+        fill="url(#logoGradient)"
+        opacity="0.85" />
+
+      <path
+        d="M55 45 L80 70 L65 70 L55 60 Z"
+        fill="url(#logoGradient)" />
 
     </svg>);
 
