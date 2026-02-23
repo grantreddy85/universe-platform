@@ -303,7 +303,7 @@ Make everything scientifically credible and relevant to the asset/project contex
   ) : null;
 
   const toolbar = (
-    <div className="flex items-center justify-between mb-3 px-1">
+    <div style={{ maxWidth: 600, margin: "0 auto" }} className="flex items-center justify-between mb-3 px-1">
       <h3 className="text-sm font-semibold text-gray-700">Research Infographic</h3>
       <div className="flex items-center gap-2">
         <Button
