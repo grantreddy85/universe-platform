@@ -23,9 +23,13 @@ export default function Projects() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
+  const [userEmail, setUserEmail] = React.useState(null);
+  React.useEffect(() => { base44.auth.me().then((u) => setUserEmail(u.email)).catch(() => {}); }, []);
+
   const { data: projects = [], isLoading } = useQuery({
-    queryKey: ["projects"],
-    queryFn: () => base44.entities.Project.list("-updated_date", 100)
+    queryKey: ["projects", userEmail],
+    queryFn: () => base44.entities.Project.filter({ created_by: userEmail }, "-updated_date", 100),
+    enabled: !!userEmail,
   });
 
   const createMutation = useMutation({
