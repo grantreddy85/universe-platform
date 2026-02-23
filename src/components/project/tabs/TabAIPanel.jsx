@@ -26,13 +26,30 @@ export default function TabAIPanel({ tabName, contextData, isOpen, onToggle, onR
       ? `\n\nCurrent ${tabName} data:\n${typeof contextData === "string" ? contextData : JSON.stringify(contextData, null, 2)}`
       : `\n\nNo ${tabName.toLowerCase()} data available yet.`;
 
-    const prompt = `You are an expert research assistant helping a scientist with their ${tabName} module. Your role is to:
+    let prompt = `You are an expert research assistant helping a scientist with their ${tabName} module. Your role is to:
 - Answer questions about the current ${tabName.toLowerCase()} data
 - Provide guidance, suggestions, and best practices
 - Help interpret and improve the research
-- Identify patterns and insights
+- Identify patterns and insights`;
 
-${tabName} context:${context}
+    if (tabName === "Cohorts" && project) {
+      const filterInfo = availableFilters
+        ? `\n\nAvailable filters to define cohorts:
+${availableFilters}`
+        : "";
+      
+      prompt += `\n\nProject Context:
+- Title: ${project.title}
+- Description: ${project.description || "Not specified"}
+- Field: ${project.field || "Not specified"}
+- Tags: ${project.tags?.join(", ") || "None"}
+
+${filterInfo}
+
+When suggesting cohorts or discussing filters, recommend specific filter selections that would help find relevant studies and cohorts for this project. Suggest combinations that align with the project's research goals.`;
+    }
+
+    prompt += `${tabName} context:${context}
 
 User question: ${input}
 
