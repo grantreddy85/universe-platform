@@ -17,9 +17,14 @@ function StudyCard({ study, onAskAbout }) {
       <div className="flex items-start justify-between gap-2 mb-2">
         <div className="flex items-center gap-2 flex-wrap">
           <Badge className={`text-[10px] uppercase font-medium px-2 py-0.5 ${
-            study.source === "ClinicalTrials"
-              ? "bg-blue-50 text-blue-600"
-              : "bg-emerald-50 text-emerald-600"
+            {
+              "ClinicalTrials": "bg-blue-50 text-blue-600",
+              "PubMed": "bg-emerald-50 text-emerald-600",
+              "bioRxiv": "bg-purple-50 text-purple-600",
+              "medRxiv": "bg-pink-50 text-pink-600",
+              "PMC": "bg-amber-50 text-amber-600",
+              "EuropePMC": "bg-cyan-50 text-cyan-600"
+            }[study.source] || "bg-gray-50 text-gray-600"
           }`}>
             {study.source}
           </Badge>
