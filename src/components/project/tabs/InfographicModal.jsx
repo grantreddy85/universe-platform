@@ -71,6 +71,15 @@ export default function InfographicModal({ asset, project, open, onClose, inline
     });
   };
 
+  const handleManualSave = async () => {
+    if (!infographic) return;
+    setIsSaving(true);
+    await saveToAsset(infographic);
+    setIsSaving(false);
+    setSavedConfirm(true);
+    setTimeout(() => setSavedConfirm(false), 2000);
+  };
+
   const generate = async () => {
     setIsGenerating(true);
     const result = await base44.integrations.Core.InvokeLLM({
