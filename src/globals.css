@@ -2,6 +2,7 @@ css
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Funnel+Sans:wght@300;400;500;600;700;800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -56,4 +57,25 @@ css
 }
 ::-webkit-scrollbar-thumb:hover {
   background: hsl(220, 13%, 75%);
+}
+
+/* IBM Plex Mono for all numbers */
+* {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Apply IBM Plex Mono to numbers only */
+body {
+  font-feature-settings: "tnum" 1;
+}
+
+/* Target numeric content specifically */
+[class*="number"],
+[class*="count"],
+[class*="stat"],
+[class*="price"],
+[class*="amount"],
+input[type="number"],
+.numeric {
+  font-family: 'IBM Plex Mono', monospace !important;
 }
