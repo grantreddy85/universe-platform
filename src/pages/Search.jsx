@@ -364,7 +364,7 @@ export default function Search() {
         }
         <input ref={fileInputRef} type="file" accept="image/*,.pdf,.csv,.xlsx,.txt" className="hidden" onChange={handleFileInputChange} />
         <div className="w-full max-w-3xl">
-          <div className="text-center mb-12">
+          <div className="mb-16 text-center">
             <div className="inline-flex items-center gap-3 mb-3">
               <UniVerseLogo className="w-12 h-12" />
               <h1 className="text-[#525153] text-5xl font-normal tracking-tight" style={{ fontFamily: "'Funnel Display', sans-serif" }}>UniVerse</h1>
