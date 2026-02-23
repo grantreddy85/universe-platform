@@ -187,43 +187,13 @@ export default function CohortsTab({ project }) {
             className="space-y-4 mt-2"
           >
             <div className="space-y-1.5">
-              <Label className="text-xs font-medium text-gray-500">Name *</Label>
-              <Input
-                value={form.name}
-                onChange={(e) => setForm({ ...form, name: e.target.value })}
-                placeholder="Cohort name"
-                className="text-sm"
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-1.5">
-                <Label className="text-xs font-medium text-gray-500">Organism</Label>
-                <Input
-                  value={form.organism}
-                  onChange={(e) => setForm({ ...form, organism: e.target.value })}
-                  placeholder="e.g. S. aureus"
-                  className="text-sm"
-                />
-              </div>
-              <div className="space-y-1.5">
-                <Label className="text-xs font-medium text-gray-500">Strain</Label>
-                <Input
-                  value={form.strain}
-                  onChange={(e) => setForm({ ...form, strain: e.target.value })}
-                  placeholder="e.g. MRSA ST239"
-                  className="text-sm"
-                />
-              </div>
-            </div>
-            <div className="space-y-1.5">
-              <Label className="text-xs font-medium text-gray-500">Sample Size</Label>
-              <Input
-                type="number"
-                value={form.sample_size}
-                onChange={(e) => setForm({ ...form, sample_size: e.target.value })}
-                placeholder="Target n"
-                className="text-sm"
-              />
+             <Label className="text-xs font-medium text-gray-500">Name *</Label>
+             <Input
+               value={form.name}
+               onChange={(e) => setForm({ ...form, name: e.target.value })}
+               placeholder="Cohort name"
+               className="text-sm"
+             />
             </div>
             <DialogFooter className="pt-2">
               <Button type="button" variant="ghost" size="sm" onClick={() => setShowNew(false)}>
