@@ -34,6 +34,13 @@ export default function CohortsTab({ project }) {
   const [showNew, setShowNew] = useState(false);
   const [form, setForm] = useState({ name: "", organism: "", strain: "", sample_size: "" });
   const [aiOpen, setAiOpen] = useState(false);
+  const [activeFilters, setActiveFilters] = useState([]);
+
+  const toggleFilter = (key) => {
+    setActiveFilters((prev) =>
+      prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]
+    );
+  };
   const queryClient = useQueryClient();
 
   const { data: cohorts = [], isLoading } = useQuery({
