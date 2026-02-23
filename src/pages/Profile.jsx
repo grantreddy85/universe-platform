@@ -63,8 +63,8 @@ export default function Profile() {
       {/* Main Content */}
       <div className="px-6 lg:px-10 py-8 max-w-5xl mx-auto">
 
-      {/* ORCID */}
-      <div className="bg-white rounded-xl border border-gray-100 p-6 mb-6">
+        {/* ORCID */}
+        <div className="bg-white rounded-xl border border-gray-100 p-6 mb-6">
         <div className="flex items-center gap-2 mb-1">
           <Link2 className="w-4 h-4 text-[#A6CE39]" />
           <h3 className="text-sm font-semibold text-gray-900">ORCID iD</h3>
