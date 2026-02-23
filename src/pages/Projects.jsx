@@ -49,7 +49,7 @@ export default function Projects() {
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-semibold text-gray-900 tracking-tight">Projects</h1>
+          <h1 className="text-[#525153] text-2xl font-semibold tracking-tight">Projects</h1>
           <p className="text-sm text-gray-400 mt-1">
             {projects.length} project{projects.length !== 1 ? "s" : ""}
           </p>
