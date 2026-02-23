@@ -20,6 +20,7 @@ export default function CohortAssistantDialog({
   onCohortCreated,
   activeFilters,
   onFiltersApply,
+  project,
 }) {
   const [stage, setStage] = useState("question"); // question, recommending, review
   const [question, setQuestion] = useState("");
