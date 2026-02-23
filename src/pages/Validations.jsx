@@ -15,14 +15,19 @@ const statusConfig = {
 };
 
 export default function Validations() {
+  const [userEmail, setUserEmail] = React.useState(null);
+  React.useEffect(() => { base44.auth.me().then((u) => setUserEmail(u.email)).catch(() => {}); }, []);
+
   const { data: validations = [], isLoading } = useQuery({
-    queryKey: ["validations"],
-    queryFn: () => base44.entities.ValidationRequest.list("-created_date"),
+    queryKey: ["validations", userEmail],
+    queryFn: () => base44.entities.ValidationRequest.filter({ created_by: userEmail }, "-created_date"),
+    enabled: !!userEmail,
   });
 
   const { data: projects = [] } = useQuery({
-    queryKey: ["projects"],
-    queryFn: () => base44.entities.Project.list(),
+    queryKey: ["projects", userEmail],
+    queryFn: () => base44.entities.Project.filter({ created_by: userEmail }),
+    enabled: !!userEmail,
   });
 
   const getProjectTitle = (projectId) => {
