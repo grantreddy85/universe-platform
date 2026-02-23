@@ -149,11 +149,24 @@ Focus on real, verifiable studies with actual identifiers (NCT IDs, PMIDs, DOIs)
           <Search className="w-4 h-4 text-blue-500" />
           <span className="text-sm font-semibold text-gray-800">Study Finder</span>
         </div>
-        {!isEmbedded && (
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 p-1">
-            <X className="w-4 h-4" />
-          </button>
-        )}
+        <div className="flex items-center gap-2">
+          {results && (
+            <Button
+              size="sm"
+              variant="outline"
+              className="text-xs h-7 px-2.5 border-green-200 text-green-700 hover:bg-green-50"
+              onClick={() => window.dispatchEvent(new CustomEvent("save_cohort_from_filters", { detail: { activeFilters } }))}
+            >
+              <Plus className="w-3.5 h-3.5 mr-1.5" />
+              Save Cohort
+            </Button>
+          )}
+          {!isEmbedded && (
+            <button onClick={onClose} className="text-gray-400 hover:text-gray-600 p-1">
+              <X className="w-4 h-4" />
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Filter summary */}
@@ -280,10 +293,10 @@ Focus on real, verifiable studies with actual identifiers (NCT IDs, PMIDs, DOIs)
             {results.top_institutions?.length > 0 && (
               <div className="bg-white rounded-lg border border-gray-100 p-3">
                 <p className="text-xs font-semibold text-gray-700 mb-3">Top Institutions</p>
-                <ResponsiveContainer width="100%" height={130}>
-                  <BarChart data={results.top_institutions.slice(0, 6)} layout="vertical" margin={{ top: 0, right: 10, left: 0, bottom: 0 }}>
+                <ResponsiveContainer width="100%" height={160}>
+                  <BarChart data={results.top_institutions.slice(0, 8)} layout="vertical" margin={{ top: 5, right: 10, left: 120, bottom: 5 }}>
                     <XAxis type="number" tick={{ fontSize: 9 }} />
-                    <YAxis type="category" dataKey="name" tick={{ fontSize: 9 }} width={90} />
+                    <YAxis type="category" dataKey="name" tick={{ fontSize: 8 }} width={115} interval={0} />
                     <Tooltip contentStyle={{ fontSize: 11 }} />
                     <Bar dataKey="count" fill="#10b981" radius={[0, 2, 2, 0]} />
                   </BarChart>
