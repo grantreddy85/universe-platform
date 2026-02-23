@@ -50,6 +50,7 @@
 import AssetDetail from './pages/AssetDetail';
 import Home from './pages/Home';
 import Labs from './pages/Labs';
+import Profile from './pages/Profile';
 import ProjectDetail from './pages/ProjectDetail';
 import Projects from './pages/Projects';
 import Search from './pages/Search';
@@ -57,7 +58,6 @@ import Tokenisation from './pages/Tokenisation';
 import ValidatedAssets from './pages/ValidatedAssets';
 import Validations from './pages/Validations';
 import Workspace from './pages/Workspace';
-import Profile from './pages/Profile';
 import __Layout from './Layout.jsx';
 
 
@@ -65,6 +65,7 @@ export const PAGES = {
     "AssetDetail": AssetDetail,
     "Home": Home,
     "Labs": Labs,
+    "Profile": Profile,
     "ProjectDetail": ProjectDetail,
     "Projects": Projects,
     "Search": Search,
@@ -72,7 +73,6 @@ export const PAGES = {
     "ValidatedAssets": ValidatedAssets,
     "Validations": Validations,
     "Workspace": Workspace,
-    "Profile": Profile,
 }
 
 export const pagesConfig = {
