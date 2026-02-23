@@ -5,10 +5,12 @@ import { Input } from "@/components/ui/input";
 import { ChevronLeft, Send, Loader2, Sparkles } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 
-export default function TabAIPanel({ tabName, contextData, isOpen, onToggle, onRecommendCohort, project, availableFilters }) {
+export default function TabAIPanel({ tabName, contextData, isOpen, onToggle, onRecommendCohort, project, availableFilters, onSetFilters, onCreateCohort }) {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [suggestedFilters, setSuggestedFilters] = useState(null);
+  const [suggestedCohort, setSuggestedCohort] = useState(null);
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
