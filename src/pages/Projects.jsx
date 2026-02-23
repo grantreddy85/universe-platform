@@ -11,8 +11,8 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  SelectValue } from
+"@/components/ui/select";
 import ProjectCard from "../components/home/ProjectCard";
 import NewProjectDialog from "../components/projects/NewProjectDialog";
 
@@ -25,7 +25,7 @@ export default function Projects() {
 
   const { data: projects = [], isLoading } = useQuery({
     queryKey: ["projects"],
-    queryFn: () => base44.entities.Project.list("-updated_date", 100),
+    queryFn: () => base44.entities.Project.list("-updated_date", 100)
   });
 
   const createMutation = useMutation({
@@ -34,12 +34,12 @@ export default function Projects() {
       queryClient.invalidateQueries({ queryKey: ["projects"] });
       setShowNew(false);
       navigate(createPageUrl(`ProjectDetail?id=${newProject.id}`));
-    },
+    }
   });
 
   const filtered = projects.filter((p) => {
     const matchSearch = p.title?.toLowerCase().includes(search.toLowerCase()) ||
-      p.description?.toLowerCase().includes(search.toLowerCase());
+    p.description?.toLowerCase().includes(search.toLowerCase());
     const matchStatus = statusFilter === "all" || p.status === statusFilter;
     return matchSearch && matchStatus;
   });
@@ -56,9 +56,9 @@ export default function Projects() {
         </div>
         <Button
           onClick={() => setShowNew(true)}
-          size="sm"
-          className="bg-blue-600 hover:bg-blue-700 text-xs"
-        >
+          size="sm" className="bg-[#000021] text-[#00F2FF] px-3 text-xs font-medium rounded-md inline-flex items-center justify-center gap-2 whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 shadow h-8 hover:bg-blue-700">
+
+
           <Plus className="w-3.5 h-3.5 mr-1.5" />
           New Project
         </Button>
@@ -72,8 +72,8 @@ export default function Projects() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search projects..."
-            className="pl-9 text-sm h-9 bg-white"
-          />
+            className="pl-9 text-sm h-9 bg-white" />
+
         </div>
         <Select value={statusFilter} onValueChange={setStatusFilter}>
           <SelectTrigger className="w-36 h-9 text-xs bg-white">
@@ -92,37 +92,37 @@ export default function Projects() {
       </div>
 
       {/* Grid */}
-      {isLoading ? (
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="bg-white rounded-xl border border-gray-100 p-5 animate-pulse">
+      {isLoading ?
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {[1, 2, 3].map((i) =>
+        <div key={i} className="bg-white rounded-xl border border-gray-100 p-5 animate-pulse">
               <div className="h-4 w-16 bg-gray-100 rounded mb-4" />
               <div className="h-4 w-3/4 bg-gray-100 rounded mb-2" />
               <div className="h-3 w-full bg-gray-50 rounded mb-1" />
               <div className="h-3 w-2/3 bg-gray-50 rounded" />
             </div>
-          ))}
-        </div>
-      ) : filtered.length === 0 ? (
-        <div className="text-center py-20">
+        )}
+        </div> :
+      filtered.length === 0 ?
+      <div className="text-center py-20">
           <p className="text-sm text-gray-400">
             {search || statusFilter !== "all" ? "No projects match your filters." : "No projects yet."}
           </p>
+        </div> :
+
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {filtered.map((project) =>
+        <ProjectCard key={project.id} project={project} />
+        )}
         </div>
-      ) : (
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filtered.map((project) => (
-            <ProjectCard key={project.id} project={project} />
-          ))}
-        </div>
-      )}
+      }
 
       <NewProjectDialog
         open={showNew}
         onOpenChange={setShowNew}
         onSubmit={(data) => createMutation.mutate(data)}
-        isSubmitting={createMutation.isPending}
-      />
-    </div>
-  );
+        isSubmitting={createMutation.isPending} />
+
+    </div>);
+
 }
