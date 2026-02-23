@@ -9,6 +9,9 @@ import { format } from "date-fns";
 
 export default function Profile() {
   const [user, setUser] = useState(null);
+  const [inviteEmail, setInviteEmail] = useState("");
+  const [inviting, setInviting] = useState(false);
+  const [inviteStatus, setInviteStatus] = useState(null); // "success" | "error"
 
   useEffect(() => {
     base44.auth.me().then(setUser).catch(() => {});
