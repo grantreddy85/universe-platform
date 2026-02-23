@@ -29,29 +29,36 @@ export default function Home() {
 
   const subscriptionStatus = user?.subscription_status || "free";
 
+  const userEmail = user?.email;
+
   const { data: projects = [] } = useQuery({
-    queryKey: ["projects"],
-    queryFn: () => base44.entities.Project.list("-updated_date", 6)
+    queryKey: ["projects", userEmail],
+    queryFn: () => base44.entities.Project.filter({ created_by: userEmail }, "-updated_date", 6),
+    enabled: !!userEmail,
   });
 
   const { data: validations = [] } = useQuery({
-    queryKey: ["validations"],
-    queryFn: () => base44.entities.ValidationRequest.list("-created_date", 50)
+    queryKey: ["validations", userEmail],
+    queryFn: () => base44.entities.ValidationRequest.filter({ created_by: userEmail }, "-created_date", 50),
+    enabled: !!userEmail,
   });
 
   const { data: assets = [] } = useQuery({
-    queryKey: ["assets"],
-    queryFn: () => base44.entities.Asset.list("-created_date", 50)
+    queryKey: ["assets", userEmail],
+    queryFn: () => base44.entities.Asset.filter({ created_by: userEmail }, "-created_date", 50),
+    enabled: !!userEmail,
   });
 
   const { data: activities = [] } = useQuery({
-    queryKey: ["activities"],
-    queryFn: () => base44.entities.Activity.list("-created_date", 4)
+    queryKey: ["activities", userEmail],
+    queryFn: () => base44.entities.Activity.filter({ created_by: userEmail }, "-created_date", 4),
+    enabled: !!userEmail,
   });
 
   const { data: labRequests = [] } = useQuery({
-    queryKey: ["lab_requests_home"],
-    queryFn: () => base44.entities.LabRequest.list("-updated_date", 10)
+    queryKey: ["lab_requests_home", userEmail],
+    queryFn: () => base44.entities.LabRequest.filter({ requester_email: userEmail }, "-updated_date", 10),
+    enabled: !!userEmail,
   });
 
   const { data: labServices = [] } = useQuery({
