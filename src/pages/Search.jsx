@@ -364,12 +364,12 @@ export default function Search() {
         }
         <input ref={fileInputRef} type="file" accept="image/*,.pdf,.csv,.xlsx,.txt" className="hidden" onChange={handleFileInputChange} />
         <div className="w-full max-w-3xl">
-          <div className="text-center mb-24">
-            <div className="inline-flex items-center gap-6 mb-6">
-              <UniVerseLogo className="w-24 h-24" />
-              <h1 className="text-[#525153] text-9xl font-normal tracking-tight" style={{ fontFamily: "'Funnel Display', sans-serif" }}>UniVerse</h1>
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-3 mb-3">
+              <UniVerseLogo className="w-12 h-12" />
+              <h1 className="text-[#525153] text-5xl font-normal tracking-tight" style={{ fontFamily: "'Funnel Display', sans-serif" }}>UniVerse</h1>
             </div>
-            <p className="text-2xl text-gray-400">Research Infrastructure Operating System</p>
+            <p className="text-sm text-gray-400">Research Infrastructure Operating System</p>
           </div>
 
           <div className="mb-6">
