@@ -30,7 +30,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import InfographicModal from "./InfographicModal";
+
 
 const statusStyles = {
   draft: "bg-gray-100 text-gray-600",
@@ -52,7 +52,7 @@ export default function AssetsTab({ project }) {
   const navigate = useNavigate();
   const [showNew, setShowNew] = useState(false);
   const [form, setForm] = useState({ title: "", type: "hypothesis", description: "" });
-  const [infographicAsset, setInfographicAsset] = useState(null);
+
   const [aiOpen, setAiOpen] = useState(false);
   const queryClient = useQueryClient();
 
@@ -141,12 +141,6 @@ export default function AssetsTab({ project }) {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    {(asset.type === "publication" || asset.type === "validation_report") && (
-                      <DropdownMenuItem onClick={(e) => { e.stopPropagation(); setInfographicAsset(asset); }}>
-                        <Sparkles className="w-3.5 h-3.5 mr-2 text-blue-500" />
-                        Generate Infographic
-                      </DropdownMenuItem>
-                    )}
                     <DropdownMenuItem
                       className="text-red-600"
                       onClick={(e) => { e.stopPropagation(); deleteMutation.mutate(asset.id); }}
@@ -173,27 +167,14 @@ export default function AssetsTab({ project }) {
                     {asset.attribution.length} contributor{asset.attribution.length !== 1 ? "s" : ""}
                   </span>
                 )}
-                {asset.metadata?.infographic && (
-                  <button
-                    onClick={(e) => { e.stopPropagation(); setInfographicAsset(asset); }}
-                    className="flex items-center gap-1 text-[10px] text-blue-500 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 rounded px-1.5 py-0.5 transition-colors"
-                  >
-                    <Sparkles className="w-2.5 h-2.5" />
-                    View Infographic
-                  </button>
-                )}
+
               </div>
             </div>
           ))}
         </div>
       )}
 
-      <InfographicModal
-        asset={infographicAsset}
-        project={project}
-        open={!!infographicAsset}
-        onClose={() => setInfographicAsset(null)}
-      />
+
 
       <Dialog open={showNew} onOpenChange={setShowNew}>
         <DialogContent className="sm:max-w-md">
