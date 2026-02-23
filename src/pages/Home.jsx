@@ -11,8 +11,8 @@ import {
   Plus,
   ArrowRight,
   Sparkles,
-  FlaskConical
-} from "lucide-react";
+  FlaskConical } from
+"lucide-react";
 import { Button } from "@/components/ui/button";
 import StatsCard from "../components/home/StatsCard";
 import ProjectCard from "../components/home/ProjectCard";
@@ -31,32 +31,32 @@ export default function Home() {
 
   const { data: projects = [] } = useQuery({
     queryKey: ["projects"],
-    queryFn: () => base44.entities.Project.list("-updated_date", 6),
+    queryFn: () => base44.entities.Project.list("-updated_date", 6)
   });
 
   const { data: validations = [] } = useQuery({
     queryKey: ["validations"],
-    queryFn: () => base44.entities.ValidationRequest.list("-created_date", 50),
+    queryFn: () => base44.entities.ValidationRequest.list("-created_date", 50)
   });
 
   const { data: assets = [] } = useQuery({
     queryKey: ["assets"],
-    queryFn: () => base44.entities.Asset.list("-created_date", 50),
+    queryFn: () => base44.entities.Asset.list("-created_date", 50)
   });
 
   const { data: activities = [] } = useQuery({
     queryKey: ["activities"],
-    queryFn: () => base44.entities.Activity.list("-created_date", 4),
+    queryFn: () => base44.entities.Activity.list("-created_date", 4)
   });
 
   const { data: labRequests = [] } = useQuery({
     queryKey: ["lab_requests_home"],
-    queryFn: () => base44.entities.LabRequest.list("-updated_date", 10),
+    queryFn: () => base44.entities.LabRequest.list("-updated_date", 10)
   });
 
   const { data: labServices = [] } = useQuery({
     queryKey: ["lab_services_home"],
-    queryFn: () => base44.entities.LabService.list(),
+    queryFn: () => base44.entities.LabService.list()
   });
 
   const activeValidations = validations.filter(
@@ -71,7 +71,7 @@ export default function Home() {
     <div className="min-h-screen p-6 lg:p-10 max-w-7xl mx-auto">
       {/* Header */}
       <div className="mb-10">
-        <h1 className="text-2xl font-semibold text-gray-900 tracking-tight">
+        <h1 className="text-[525153] text-2xl font-semibold tracking-tight">
           Welcome back, {firstName}
         </h1>
         <p className="text-sm text-gray-400 mt-1">
@@ -93,8 +93,8 @@ export default function Home() {
         <div className="lg:col-span-2 flex flex-col gap-6">
           <div>
             <div className="flex items-center justify-between mb-5">
-              <h2 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">
-                Continue Research
+              <h2 className="text-[525153] text-sm font-semibold uppercase tracking-wider">CONTINUE RESEARCH
+
               </h2>
               <Link to={createPageUrl("Projects")}>
                 <Button variant="ghost" size="sm" className="text-xs text-gray-500 hover:text-gray-900">
@@ -103,8 +103,8 @@ export default function Home() {
               </Link>
             </div>
 
-            {projects.length === 0 ? (
-              <div className="bg-white rounded-xl border border-dashed border-gray-200 p-12 text-center">
+            {projects.length === 0 ?
+            <div className="bg-white rounded-xl border border-dashed border-gray-200 p-12 text-center">
                 <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center mx-auto mb-4">
                   <Sparkles className="w-5 h-5 text-blue-500" />
                 </div>
@@ -118,14 +118,14 @@ export default function Home() {
                     New Project
                   </Button>
                 </Link>
+              </div> :
+
+            <div className="grid sm:grid-cols-2 gap-4">
+                {projects.slice(0, 4).map((project) =>
+              <ProjectCard key={project.id} project={project} />
+              )}
               </div>
-            ) : (
-              <div className="grid sm:grid-cols-2 gap-4">
-                {projects.slice(0, 4).map((project) => (
-                  <ProjectCard key={project.id} project={project} />
-                ))}
-              </div>
-            )}
+            }
           </div>
 
           {/* Marketplace Bar - below project cards, same width */}
@@ -140,17 +140,17 @@ export default function Home() {
               Recent Activity
             </h2>
             <div className="bg-white rounded-xl border border-gray-100 p-5">
-              {activities.length === 0 ? (
-                <p className="text-xs text-gray-400 text-center py-8">
+              {activities.length === 0 ?
+              <p className="text-xs text-gray-400 text-center py-8">
                   No recent activity yet.
-                </p>
-              ) : (
-                <div className="divide-y divide-gray-50">
-                  {activities.map((activity) => (
-                    <ActivityItem key={activity.id} activity={activity} />
-                  ))}
+                </p> :
+
+              <div className="divide-y divide-gray-50">
+                  {activities.map((activity) =>
+                <ActivityItem key={activity.id} activity={activity} />
+                )}
                 </div>
-              )}
+              }
             </div>
           </div>
 
@@ -165,22 +165,22 @@ export default function Home() {
               </Link>
             </div>
             <div className="bg-white rounded-xl border border-gray-100 p-5">
-              {labRequests.length === 0 ? (
-                <p className="text-xs text-gray-400 text-center py-8">No lab requests yet.</p>
-              ) : (
-                <div className="divide-y divide-gray-50">
+              {labRequests.length === 0 ?
+              <p className="text-xs text-gray-400 text-center py-8">No lab requests yet.</p> :
+
+              <div className="divide-y divide-gray-50">
                   {labRequests.slice(0, 5).map((req) => {
-                    const service = labServices.find((s) => s.id === req.service_id);
-                    const STATUS_CONFIG = {
-                      pending:    { color: "bg-amber-100 text-amber-600",   label: "Pending" },
-                      in_review:  { color: "bg-blue-100 text-blue-600",     label: "In Review" },
-                      processing: { color: "bg-purple-100 text-purple-600", label: "Processing" },
-                      completed:  { color: "bg-emerald-100 text-emerald-600", label: "Completed" },
-                      rejected:   { color: "bg-red-100 text-red-500",       label: "Rejected" },
-                    };
-                    const sc = STATUS_CONFIG[req.status] || { color: "bg-gray-100 text-gray-500", label: req.status };
-                    return (
-                      <div key={req.id} className="flex items-start gap-3 py-3 first:pt-0 last:pb-0">
+                  const service = labServices.find((s) => s.id === req.service_id);
+                  const STATUS_CONFIG = {
+                    pending: { color: "bg-amber-100 text-amber-600", label: "Pending" },
+                    in_review: { color: "bg-blue-100 text-blue-600", label: "In Review" },
+                    processing: { color: "bg-purple-100 text-purple-600", label: "Processing" },
+                    completed: { color: "bg-emerald-100 text-emerald-600", label: "Completed" },
+                    rejected: { color: "bg-red-100 text-red-500", label: "Rejected" }
+                  };
+                  const sc = STATUS_CONFIG[req.status] || { color: "bg-gray-100 text-gray-500", label: req.status };
+                  return (
+                    <div key={req.id} className="flex items-start gap-3 py-3 first:pt-0 last:pb-0">
                         <div className="w-8 h-8 rounded-lg bg-teal-50 flex items-center justify-center flex-shrink-0 mt-0.5">
                           <FlaskConical className="w-4 h-4 text-teal-600" strokeWidth={1.8} />
                         </div>
@@ -191,11 +191,11 @@ export default function Home() {
                             {sc.label}
                           </span>
                         </div>
-                      </div>
-                    );
-                  })}
+                      </div>);
+
+                })}
                 </div>
-              )}
+              }
             </div>
           </div>
         </div>
@@ -205,6 +205,6 @@ export default function Home() {
       <div className="mt-8">
         <EcosystemBanner projects={projects} subscriptionStatus={subscriptionStatus} />
       </div>
-    </div>
-  );
+    </div>);
+
 }
