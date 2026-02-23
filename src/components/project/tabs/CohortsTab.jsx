@@ -33,7 +33,7 @@ const statusStyles = {
 
 export default function CohortsTab({ project }) {
   const [showNew, setShowNew] = useState(false);
-  const [form, setForm] = useState({ name: "", organism: "", strain: "", sample_size: "" });
+  const [form, setForm] = useState({ name: "" });
   const [aiOpen, setAiOpen] = useState(false);
   const [activeFilters, setActiveFilters] = useState([]);
   const [studyFinderOpen, setStudyFinderOpen] = useState(false);
