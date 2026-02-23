@@ -15,7 +15,7 @@ export default function UniVerseLogo({ className = "w-8 h-8" }) {
   }, []);
 
   if (customLogoUrl) {
-    return <img src={customLogoUrl} alt="Logo" className="w-12 h-12" />;
+    return <img src={customLogoUrl} alt="Logo" className={className} />;
   }
 
   return (
