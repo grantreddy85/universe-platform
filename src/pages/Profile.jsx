@@ -64,6 +64,51 @@ export default function Profile() {
         )}
       </div>
 
+      {/* ORCID */}
+      <div className="bg-white rounded-xl border border-gray-100 p-6 mb-6">
+        <div className="flex items-center gap-2 mb-1">
+          <Link2 className="w-4 h-4 text-[#A6CE39]" />
+          <h3 className="text-sm font-semibold text-gray-900">ORCID iD</h3>
+          {user.orcid_id && (
+            <span className="ml-auto text-[10px] bg-[#A6CE39]/10 text-[#5a7a00] font-medium px-2 py-0.5 rounded-full">Linked</span>
+          )}
+        </div>
+        <p className="text-xs text-gray-400 mb-4">Your unique researcher identifier used to attribute assets and publications across platforms.</p>
+        <div className="flex gap-2 items-center">
+          <span className="text-xs text-gray-400 flex-shrink-0">orcid.org/</span>
+          <Input
+            placeholder="0000-0000-0000-0000"
+            value={orcidInput}
+            onChange={(e) => setOrcidInput(e.target.value)}
+            className="text-sm font-mono"
+          />
+          <Button
+            size="sm"
+            disabled={orcidSaving || orcidInput === (user.orcid_id || "")}
+            onClick={async () => {
+              setOrcidSaving(true);
+              await base44.auth.updateMe({ orcid_id: orcidInput });
+              const updated = await base44.auth.me();
+              setUser(updated);
+              setOrcidSaving(false);
+            }}
+            className="bg-[#000021] text-[#00F2FF] hover:bg-[#000021]/90 whitespace-nowrap"
+          >
+            {orcidSaving ? "Saving…" : "Save"}
+          </Button>
+        </div>
+        {user.orcid_id && (
+          <a
+            href={`https://orcid.org/${user.orcid_id}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1 text-[11px] text-[#A6CE39] hover:underline mt-2"
+          >
+            <Link2 className="w-3 h-3" /> View ORCID profile
+          </a>
+        )}
+      </div>
+
       {/* Subscription & Visibility */}
       <div className="bg-white rounded-xl border border-gray-100 p-6 mb-6">
         <h3 className="text-sm font-semibold text-gray-900 mb-4">Platform Access</h3>
