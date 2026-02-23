@@ -89,6 +89,15 @@ export default function CohortsTab({ project }) {
           <Button
             variant="ghost"
             size="sm"
+            onClick={() => setStudyFinderOpen(!studyFinderOpen)}
+            className={`text-xs h-7 px-2.5 ${studyFinderOpen ? "text-blue-600 bg-blue-50" : "text-gray-500 hover:text-blue-600"}`}
+          >
+            <Search className="w-3.5 h-3.5 mr-1.5" />
+            Find Studies
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={() => setAiOpen(!aiOpen)}
             className={`text-xs h-7 px-2.5 ${aiOpen ? "text-blue-600 bg-blue-50" : "text-gray-500 hover:text-blue-600"}`}
           >
