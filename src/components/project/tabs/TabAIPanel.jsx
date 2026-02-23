@@ -58,6 +58,13 @@ User question: ${input}
 Provide concise, insightful responses tailored to this research context.`;
 
     const response = await base44.integrations.Core.InvokeLLM({ prompt });
+    
+    // Check if response suggests filters or cohort creation
+    if (tabName === "Cohorts" && (response.includes("filter") || response.includes("cohort"))) {
+      setSuggestedFilters(null);
+      setSuggestedCohort(null);
+    }
+    
     setMessages((prev) => [...prev, { role: "assistant", content: response }]);
     setIsLoading(false);
   };
