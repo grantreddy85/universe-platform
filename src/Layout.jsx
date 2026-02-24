@@ -10,6 +10,7 @@ import {
   GitBranch,
   Store,
   User,
+  Shield,
   ChevronLeft,
   ChevronRight,
   ChevronDown,
