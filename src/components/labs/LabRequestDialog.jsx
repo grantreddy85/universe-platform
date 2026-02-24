@@ -146,6 +146,49 @@ export default function LabRequestDialog({ service, open, onClose }) {
               </div>
             )}
 
+            {/* Payment Preference */}
+            <div>
+              <Label className="text-xs text-gray-500 mb-2 block">Lab Compensation</Label>
+              <div className="grid grid-cols-2 gap-2">
+                {[
+                  { value: "cash", label: "Cash Payment", desc: "Standard service fee applies" },
+                  { value: "equity_share", label: "Equity Share", desc: "Lab takes % stake in the asset" },
+                ].map((opt) => (
+                  <button
+                    key={opt.value}
+                    onClick={() => setPaymentPreference(opt.value)}
+                    className={`text-left p-3 rounded-lg border text-xs transition-all ${
+                      paymentPreference === opt.value
+                        ? "border-teal-300 bg-teal-50"
+                        : "border-gray-100 bg-gray-50 hover:border-gray-200"
+                    }`}
+                  >
+                    <div className={`font-medium ${paymentPreference === opt.value ? "text-teal-700" : "text-gray-700"}`}>{opt.label}</div>
+                    <div className="text-gray-400 mt-0.5">{opt.desc}</div>
+                  </button>
+                ))}
+              </div>
+              {paymentPreference === "equity_share" && (
+                <div className="mt-3">
+                  <Label className="text-xs text-gray-500 mb-1.5 block">
+                    Equity Percentage — <span className="text-teal-600 font-semibold">{equityPercentage}%</span>
+                    <span className="text-gray-400 ml-1">(dilutes all other contributors proportionally)</span>
+                  </Label>
+                  <input
+                    type="range"
+                    min={1}
+                    max={49}
+                    value={equityPercentage}
+                    onChange={(e) => setEquityPercentage(Number(e.target.value))}
+                    className="w-full accent-teal-500"
+                  />
+                  <div className="flex justify-between text-xs text-gray-400 mt-1">
+                    <span>1%</span><span>49%</span>
+                  </div>
+                </div>
+              )}
+            </div>
+
             {/* Link to project */}
             <div>
               <Label className="text-xs text-gray-500 mb-1.5 block">Link to Project (optional)</Label>
