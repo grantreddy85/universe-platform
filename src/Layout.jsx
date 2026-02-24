@@ -145,6 +145,9 @@ export default function Layout({ children, currentPageName }) {
                 // Hide admin-only items for non-admins
                 if (item.adminOnly && user?.role !== "admin") return null;
 
+                // Add divider before admin item
+                const isAdminItem = item.adminOnly;
+
                 if (item.external) {
                   return (
                     <Tooltip key={item.name}>
