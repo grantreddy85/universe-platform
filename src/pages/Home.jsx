@@ -179,7 +179,7 @@ export default function Home() {
           {/* Lab Activity */}
           <div>
             <div className="flex items-center justify-between mb-5">
-              <h2 className="text-[#525153] text-sm font-semibold uppercase tracking-wider">LAB ACTIVITY</h2>
+              <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6994076dc777dd78309c97c9/c5397ab22_UniVerseLabs-Logo-01300x.png" alt="UniVerse Labs" className="h-5 object-contain" />
               <Link to={createPageUrl("Labs")}>
                 <Button variant="ghost" size="sm" className="text-[#525153] px-3 text-xs font-medium rounded-md inline-flex items-center justify-center gap-2 whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-accent h-8 hover:text-gray-900">
                   View Labs <ArrowRight className="w-3 h-3 ml-1" />
