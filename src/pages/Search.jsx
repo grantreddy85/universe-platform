@@ -235,11 +235,15 @@ export default function Search() {
 
   const saveToProject = async () => {
     if (!saveForm.projectId || !saveForm.title.trim()) return;
+    const attribution = userData?.orcid_id
+      ? `orcid:${userData.orcid_id}`
+      : userData?.email || null;
     await base44.entities.Note.create({
       project_id: saveForm.projectId,
       title: saveForm.title,
       content: saveForm.content,
-      source: "research_chat"
+      source: "research_chat",
+      tags: attribution ? [`author:${attribution}`] : []
     });
     queryClient.invalidateQueries({ queryKey: ["project-notes", saveForm.projectId] });
     setShowSaveDialog(false);
