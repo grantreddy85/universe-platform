@@ -379,12 +379,7 @@ export default function Search() {
         <div className="w-full max-w-3xl">
           <div className="mb-16 text-center">
             <div className="inline-flex items-center gap-3 mb-3">
-              {customLogoUrl ? (
-                <img src={customLogoUrl} alt="Logo" className="w-16 h-16 object-contain" />
-              ) : (
-                <UniVerseLogo className="w-12 h-12" />
-              )}
-              <h1 className="text-[#525153] text-5xl font-normal tracking-tight" style={{ fontFamily: "'Funnel Display', sans-serif" }}>UniVerse</h1>
+              <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6994076dc777dd78309c97c9/c5397ab22_UniVerseLabs-Logo-01300x.png" alt="UniVerse" className="h-14 object-contain" />
             </div>
             <p className="text-sm text-gray-400">Research Infrastructure Operating System</p>
           </div>
