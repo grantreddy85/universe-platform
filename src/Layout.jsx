@@ -19,6 +19,7 @@ import {
 "lucide-react";
 import UniVerseLogo from "@/components/UniVerseLogo";
 import { Button } from "@/components/ui/button";
+import AdminModeToggle from "@/components/admin/AdminModeToggle";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 // Theme Context
