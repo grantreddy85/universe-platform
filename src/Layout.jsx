@@ -129,11 +129,7 @@ export default function Layout({ children, currentPageName }) {
 
           {/* Logo */}
           <div className="flex items-center gap-2.5 px-5 h-16 border-b border-gray-100">
-            {customLogoUrl ? (
-              <img src={customLogoUrl} alt="Logo" className="w-8 h-8 flex-shrink-0 object-contain" />
-            ) : (
-              <UniVerseLogo className="w-8 h-8 flex-shrink-0" allowUpload={true} />
-            )}
+            <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6994076dc777dd78309c97c9/c5397ab22_UniVerseLabs-Logo-01300x.png" alt="UniVerse Labs" className="h-6 flex-shrink-0 object-contain" />
             {!collapsed &&
               <span className="text-[#525153] text-2xl font-normal tracking-tight" style={{ fontFamily: "'Funnel Display', sans-serif" }}>
                 UniVerse
