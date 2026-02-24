@@ -69,7 +69,7 @@ export default function Labs() {
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center gap-3 mb-1">
             <div className="w-9 h-9 rounded-xl bg-teal-50 flex items-center justify-center">
-              <FlaskConical className="w-5 h-5 text-teal-600" strokeWidth={1.7} />
+              <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6994076dc777dd78309c97c9/8e93fa60c_UniVerseLabs-Logo-01300x.png" alt="UniVerse Labs" className="w-5 h-5 object-contain" />
             </div>
             <h1 className="text-xl font-semibold text-gray-900">UniVerse Labs</h1>
           </div>
