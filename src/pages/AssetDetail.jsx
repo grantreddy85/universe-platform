@@ -272,20 +272,7 @@ export default function AssetDetail() {
             {editingTopics ? (
               <TopicClustersEditor topicClusters={pendingTopics} onChange={setPendingTopics} />
             ) : asset.topic_clusters?.length > 0 ? (
-              <div>
-                <div className="flex rounded-full overflow-hidden h-2 mb-3">
-                  {asset.topic_clusters.map((c, i) => {
-                    const colors = ["bg-blue-400","bg-teal-400","bg-violet-400","bg-amber-400","bg-orange-400","bg-pink-400","bg-indigo-400"];
-                    return <div key={i} className={colors[i % colors.length]} style={{ width: `${c.weight_percentage}%` }} />;
-                  })}
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {asset.topic_clusters.map((c, i) => {
-                    const badges = ["bg-blue-50 text-blue-700","bg-teal-50 text-teal-700","bg-violet-50 text-violet-700","bg-amber-50 text-amber-700","bg-orange-50 text-orange-700","bg-pink-50 text-pink-700","bg-indigo-50 text-indigo-700"];
-                    return <span key={i} className={`px-2 py-0.5 rounded-full text-xs font-medium ${badges[i % badges.length]}`}>{c.topic}: {c.weight_percentage}%</span>;
-                  })}
-                </div>
-              </div>
+              <TopicClustersDisplay topicClusters={asset.topic_clusters} />
             ) : (
               <p className="text-xs text-gray-300 text-center py-4">No topic clusters defined. Click Edit to add.</p>
             )}
