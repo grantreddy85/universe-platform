@@ -60,7 +60,8 @@ export default function Search() {
   }, []);
 
   const [userEmail, setUserEmail] = React.useState(null);
-  useEffect(() => { base44.auth.me().then((u) => setUserEmail(u.email)).catch(() => {}); }, []);
+  const [userData, setUserData] = React.useState(null);
+  useEffect(() => { base44.auth.me().then((u) => { setUserEmail(u.email); setUserData(u); }).catch(() => {}); }, []);
 
   const { data: projects = [] } = useQuery({
     queryKey: ["projects-list", userEmail],
