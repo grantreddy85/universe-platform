@@ -502,8 +502,7 @@ export default function Search() {
       <div className="bg-white border-b border-gray-200 px-6 py-3">
         <div className="flex items-center gap-2 overflow-x-auto">
           <div className="flex items-center gap-2 mr-4 pr-4 border-r border-gray-200">
-            <UniVerseLogo className="w-6 h-6" />
-            <span className="text-sm font-semibold text-gray-900">UniVerse</span>
+            <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6994076dc777dd78309c97c9/c5397ab22_UniVerseLabs-Logo-01300x.png" alt="UniVerse" className="h-6 object-contain" />
           </div>
           {tabs.map((tab) =>
           <button
