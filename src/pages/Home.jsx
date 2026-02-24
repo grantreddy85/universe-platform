@@ -75,6 +75,11 @@ export default function Home() {
 
   const firstName = user?.full_name?.split(" ")[0] || "Researcher";
 
+  // Admin sees CRM dashboard
+  if (user?.role === "admin") {
+    return <AdminCRMDashboard />;
+  }
+
   return (
     <div className="min-h-screen p-6 lg:p-10 max-w-7xl mx-auto">
       {/* Header / Profile */}
