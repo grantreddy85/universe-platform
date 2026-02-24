@@ -310,13 +310,18 @@ export default function Search() {
         add_context_from_internet: false
       });
 
+      const attribution = userData?.orcid_id
+        ? `orcid:${userData.orcid_id}`
+        : userData?.email || null;
+      const attributionTags = attribution ? [`author:${attribution}`] : [];
+
       if (saveDestination === "workspace") {
         // Save to Workspace as WorkspaceItem
         await base44.entities.WorkspaceItem.create({
           title: saveForm.title,
           type: "note",
           content: summary,
-          metadata: { source: "research_chat_summary" }
+          metadata: { source: "research_chat_summary", author: attribution }
         });
       } else if (saveDestination === "new_project") {
         // Create new project and save note to it
@@ -328,7 +333,8 @@ export default function Search() {
           project_id: newProj.id,
           title: saveForm.title,
           content: summary,
-          source: "research_chat"
+          source: "research_chat",
+          tags: attributionTags
         });
         queryClient.invalidateQueries({ queryKey: ["projects-list"] });
       } else if (saveDestination.startsWith("project_")) {
@@ -338,7 +344,8 @@ export default function Search() {
           project_id: projectId,
           title: saveForm.title,
           content: summary,
-          source: "research_chat"
+          source: "research_chat",
+          tags: attributionTags
         });
         queryClient.invalidateQueries({ queryKey: ["project-notes", projectId] });
       }
