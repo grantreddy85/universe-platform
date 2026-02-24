@@ -15,8 +15,7 @@ import {
   ChevronDown,
   LogOut,
   Search,
-  MessageSquare,
-  ShieldCheck } from
+  MessageSquare } from
 "lucide-react";
 import UniVerseLogo from "@/components/UniVerseLogo";
 import { Button } from "@/components/ui/button";
@@ -268,28 +267,6 @@ export default function Layout({ children, currentPageName }) {
 
               })}
           </nav>
-
-          {/* Admin link — only for admins */}
-          {user?.role === "admin" && (
-            <div className="px-3 pb-2">
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Link
-                    to={createPageUrl("AdminDashboard")}
-                    className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-150 hover:scale-105 ${
-                      collapsed ? "justify-center" : ""} ${
-                      currentPageName === "AdminDashboard"
-                        ? "bg-[#000021] text-[#00F2FF] font-medium"
-                        : "text-gray-600 hover:bg-[#000021] hover:text-[#00F2FF]"}`}
-                  >
-                    <ShieldCheck className={`w-[18px] h-[18px] flex-shrink-0 ${currentPageName === "AdminDashboard" ? "text-[#00F2FF]" : ""}`} strokeWidth={1.7} />
-                    {!collapsed && <span>Admin</span>}
-                  </Link>
-                </TooltipTrigger>
-                {collapsed && <TooltipContent side="right" className="text-xs">Admin Dashboard</TooltipContent>}
-              </Tooltip>
-            </div>
-          )}
 
           {/* User */}
           <div className="border-t border-gray-100 p-3">

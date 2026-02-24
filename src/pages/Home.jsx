@@ -19,7 +19,6 @@ import ProjectCard from "../components/home/ProjectCard";
 import ActivityItem from "../components/home/ActivityItem";
 import MarketplaceBar from "../components/home/MarketplaceBar";
 import EcosystemBanner from "../components/home/EcosystemBanner";
-import AdminCRMDashboard from "../components/admin/AdminCRMDashboard";
 
 export default function Home() {
   const [user, setUser] = useState(null);
@@ -74,11 +73,6 @@ export default function Home() {
   const tokenisedAssets = assets.filter((a) => a.status === "tokenised").length;
 
   const firstName = user?.full_name?.split(" ")[0] || "Researcher";
-
-  // Admin sees CRM dashboard
-  if (user?.role === "admin") {
-    return <AdminCRMDashboard />;
-  }
 
   return (
     <div className="min-h-screen p-6 lg:p-10 max-w-7xl mx-auto">
