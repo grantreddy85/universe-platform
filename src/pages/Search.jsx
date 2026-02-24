@@ -25,11 +25,7 @@ import UniVerseLogo from "@/components/UniVerseLogo";
 
 const suggestions = [
 "Generate hypothesis about treatment of Haemachromatosis",
-"Generate counter hypothesis about Cervical Cancer",
-"What are the latest findings in Cancer Immunotherapy",
-"Explore antimicrobial resistance patterns in MRSA",
-"Design a cohort for Alzheimer's biomarker validation",
-"Analyse proteomic data for early disease detection"];
+"Generate counter hypothesis about Cervical Cancer"];
 
 
 export default function Search() {
