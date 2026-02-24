@@ -248,28 +248,98 @@ export default function AssetDetail() {
             </div>
           )}
 
-          {/* Attribution */}
-          {asset.attribution?.length > 0 && (
-            <div className="bg-white rounded-xl border border-gray-100 p-6">
-              <h2 className="text-sm font-semibold text-gray-700 mb-4">Attribution</h2>
-              <div className="space-y-2">
-                {asset.attribution.map((attr, i) => (
-                  <div key={i} className="flex items-center gap-3 p-3 rounded-lg bg-gray-50">
-                    <div className="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                      <Users className="w-3.5 h-3.5 text-blue-500" />
-                    </div>
-                    <div className="flex-1">
-                      <p className="text-xs font-medium text-gray-800">{attr.contributor}</p>
-                      <p className="text-[10px] text-gray-400">{attr.role}</p>
-                    </div>
-                    {attr.share_percentage && (
-                      <span className="text-xs font-semibold text-gray-600">{attr.share_percentage}%</span>
-                    )}
-                  </div>
-                ))}
-              </div>
+          {/* Topic Clusters */}
+          <div className="bg-white rounded-xl border border-gray-100 p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-sm font-semibold text-gray-700">Topic Clusters</h2>
+              {!editingTopics ? (
+                <Button variant="ghost" size="sm" className="h-7 text-xs text-gray-400" onClick={() => { setEditingTopics(true); setPendingTopics(asset.topic_clusters || []); }}>
+                  <Edit2 className="w-3 h-3 mr-1" /> Edit
+                </Button>
+              ) : (
+                <div className="flex gap-1">
+                  <Button variant="ghost" size="sm" className="h-7 text-xs text-emerald-600" onClick={() => { updateMutation.mutate({ topic_clusters: pendingTopics }); setEditingTopics(false); }}>
+                    <Save className="w-3 h-3 mr-1" /> Save
+                  </Button>
+                  <Button variant="ghost" size="sm" className="h-7 text-xs text-gray-400" onClick={() => setEditingTopics(false)}>
+                    <X className="w-3 h-3" />
+                  </Button>
+                </div>
+              )}
             </div>
-          )}
+            {editingTopics ? (
+              <TopicClustersEditor topicClusters={pendingTopics} onChange={setPendingTopics} />
+            ) : asset.topic_clusters?.length > 0 ? (
+              <div>
+                <div className="flex rounded-full overflow-hidden h-2 mb-3">
+                  {asset.topic_clusters.map((c, i) => {
+                    const colors = ["bg-blue-400","bg-teal-400","bg-violet-400","bg-amber-400","bg-orange-400","bg-pink-400","bg-indigo-400"];
+                    return <div key={i} className={colors[i % colors.length]} style={{ width: `${c.weight_percentage}%` }} />;
+                  })}
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {asset.topic_clusters.map((c, i) => {
+                    const badges = ["bg-blue-50 text-blue-700","bg-teal-50 text-teal-700","bg-violet-50 text-violet-700","bg-amber-50 text-amber-700","bg-orange-50 text-orange-700","bg-pink-50 text-pink-700","bg-indigo-50 text-indigo-700"];
+                    return <span key={i} className={`px-2 py-0.5 rounded-full text-xs font-medium ${badges[i % badges.length]}`}>{c.topic}: {c.weight_percentage}%</span>;
+                  })}
+                </div>
+              </div>
+            ) : (
+              <p className="text-xs text-gray-300 text-center py-4">No topic clusters defined. Click Edit to add.</p>
+            )}
+          </div>
+
+          {/* Attribution */}
+          <div className="bg-white rounded-xl border border-gray-100 p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-sm font-semibold text-gray-700">Attribution Breakdown</h2>
+              {!editingAttribution ? (
+                <Button variant="ghost" size="sm" className="h-7 text-xs text-gray-400" onClick={() => { setEditingAttribution(true); setPendingAttribution(asset.attribution || []); }}>
+                  <Edit2 className="w-3 h-3 mr-1" /> Edit
+                </Button>
+              ) : (
+                <div className="flex gap-1">
+                  <Button variant="ghost" size="sm" className="h-7 text-xs text-emerald-600" onClick={() => { updateMutation.mutate({ attribution: pendingAttribution }); setEditingAttribution(false); }}>
+                    <Save className="w-3 h-3 mr-1" /> Save
+                  </Button>
+                  <Button variant="ghost" size="sm" className="h-7 text-xs text-gray-400" onClick={() => setEditingAttribution(false)}>
+                    <X className="w-3 h-3" />
+                  </Button>
+                </div>
+              )}
+            </div>
+            {editingAttribution ? (
+              <AttributionEditor attribution={pendingAttribution} onChange={setPendingAttribution} />
+            ) : asset.attribution?.length > 0 ? (
+              <>
+                <div className="space-y-2 mb-4">
+                  {asset.attribution.map((attr, i) => (
+                    <div key={i} className="flex items-center gap-3 p-3 rounded-lg bg-gray-50">
+                      <div className="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                        <Users className="w-3.5 h-3.5 text-blue-500" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-xs font-medium text-gray-800">{attr.contributor}</p>
+                        <p className="text-[10px] text-gray-400 capitalize">{attr.role?.replace(/_/g, " ")}</p>
+                      </div>
+                      {attr.share_percentage != null && (
+                        <span className="text-xs font-semibold text-gray-700">{attr.share_percentage}%</span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+                {/* Visual bar */}
+                <div className="flex rounded-full overflow-hidden h-1.5">
+                  {asset.attribution.map((a, i) => {
+                    const colors = ["bg-blue-400","bg-teal-400","bg-violet-400","bg-amber-400","bg-orange-400","bg-gray-400"];
+                    return <div key={i} className={colors[i % colors.length]} style={{ width: `${a.share_percentage}%` }} />;
+                  })}
+                </div>
+              </>
+            ) : (
+              <p className="text-xs text-gray-300 text-center py-4">No attribution defined. Click Edit to add contributors.</p>
+            )}
+          </div>
 
           {/* IP Marketplace Activity */}
           <div className="bg-white rounded-xl border border-gray-100 p-6">
