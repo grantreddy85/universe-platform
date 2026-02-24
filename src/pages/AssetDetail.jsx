@@ -13,6 +13,8 @@ import {
 import InfographicModal from "@/components/project/tabs/InfographicModal";
 import AttributionEditor from "@/components/asset/AttributionEditor";
 import TopicClustersEditor from "@/components/asset/TopicClustersEditor";
+import AttributionDisplay from "@/components/asset/AttributionDisplay";
+import TopicClustersDisplay from "@/components/asset/TopicClustersDisplay";
 
 const typeIcons = {
   hypothesis: { icon: Lightbulb, color: "text-amber-500", bg: "bg-amber-50" },
