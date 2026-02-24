@@ -56,6 +56,10 @@ export default function AssetDetail() {
 
   const [marketplaceSubmitted, setMarketplaceSubmitted] = useState(false);
   const [showInfographic, setShowInfographic] = useState(false);
+  const [editingAttribution, setEditingAttribution] = useState(false);
+  const [pendingAttribution, setPendingAttribution] = useState(null);
+  const [editingTopics, setEditingTopics] = useState(false);
+  const [pendingTopics, setPendingTopics] = useState(null);
 
   const { data: asset, isLoading: assetLoading } = useQuery({
     queryKey: ["asset", assetId],
