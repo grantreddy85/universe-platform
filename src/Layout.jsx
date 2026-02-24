@@ -9,6 +9,7 @@ import {
   FlaskConical,
   GitBranch,
   Store,
+  Coins,
   User,
   Shield,
   ChevronLeft,
