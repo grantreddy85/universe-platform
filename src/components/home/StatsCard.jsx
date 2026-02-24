@@ -17,7 +17,7 @@ export default function StatsCard({ label, value, icon: Icon, accent = "blue", l
       </div>
       <div>
         <p className="text-[10px] font-medium text-gray-400 uppercase tracking-wider leading-none mb-1">{label}</p>
-        <p className="text-[#525153] text-lg font-semibold leading-none">{value}</p>
+        <p className="text-[#525153] text-lg font-semibold leading-none" style={{ fontFamily: "'IBM Plex Mono', monospace" }}>{value}</p>
       </div>
     </div>;
 
