@@ -803,6 +803,15 @@ export default function Search() {
                 className="text-sm" />
 
              </div>
+
+             {/* Attribution notice */}
+             <div className="text-[11px] text-gray-400 bg-gray-50 rounded-lg px-3 py-2 flex items-center gap-1.5">
+               <span>📎 Will be attributed to:</span>
+               <span className="font-mono text-gray-600">
+                 {userData?.orcid_id ? `orcid.org/${userData.orcid_id}` : userData?.email || "your account"}
+               </span>
+               {!userData?.orcid_id && <span className="text-amber-500 ml-1">(add ORCID in Profile for academic attribution)</span>}
+             </div>
           </div>
           <DialogFooter className="pt-2">
             <Button type="button" variant="ghost" size="sm" onClick={() => setShowSummarizeDialog(false)}>
