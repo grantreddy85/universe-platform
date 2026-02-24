@@ -76,7 +76,7 @@ export default function LabServiceCard({ service, categoryMeta, onRequest }) {
               </span>
             )}
             {service.price_from && (
-              <span className="text-gray-500 font-medium">
+              <span className="text-gray-500 font-medium" style={{ fontFamily: "'IBM Plex Mono', monospace" }}>
                 From ${service.price_from}
               </span>
             )}
