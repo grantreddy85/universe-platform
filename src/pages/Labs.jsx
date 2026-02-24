@@ -71,7 +71,7 @@ export default function Labs() {
             
 
 
-            <h1 className="text-xl font-semibold text-gray-900">UniVerse Labs</h1>
+            <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6994076dc777dd78309c97c9/c5397ab22_UniVerseLabs-Logo-01300x.png" alt="UniVerse Labs" className="h-8" />
           </div>
           <p className="text-gray-400 text-sm">Browse available lab equipment and submit service requests to have your samples or data analysed.
 
