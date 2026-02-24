@@ -318,7 +318,38 @@ export default function AssetDetail() {
             ) : asset.attribution?.length > 0 ? (
               <AttributionDisplay attribution={asset.attribution} />
             ) : (
-              <p className="text-xs text-gray-300 text-center py-4">No attribution defined. Click Edit to add contributors.</p>
+              <div className="py-2">
+                {/* Placeholder bar */}
+                <div className="flex rounded-full overflow-hidden h-2 mb-4">
+                  {[
+                    { w: 40, color: "#93c5fd" },
+                    { w: 20, color: "#5eead4" },
+                    { w: 20, color: "#c4b5fd" },
+                    { w: 20, color: "#fcd34d" },
+                  ].map((s, i) => (
+                    <div key={i} style={{ width: `${s.w}%`, backgroundColor: s.color }} />
+                  ))}
+                </div>
+                {/* Placeholder contributor rows */}
+                <div className="space-y-2 mb-4 opacity-40">
+                  {[
+                    { role: "Researcher", label: "bg-blue-50 text-blue-400", pct: 40 },
+                    { role: "Lab", label: "bg-teal-50 text-teal-400", pct: 20 },
+                    { role: "UniVerse", label: "bg-violet-50 text-violet-400", pct: 20 },
+                    { role: "Investor", label: "bg-amber-50 text-amber-400", pct: 20 },
+                  ].map((a, i) => (
+                    <div key={i} className="flex items-center gap-3 px-3 py-2 rounded-lg bg-gray-50">
+                      <div className="w-6 h-6 rounded-full bg-gray-200" />
+                      <div className="flex-1">
+                        <div className="h-2 w-28 bg-gray-200 rounded" />
+                        <span className={`mt-1 inline-block px-1.5 py-0.5 rounded text-[10px] ${a.label}`}>{a.role}</span>
+                      </div>
+                      <span className="text-xs font-semibold text-gray-400">{a.pct}%</span>
+                    </div>
+                  ))}
+                </div>
+                <p className="text-xs text-gray-400 text-center">No attribution defined yet — click <span className="font-medium">Edit</span> to add contributors.</p>
+              </div>
             )}
           </div>
 
