@@ -71,7 +71,7 @@ export default function Labs() {
             
 
 
-            <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6994076dc777dd78309c97c9/c5397ab22_UniVerseLabs-Logo-01300x.png" alt="UniVerse Labs" className="h-12" />
+            <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6994076dc777dd78309c97c9/c5397ab22_UniVerseLabs-Logo-01300x.png" alt="UniVerse Labs" className="px-8 h-12" />
           </div>
         </div>
       </div>
@@ -143,8 +143,8 @@ export default function Labs() {
           return (
             <div key={cat} className="mb-10">
                 <div className="flex items-center gap-2.5 mb-4">
-                  <div className={`w-7 h-7 rounded-lg flex items-center justify-center border ${meta.color}`}>
-                    <Icon className="w-3.5 h-3.5" strokeWidth={1.8} />
+                  <div className="bg-[#000021] text-emerald-600 rounded-lg w-9 h-9 flex items-center justify-center border border-emerald-100">
+                    <Icon className="lucide lucide-microscope w-4 h-4" strokeWidth={1.8} />
                   </div>
                   <h2 className="text-sm font-semibold text-gray-700">{meta.label}</h2>
                   <span className="text-xs text-gray-400 ml-1">({items.length})</span>
