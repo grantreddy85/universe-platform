@@ -166,7 +166,7 @@ export default function MarketplaceBar() {
                   {hidden ?
                 <span className="text-[10px] text-gray-300 font-semibold tracking-widest">••••</span> :
 
-                <span className="text-[10px] font-semibold text-gray-700">{fmt(h.value)}</span>
+                <span className="text-[10px] font-semibold text-gray-700" style={{ fontFamily: "'IBM Plex Mono', monospace" }}>{fmt(h.value)}</span>
                 }
                 </div>
               )}
