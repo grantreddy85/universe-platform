@@ -246,33 +246,37 @@ export default function Layout({ children, currentPageName }) {
                 }
 
                 return (
-                  <Tooltip key={item.name}>
-                  <TooltipTrigger asChild>
-                    <Link
-                        to={createPageUrl(item.page)}
-                        className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-150 hover:scale-105 ${
-                        collapsed ? "justify-center" : ""} ${
+                  <React.Fragment key={item.name}>
+                    {isAdminItem && <div className="my-1 border-t border-gray-100" />}
+                    <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Link
+                          to={createPageUrl(item.page)}
+                          className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-150 hover:scale-105 ${
+                          collapsed ? "justify-center" : ""} ${
+                          isAdminItem ? "border border-dashed border-gray-200 " : ""}${
 
-                        isActive ?
-                        "bg-[#000021] text-[#00F2FF] font-medium" :
-                        "text-gray-600 hover:bg-[#000021] hover:text-[#00F2FF]"}`
-                        }>
+                          isActive ?
+                          "bg-[#000021] text-[#00F2FF] font-medium" :
+                          "text-gray-600 hover:bg-[#000021] hover:text-[#00F2FF]"}`
+                          }>
 
-                      <Icon
-                          className={`w-[18px] h-[18px] flex-shrink-0 ${
-                          isActive ? "text-[#00F2FF]" : ""}`
-                          }
-                          strokeWidth={1.7} />
+                        <Icon
+                            className={`w-[18px] h-[18px] flex-shrink-0 ${
+                            isActive ? "text-[#00F2FF]" : ""}`
+                            }
+                            strokeWidth={1.7} />
 
-                      {!collapsed && <span>{item.name}</span>}
-                    </Link>
-                  </TooltipTrigger>
-                  {collapsed &&
-                    <TooltipContent side="right" className="text-xs">
-                      {item.name}
-                    </TooltipContent>
-                    }
-                </Tooltip>);
+                        {!collapsed && <span>{item.name}</span>}
+                      </Link>
+                    </TooltipTrigger>
+                    {collapsed &&
+                      <TooltipContent side="right" className="text-xs">
+                        {item.name}
+                      </TooltipContent>
+                      }
+                  </Tooltip>
+                  </React.Fragment>);
 
               })}
           </nav>
