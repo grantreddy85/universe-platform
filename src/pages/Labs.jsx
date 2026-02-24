@@ -73,13 +73,11 @@ export default function Labs() {
 
             <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6994076dc777dd78309c97c9/c5397ab22_UniVerseLabs-Logo-01300x.png" alt="UniVerse Labs" className="h-12" />
           </div>
-          <p className="text-gray-400 text-sm">Browse available lab equipment and submit service requests to have your samples or data analysed.
-
-          </p>
         </div>
       </div>
 
       <div className="max-w-6xl mx-auto px-8 py-8">
+        <p className="text-gray-400 text-sm mb-6">Browse available lab equipment and submit service requests to have your samples or data analysed.</p>
         {/* Search + Filter Bar */}
         <div className="flex flex-col sm:flex-row gap-3 mb-8">
           <div className="relative flex-1">
