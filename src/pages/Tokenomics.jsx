@@ -4,9 +4,9 @@ import { useQuery } from "@tanstack/react-query";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Legend } from "recharts";
 import { Coins, Lock, Shield, TrendingUp, Users, ChevronDown, ChevronRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import TokenSupplyRing from "@/components/tokenomics/TokenSupplyRing";
-import EscrowPanel from "@/components/tokenomics/EscrowPanel";
-import AssetRoyaltyCard from "@/components/tokenomics/AssetRoyaltyCard";
+import TokenSupplyRing from "@/components/tokenomics/TokenSupplyRing.jsx";
+import EscrowPanel from "@/components/tokenomics/EscrowPanel.jsx";
+import AssetRoyaltyCard from "@/components/tokenomics/AssetRoyaltyCard.jsx";
 
 export default function Tokenomics() {
   const [expandedAsset, setExpandedAsset] = useState(null);
