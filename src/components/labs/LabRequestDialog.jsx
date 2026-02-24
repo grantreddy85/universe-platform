@@ -11,6 +11,8 @@ import { Upload, FlaskConical, FileText, CheckCircle } from "lucide-react";
 export default function LabRequestDialog({ service, open, onClose }) {
   const [step, setStep] = useState(1); // 1 = form, 2 = success
   const [requestType, setRequestType] = useState("data_upload");
+  const [paymentPreference, setPaymentPreference] = useState("cash");
+  const [equityPercentage, setEquityPercentage] = useState(10);
   const [form, setForm] = useState({ title: "", description: "", sample_details: "", project_id: "" });
   const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
