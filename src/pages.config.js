@@ -60,6 +60,7 @@ import Tokenomics from './pages/Tokenomics';
 import ValidatedAssets from './pages/ValidatedAssets';
 import Validations from './pages/Validations';
 import Workspace from './pages/Workspace';
+import TopicLibrary from './pages/TopicLibrary';
 import __Layout from './Layout.jsx';
 
 
@@ -77,6 +78,7 @@ export const PAGES = {
     "ValidatedAssets": ValidatedAssets,
     "Validations": Validations,
     "Workspace": Workspace,
+    "TopicLibrary": TopicLibrary,
 }
 
 export const pagesConfig = {
