@@ -300,31 +300,7 @@ export default function AssetDetail() {
             {editingAttribution ? (
               <AttributionEditor attribution={pendingAttribution} onChange={setPendingAttribution} />
             ) : asset.attribution?.length > 0 ? (
-              <>
-                <div className="space-y-2 mb-4">
-                  {asset.attribution.map((attr, i) => (
-                    <div key={i} className="flex items-center gap-3 p-3 rounded-lg bg-gray-50">
-                      <div className="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                        <Users className="w-3.5 h-3.5 text-blue-500" />
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-xs font-medium text-gray-800">{attr.contributor}</p>
-                        <p className="text-[10px] text-gray-400 capitalize">{attr.role?.replace(/_/g, " ")}</p>
-                      </div>
-                      {attr.share_percentage != null && (
-                        <span className="text-xs font-semibold text-gray-700">{attr.share_percentage}%</span>
-                      )}
-                    </div>
-                  ))}
-                </div>
-                {/* Visual bar */}
-                <div className="flex rounded-full overflow-hidden h-1.5">
-                  {asset.attribution.map((a, i) => {
-                    const colors = ["bg-blue-400","bg-teal-400","bg-violet-400","bg-amber-400","bg-orange-400","bg-gray-400"];
-                    return <div key={i} className={colors[i % colors.length]} style={{ width: `${a.share_percentage}%` }} />;
-                  })}
-                </div>
-              </>
+              <AttributionDisplay attribution={asset.attribution} />
             ) : (
               <p className="text-xs text-gray-300 text-center py-4">No attribution defined. Click Edit to add contributors.</p>
             )}
