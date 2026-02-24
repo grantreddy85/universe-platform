@@ -142,6 +142,9 @@ export default function Layout({ children, currentPageName }) {
                 const isActive = currentPageName === item.page;
                 const Icon = item.icon;
 
+                // Hide admin-only items for non-admins
+                if (item.adminOnly && user?.role !== "admin") return null;
+
                 if (item.external) {
                   return (
                     <Tooltip key={item.name}>
