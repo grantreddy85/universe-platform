@@ -129,8 +129,8 @@ export default function Layout({ children, currentPageName }) {
 
           {/* Logo */}
           <div className="flex items-center gap-2.5 px-5 h-16 border-b border-gray-100">
-            {!collapsed && <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6994076dc777dd78309c97c9/7e91c11f3_Screenshot2026-02-25at50044am.png" alt="UniVerse" className="h-7 flex-shrink-0 object-contain" />}
-            {collapsed && <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6994076dc777dd78309c97c9/7e91c11f3_Screenshot2026-02-25at50044am.png" alt="UniVerse" className="h-5 flex-shrink-0 object-contain" />}
+            {!collapsed && <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6994076dc777dd78309c97c9/7e91c11f3_Screenshot2026-02-25at50044am.png" alt="UniVerse" className="h-8 w-auto max-w-full flex-shrink-0 object-contain object-left" />}
+            {collapsed && <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6994076dc777dd78309c97c9/7e91c11f3_Screenshot2026-02-25at50044am.png" alt="UniVerse" className="h-6 w-auto flex-shrink-0 object-contain object-left" />}
           </div>
 
           {/* Nav */}
