@@ -50,6 +50,8 @@ export default function LabRequestDialog({ service, open, onClose }) {
       request_type: requestType,
       data_file_url,
       sample_details: form.sample_details,
+      payment_preference: paymentPreference,
+      equity_percentage: paymentPreference === "equity_share" ? equityPercentage : null,
       status: "pending",
     });
 
