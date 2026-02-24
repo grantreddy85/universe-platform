@@ -274,7 +274,23 @@ export default function AssetDetail() {
             ) : asset.topic_clusters?.length > 0 ? (
               <TopicClustersDisplay topicClusters={asset.topic_clusters} />
             ) : (
-              <p className="text-xs text-gray-300 text-center py-4">No topic clusters defined. Click Edit to add.</p>
+              <div className="py-2">
+                {/* Placeholder bar */}
+                <div className="flex rounded-lg overflow-hidden h-4 mb-3 gap-0.5">
+                  {[40, 25, 20, 15].map((w, i) => {
+                    const colors = ["bg-blue-200","bg-teal-200","bg-violet-200","bg-amber-200"];
+                    return <div key={i} className={`${colors[i]} flex items-center justify-center`} style={{ width: `${w}%` }}><span className="text-white text-[9px] font-semibold">{w}%</span></div>;
+                  })}
+                </div>
+                {/* Placeholder pills */}
+                <div className="flex flex-wrap gap-2 mb-3">
+                  {["Oncology","Genomics","Immunology","Biomarkers"].map((t, i) => {
+                    const styles = ["bg-blue-50 text-blue-400 border-blue-100","bg-teal-50 text-teal-400 border-teal-100","bg-violet-50 text-violet-400 border-violet-100","bg-amber-50 text-amber-400 border-amber-100"];
+                    return <span key={i} className={`px-3 py-1 rounded-full border text-xs font-medium opacity-50 ${styles[i]}`}>{t}</span>;
+                  })}
+                </div>
+                <p className="text-xs text-gray-400 text-center pt-1">No topic clusters defined yet — click <span className="font-medium">Edit</span> to add your research topics.</p>
+              </div>
             )}
           </div>
 
