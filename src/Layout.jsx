@@ -287,7 +287,15 @@ export default function Layout({ children, currentPageName }) {
               })}
           </nav>
 
-          {/* User */}
+          {/* Notifications + User */}
+          <div className="border-t border-gray-100 p-3">
+            {!collapsed && user && (
+              <div className="flex items-center justify-between mb-1 px-1">
+                <span className="text-[10px] text-gray-400 uppercase tracking-wider">Notifications</span>
+                <NotificationBell userEmail={user?.email} />
+              </div>
+            )}
+          </div>
           <div className="border-t border-gray-100 p-3">
             <Tooltip>
               <TooltipTrigger asChild>
