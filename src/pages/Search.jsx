@@ -61,12 +61,12 @@ export default function Search() {
 
   const [userEmail, setUserEmail] = React.useState(null);
   const [userData, setUserData] = React.useState(null);
-  useEffect(() => { base44.auth.me().then((u) => { setUserEmail(u.email); setUserData(u); }).catch(() => {}); }, []);
+  useEffect(() => {base44.auth.me().then((u) => {setUserEmail(u.email);setUserData(u);}).catch(() => {});}, []);
 
   const { data: projects = [] } = useQuery({
     queryKey: ["projects-list", userEmail],
     queryFn: () => base44.entities.Project.filter({ created_by: userEmail }, "title", 100),
-    enabled: !!userEmail,
+    enabled: !!userEmail
   });
 
   // Reset to landing page when Research tab is clicked
@@ -235,9 +235,9 @@ export default function Search() {
 
   const saveToProject = async () => {
     if (!saveForm.projectId || !saveForm.title.trim()) return;
-    const attribution = userData?.orcid_id
-      ? `orcid:${userData.orcid_id}`
-      : userData?.email || null;
+    const attribution = userData?.orcid_id ?
+    `orcid:${userData.orcid_id}` :
+    userData?.email || null;
     await base44.entities.Note.create({
       project_id: saveForm.projectId,
       title: saveForm.title,
@@ -310,9 +310,9 @@ export default function Search() {
         add_context_from_internet: false
       });
 
-      const attribution = userData?.orcid_id
-        ? `orcid:${userData.orcid_id}`
-        : userData?.email || null;
+      const attribution = userData?.orcid_id ?
+      `orcid:${userData.orcid_id}` :
+      userData?.email || null;
       const attributionTags = attribution ? [`author:${attribution}`] : [];
 
       if (saveDestination === "workspace") {
@@ -386,8 +386,8 @@ export default function Search() {
         <input ref={fileInputRef} type="file" accept="image/*,.pdf,.csv,.xlsx,.txt" className="hidden" onChange={handleFileInputChange} />
         <div className="w-full max-w-3xl">
           <div className="mb-10 text-center flex flex-col items-center gap-3">
-            <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6994076dc777dd78309c97c9/7e91c11f3_Screenshot2026-02-25at50044am.png" alt="UniVerse" className="h-40 object-contain" />
-            <h1 className="text-5xl font-normal tracking-tight text-gray-900" style={{ fontFamily: "'Funnel Display', sans-serif" }}>UniVerse</h1>
+            
+            <h1 className="text-[#525153] text-6xl font-normal tracking-tight" style={{ fontFamily: "'Funnel Display', sans-serif" }}>UniVerse</h1>
           </div>
 
           <div className="mb-6">
