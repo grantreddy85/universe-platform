@@ -38,7 +38,8 @@ const navItems = [
 { name: "Tokenomics", icon: Coins, page: "Tokenomics", adminOnly: true },
 { name: "Marketplace", icon: Store, page: null, external: true },
 { name: "Topic Library", icon: Coins, page: "TopicLibrary", adminOnly: true },
-{ name: "Admin", icon: Shield, page: "AdminDashboard", adminOnly: true }];
+{ name: "Admin", icon: Shield, page: "AdminDashboard", adminOnly: true },
+{ name: "Plans & Credits", icon: Zap, page: "Pricing" }];
 
 
 function ThemeProvider({ children }) {
