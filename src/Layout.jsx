@@ -17,7 +17,8 @@ import {
   ChevronDown,
   LogOut,
   Search,
-  MessageSquare } from
+  MessageSquare,
+  Zap } from
 "lucide-react";
 import UniVerseLogo from "@/components/UniVerseLogo";
 import { Button } from "@/components/ui/button";
