@@ -398,6 +398,63 @@ export default function Workspace() {
         </>
       }
 
+      {/* View Item Dialog */}
+      <Dialog open={!!viewingItem} onOpenChange={(open) => {
+        if (!open) { setViewingItem(null); setSavedToProject(null); setNewProjectTitle(""); }
+      }}>
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle className="text-base font-semibold flex items-center gap-2">
+              {viewingItem && (() => { const Icon = typeIcons[viewingItem.type] || StickyNote; return <Icon className="w-4 h-4 text-gray-500" />; })()}
+              {viewingItem?.title}
+            </DialogTitle>
+          </DialogHeader>
+          {viewingItem && (
+            <div className="space-y-4 mt-1">
+              <p className="text-sm text-gray-700 whitespace-pre-wrap leading-relaxed max-h-64 overflow-y-auto">
+                {viewingItem.content || "No content."}
+              </p>
+              <div className="border-t pt-4">
+                {savedToProject ? (
+                  <div className="text-sm text-green-600 font-medium flex items-center gap-2">
+                    <FolderPlus className="w-4 h-4" /> Saved to project: <span className="font-semibold">{savedToProject.title}</span>
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    <p className="text-xs font-medium text-gray-500">Save to a new project</p>
+                    <div className="flex gap-2">
+                      <Input
+                        placeholder="New project title…"
+                        value={newProjectTitle}
+                        onChange={(e) => setNewProjectTitle(e.target.value)}
+                        className="text-sm h-8"
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" && newProjectTitle.trim()) {
+                            setSavingToProject(true);
+                            saveToNewProjectMutation.mutate({ item: viewingItem, projectTitle: newProjectTitle }, { onSettled: () => setSavingToProject(false) });
+                          }
+                        }}
+                      />
+                      <Button
+                        size="sm"
+                        disabled={!newProjectTitle.trim() || savingToProject}
+                        className="bg-[#000021] text-[#00f2ff] text-xs h-8"
+                        onClick={() => {
+                          setSavingToProject(true);
+                          saveToNewProjectMutation.mutate({ item: viewingItem, projectTitle: newProjectTitle }, { onSettled: () => setSavingToProject(false) });
+                        }}
+                      >
+                        {savingToProject ? "Saving…" : <><FolderPlus className="w-3.5 h-3.5 mr-1" /> Create</>}
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
       <Dialog open={showNew || editingItem} onOpenChange={(open) => {
         if (!open) {
           setShowNew(false);
