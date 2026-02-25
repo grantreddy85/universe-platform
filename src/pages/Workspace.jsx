@@ -329,7 +329,10 @@ export default function Workspace() {
                         <Icon className="w-3.5 h-3.5" strokeWidth={1.8} />
                       </div>
                       <div>
-                        <h3 className="text-sm font-semibold text-gray-900">{item.title}</h3>
+                        <h3
+                          className="text-sm font-semibold text-gray-900 hover:text-blue-600 cursor-pointer transition-colors"
+                          onClick={() => { setViewingItem(item); setSavedToProject(null); setNewProjectTitle(""); }}
+                        >{item.title}</h3>
                         {item.content &&
                       <p className="text-xs text-gray-500 mt-1 line-clamp-2">{item.content}</p>
                       }
