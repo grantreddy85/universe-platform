@@ -218,8 +218,8 @@ export default function Workspace() {
         </div>
         <Button
           onClick={() => setShowNew(true)}
-          size="sm"
-          className="bg-blue-600 hover:bg-blue-700 text-xs">
+          size="sm" className="bg-[#000021] text-[#00f2ff] px-3 text-xs font-medium rounded-md inline-flex items-center justify-center gap-2 whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 shadow h-8 hover:bg-blue-700">
+
 
           <Plus className="w-3.5 h-3.5 mr-1.5" />
           New Item
