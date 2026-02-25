@@ -187,12 +187,12 @@ Return a JSON object with this exact schema:
 
     const tags = ["platform-intelligence", "admin", ...(attributionResult?.tags || [])];
 
-    await base44.entities.Note.create({
+    await base44.entities.WorkspaceItem.create({
       title: `Platform Intelligence — ${new Date().toLocaleDateString()}`,
+      type: "note",
       content,
-      source: "ai_copilot",
-      tags,
       metadata: {
+        tags,
         attribution: attributionResult?.attribution || [{ contributor: "universe", role: "universe", share_percentage: 100 }]
       }
     });
