@@ -147,7 +147,7 @@ export default function Labs() {
                     <Icon className="text-[#00F2FF] lucide lucide-microscope w-4 h-4" strokeWidth={1.8} />
                   </div>
                   <h2 className="text-sm font-semibold text-gray-700">{meta.label}</h2>
-                  <span className="text-xs text-gray-400 ml-1">({items.length})</span>
+                  <span className="text-xs text-gray-400 ml-1" style={{ fontFamily: "'IBM Plex Mono', monospace" }}>({items.length})</span>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                   {items.map((service) =>
