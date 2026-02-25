@@ -170,13 +170,7 @@ export default function AdminDashboard() {
 
         {/* CENTRE — Platform Intelligence RAG (50%) */}
         <div className="flex-1 flex flex-col p-4 gap-4 overflow-hidden min-w-0">
-          {/* Mini charts row */}
-          <div className="grid grid-cols-2 gap-3 flex-shrink-0">
-            <MiniChart title="Project Status" data={projectStatusData} />
-            <MiniChart title="Validation Pipeline" data={validationStatusData} />
-          </div>
-
-          {/* RAG — takes remaining space */}
+          {/* RAG — takes all space */}
           <div className="flex-1 min-h-0">
             <PlatformIntelligenceRAG
               allProjects={allProjects}
@@ -188,15 +182,17 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* RIGHT — User detail or recent activity (25%) */}
+        {/* RIGHT — Charts + Activity (or user detail) */}
         <div className="w-[260px] flex-shrink-0 border-l border-gray-100 p-3 overflow-y-auto">
           {selectedUser ? (
             <UserDetailPanel user={selectedUser} />
           ) : (
             <div className="space-y-3">
-              <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider px-1">Recent Activity</p>
+              <MiniChart title="Project Status" data={projectStatusData} />
+              <MiniChart title="Validation Pipeline" data={validationStatusData} />
+              <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider px-1 pt-1">Recent Activity</p>
               {allActivities.length === 0 ? (
-                <p className="text-xs text-gray-400 text-center py-10">No activity yet</p>
+                <p className="text-xs text-gray-400 text-center py-6">No activity yet</p>
               ) : allActivities.map(a => (
                 <div key={a.id} className="bg-white rounded-lg border border-gray-100 p-3 flex items-start gap-2">
                   <div className="w-6 h-6 rounded-lg bg-indigo-50 flex items-center justify-center flex-shrink-0 mt-0.5">
@@ -208,7 +204,7 @@ export default function AdminDashboard() {
                   </div>
                 </div>
               ))}
-              <p className="text-[10px] text-gray-400 text-center mt-4 px-1">← Select a user to view their profile</p>
+              <p className="text-[10px] text-gray-400 text-center mt-2 px-1">← Select a user to view their profile</p>
             </div>
           )}
         </div>
