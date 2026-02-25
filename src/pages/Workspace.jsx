@@ -62,6 +62,10 @@ const typeLabels = {
 export default function Workspace() {
   const [showNew, setShowNew] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
+  const [viewingItem, setViewingItem] = useState(null);
+  const [newProjectTitle, setNewProjectTitle] = useState("");
+  const [savingToProject, setSavingToProject] = useState(false);
+  const [savedToProject, setSavedToProject] = useState(null);
   const [form, setForm] = useState({ title: "", type: "note", content: "" });
   const queryClient = useQueryClient();
 
