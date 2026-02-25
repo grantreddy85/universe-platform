@@ -136,6 +136,13 @@ export default function AssetDetail() {
     ...validations.map(v => ({ ...v, _kind: "validation_report", label: "Validation" })),
   ];
 
+  const groupedComponents = [
+    { key: "hypothesis", label: "Hypotheses", items: hypotheses.map(h => ({ ...h, _kind: "hypothesis", label: "Hypothesis" })) },
+    { key: "cohort", label: "Cohorts", items: cohorts.map(c => ({ ...c, _kind: "cohort", label: "Cohort" })) },
+    { key: "workflow_result", label: "Workflows", items: workflows.map(w => ({ ...w, _kind: "workflow_result", label: "Workflow" })) },
+    { key: "validation_report", label: "Validations", items: validations.map(v => ({ ...v, _kind: "validation_report", label: "Validation" })) },
+  ].filter(g => g.items.length > 0);
+
   return (
     <div className="min-h-screen bg-[#fafbfc]">
       {/* Header */}
