@@ -106,12 +106,12 @@ export default function Labs() {
               return (
                 <button
                   key={cat}
-                  onClick={() => setActiveCategory(cat)}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium border transition-all ${
-                  activeCategory === cat ?
-                  "bg-gray-900 text-white border-gray-900" :
-                  "bg-white text-gray-600 border-gray-200 hover:border-gray-300"}`
-                  }>
+                  onClick={() => setActiveCategory(cat)} className="bg-[#000021] text-[#00F2FF] px-3 py-1.5 text-xs font-medium rounded-lg flex items-center gap-1.5 border transition-all border-gray-200 hover:border-gray-300">
+
+
+
+
+
 
                   <Icon className="w-3.5 h-3.5" />
                   {meta.label.split(" ")[0]}
