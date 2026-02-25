@@ -56,15 +56,37 @@ export default function PlatformIntelligenceRAG({ allProjects, allNotes, allAsse
       `Note: "${n.title}" | Content: ${(n.content || "").slice(0, 150)}`
     ).join("\n");
 
-    const assetsSummary = allAssets.slice(0, 30).map(a =>
-      `Asset: "${a.title}" | Type: ${a.type} | Status: ${a.status} | Description: ${(a.description || "").slice(0, 100)}`
-    ).join("\n");
+    const assetsSummary = allAssets.slice(0, 30).map(a => {
+      const attribution = (a.attribution || []).map(attr =>
+        `${attr.contributor} (${attr.role}, ${attr.share_percentage}%)`
+      ).join(", ");
+      const topicClusters = (a.topic_clusters || []).map(tc =>
+        `${tc.topic} (${tc.weight_percentage}%)`
+      ).join(", ");
+      return `Asset: "${a.title}" | Type: ${a.type} | Status: ${a.status} | Description: ${(a.description || "").slice(0, 100)} | Attribution: ${attribution || "none"} | Topics: ${topicClusters || "none"}`;
+    }).join("\n");
 
     const hypothesesSummary = allHypotheses.slice(0, 20).map(h =>
       `Hypothesis: "${h.title}" | Status: ${h.status} | Description: ${(h.description || "").slice(0, 120)}`
     ).join("\n");
 
-    return { projectsSummary, notesSummary, assetsSummary, hypothesesSummary };
+    // Build a contributor map from all assets for attribution weighting
+    const contributorMap = {};
+    allAssets.forEach(a => {
+      (a.attribution || []).forEach(attr => {
+        if (!contributorMap[attr.contributor]) {
+          contributorMap[attr.contributor] = { roles: new Set(), totalShares: 0, assetCount: 0 };
+        }
+        contributorMap[attr.contributor].roles.add(attr.role);
+        contributorMap[attr.contributor].totalShares += attr.share_percentage || 0;
+        contributorMap[attr.contributor].assetCount += 1;
+      });
+    });
+    const contributorsSummary = Object.entries(contributorMap).map(([contributor, data]) =>
+      `Contributor: ${contributor} | Roles: ${[...data.roles].join(", ")} | Avg Share: ${(data.totalShares / data.assetCount).toFixed(1)}% | Assets Involved: ${data.assetCount}`
+    ).join("\n");
+
+    return { projectsSummary, notesSummary, assetsSummary, hypothesesSummary, contributorsSummary };
   };
 
   const send = async (promptText) => {
