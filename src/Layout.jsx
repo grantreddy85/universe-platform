@@ -128,19 +128,19 @@ export default function Layout({ children, currentPageName }) {
       <TooltipProvider delayDuration={0}>
         <div className="flex h-screen bg-[#fafbfc]">
         {/* Sidebar */}
-        <aside className="bg-white pr-4 relative flex flex-col border-r border-gray-200/80 transition-all duration-300 ease-in-out w-[220px]">
-
-
-
+        <aside
+            className={`relative flex flex-col border-r border-gray-200/80 bg-white transition-all duration-300 ease-in-out ${
+            collapsed ? "w-[68px]" : "w-[220px]"}`
+            }>
 
           {/* Logo */}
-          <div className="px-4 flex items-center justify-left h-16 border-b border-gray-100 gap-2">
-            <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6994076dc777dd78309c97c9/6a7cc2cbe_UniVerseTDAJ-Icon2Dark.png" alt="UniVerse" className={collapsed ? "h-8 w-8 object-contain" : "h-10 w-10 object-contain"} />
-            {!collapsed && <span className="text-2xl font-normal" style={{ fontFamily: "'Funnel Display', sans-serif", color: "#525153" }}>UniVerse</span>}
+          <div className="flex items-center justify-center h-16 border-b border-gray-100">
+            
+            {collapsed && <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6994076dc777dd78309c97c9/7e91c11f3_Screenshot2026-02-25at50044am.png" alt="UniVerse" className="h-8 w-auto object-contain" />}
           </div>
 
           {/* Nav */}
-          <nav className="pt-4 pr-4 pb-4 pl-4 flex-1 space-y-0.5">
+          <nav className="flex-1 py-4 px-3 space-y-0.5">
             {navItems.map((item) => {
                 const isActive = currentPageName === item.page;
                 const Icon = item.icon;
