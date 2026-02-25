@@ -128,10 +128,10 @@ export default function Layout({ children, currentPageName }) {
       <TooltipProvider delayDuration={0}>
         <div className="flex h-screen bg-[#fafbfc]">
         {/* Sidebar */}
-        <aside
-            className={`relative flex flex-col border-r border-gray-200/80 bg-white transition-all duration-300 ease-in-out ${
-            collapsed ? "w-[68px]" : "w-[220px]"}`
-            }>
+        <aside className="bg-white pr-4 relative flex flex-col border-r border-gray-200/80 transition-all duration-300 ease-in-out w-[220px]">
+
+
+
 
           {/* Logo */}
           <div className="px-4 flex items-center justify-left h-16 border-b border-gray-100 gap-2">
@@ -140,7 +140,7 @@ export default function Layout({ children, currentPageName }) {
           </div>
 
           {/* Nav */}
-          <nav className="flex-1 py-1 px-4 space-y-0.5">
+          <nav className="pt-4 pr-4 pb-4 pl-4 flex-1 space-y-0.5">
             {navItems.map((item) => {
                 const isActive = currentPageName === item.page;
                 const Icon = item.icon;
