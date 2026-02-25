@@ -134,8 +134,13 @@ export default function Layout({ children, currentPageName }) {
             }>
 
           {/* Logo */}
-          <div className="flex items-center justify-center h-16 border-b border-gray-100">
-            
+          <div className="flex items-center justify-center h-16 border-b border-gray-100 gap-2">
+            {!collapsed && (
+              <>
+                <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6994076dc777dd78309c97c9/6a7cc2cbe_UniVerseTDAJ-Icon2Dark.png" alt="UniVerse Icon" className="h-8 w-8 object-contain" />
+                <span className="text-[#525153] text-xl font-normal" style={{ fontFamily: "'Funnel Display', sans-serif" }}>UniVerse</span>
+              </>
+            )}
             {collapsed && <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6994076dc777dd78309c97c9/7e91c11f3_Screenshot2026-02-25at50044am.png" alt="UniVerse" className="h-8 w-auto object-contain" />}
           </div>
 
