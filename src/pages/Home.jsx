@@ -34,31 +34,31 @@ export default function Home() {
   const { data: projects = [] } = useQuery({
     queryKey: ["projects", userEmail],
     queryFn: () => base44.entities.Project.filter({ created_by: userEmail }, "-updated_date", 6),
-    enabled: !!userEmail,
+    enabled: !!userEmail
   });
 
   const { data: validations = [] } = useQuery({
     queryKey: ["validations", userEmail],
     queryFn: () => base44.entities.ValidationRequest.filter({ created_by: userEmail }, "-created_date", 50),
-    enabled: !!userEmail,
+    enabled: !!userEmail
   });
 
   const { data: assets = [] } = useQuery({
     queryKey: ["assets", userEmail],
     queryFn: () => base44.entities.Asset.filter({ created_by: userEmail }, "-created_date", 50),
-    enabled: !!userEmail,
+    enabled: !!userEmail
   });
 
   const { data: activities = [] } = useQuery({
     queryKey: ["activities", userEmail],
     queryFn: () => base44.entities.Activity.filter({ created_by: userEmail }, "-created_date", 4),
-    enabled: !!userEmail,
+    enabled: !!userEmail
   });
 
   const { data: labRequests = [] } = useQuery({
     queryKey: ["lab_requests_home", userEmail],
     queryFn: () => base44.entities.LabRequest.filter({ requester_email: userEmail }, "-updated_date", 10),
-    enabled: !!userEmail,
+    enabled: !!userEmail
   });
 
   const { data: labServices = [] } = useQuery({
@@ -88,16 +88,16 @@ export default function Home() {
           <p className="text-sm text-gray-400 mt-0.5">
             {user?.role ? user.role.charAt(0).toUpperCase() + user.role.slice(1) : "Researcher"} · Resume your research or start something new.
           </p>
-          {user?.orcid_id && (
-            <a
-              href={`https://orcid.org/${user.orcid_id}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-[11px] text-[#A6CE39] hover:underline mt-1"
-            >
+          {user?.orcid_id &&
+          <a
+            href={`https://orcid.org/${user.orcid_id}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1 text-[11px] text-[#A6CE39] hover:underline mt-1">
+
               <span className="font-bold">iD</span> orcid.org/{user.orcid_id}
             </a>
-          )}
+          }
         </div>
       </div>
 
@@ -130,12 +130,12 @@ export default function Home() {
                 <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center mx-auto mb-4">
                   <Sparkles className="w-5 h-5 text-blue-500" />
                 </div>
-                <h3 className="text-sm font-semibold text-gray-900 mb-1">Start your first project</h3>
+                <h3 className="text-[#525153] mb-1 text-sm font-semibold">Start your first project</h3>
                 <p className="text-xs text-gray-400 mb-5 max-w-xs mx-auto">
                   Create a project to begin structuring your research, uploading literature, and generating hypotheses.
                 </p>
                 <Link to={createPageUrl("Projects")}>
-                  <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-xs">
+                  <Button size="sm" className="bg-[#000021] text-[#00f2ff] px-3 text-xs font-medium rounded-md inline-flex items-center justify-center gap-2 whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 shadow h-8 hover:bg-blue-700">
                     <Plus className="w-3.5 h-3.5 mr-1.5" />
                     New Project
                   </Button>
@@ -179,7 +179,7 @@ export default function Home() {
           {/* Lab Activity */}
           <div>
             <div className="flex items-center justify-between mb-5">
-              <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6994076dc777dd78309c97c9/c5397ab22_UniVerseLabs-Logo-01300x.png" alt="UniVerse Labs" className="h-5 object-contain" />
+              <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6994076dc777dd78309c97c9/c5397ab22_UniVerseLabs-Logo-01300x.png" alt="UniVerse Labs" className="h-9 object-contain" />
               <Link to={createPageUrl("Labs")}>
                 <Button variant="ghost" size="sm" className="text-[#525153] px-3 text-xs font-medium rounded-md inline-flex items-center justify-center gap-2 whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-accent h-8 hover:text-gray-900">
                   View Labs <ArrowRight className="w-3 h-3 ml-1" />
