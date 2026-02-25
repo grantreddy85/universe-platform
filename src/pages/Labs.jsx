@@ -91,12 +91,12 @@ export default function Labs() {
           </div>
           <div className="flex gap-2 flex-wrap">
             <button
-              onClick={() => setActiveCategory("all")}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-all ${
-              activeCategory === "all" ?
-              "bg-gray-900 text-white border-gray-900" :
-              "bg-white text-gray-600 border-gray-200 hover:border-gray-300"}`
-              }>
+              onClick={() => setActiveCategory("all")} className="bg-gray-900 text-[#00F2FF] px-3 py-1.5 text-xs font-medium rounded-lg border transition-all border-gray-900">
+
+
+
+
+
 
               All
             </button>
