@@ -57,10 +57,10 @@ import Projects from './pages/Projects';
 import Search from './pages/Search';
 import Tokenisation from './pages/Tokenisation';
 import Tokenomics from './pages/Tokenomics';
+import TopicLibrary from './pages/TopicLibrary';
 import ValidatedAssets from './pages/ValidatedAssets';
 import Validations from './pages/Validations';
 import Workspace from './pages/Workspace';
-import TopicLibrary from './pages/TopicLibrary';
 import __Layout from './Layout.jsx';
 
 
@@ -75,10 +75,10 @@ export const PAGES = {
     "Search": Search,
     "Tokenisation": Tokenisation,
     "Tokenomics": Tokenomics,
+    "TopicLibrary": TopicLibrary,
     "ValidatedAssets": ValidatedAssets,
     "Validations": Validations,
     "Workspace": Workspace,
-    "TopicLibrary": TopicLibrary,
 }
 
 export const pagesConfig = {
