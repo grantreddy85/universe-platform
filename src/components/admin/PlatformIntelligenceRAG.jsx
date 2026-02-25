@@ -144,12 +144,59 @@ Query: ${text}`;
 
   const saveAsNote = async (content, index) => {
     setSavingIndex(index);
+
+    // Ask the LLM to extract contributor attribution weights from the response
+    const attributionResult = await base44.integrations.Core.InvokeLLM({
+      prompt: `You are analysing an AI-generated research insight to extract contributor attribution data.
+
+PLATFORM CONTRIBUTOR DATA (from assets):
+${allAssets.slice(0, 20).map(a =>
+  (a.attribution || []).map(attr => `${attr.contributor} (${attr.role}, ${attr.share_percentage}%)`).join(", ")
+).filter(Boolean).join("\n")}
+
+INSIGHT CONTENT:
+${content.slice(0, 1500)}
+
+Task: Based on which contributors, researchers, labs or funders are referenced or implied in the insight above — and their known platform share weights — assign proportional attribution percentages for this note. Only include contributors actually mentioned or whose assets are directly relevant. Percentages must sum to 100. If no specific contributors are identifiable, assign 100% to "universe" (the platform itself).
+
+Return a JSON object with this exact schema:
+{
+  "attribution": [
+    { "contributor": "email_or_name", "role": "researcher|lab|universe|investor|funder|tool_creator", "share_percentage": number }
+  ],
+  "tags": ["array", "of", "relevant", "topic", "tags", "max 5"]
+}`,
+      response_json_schema: {
+        type: "object",
+        properties: {
+          attribution: {
+            type: "array",
+            items: {
+              type: "object",
+              properties: {
+                contributor: { type: "string" },
+                role: { type: "string" },
+                share_percentage: { type: "number" }
+              }
+            }
+          },
+          tags: { type: "array", items: { type: "string" } }
+        }
+      }
+    });
+
+    const tags = ["platform-intelligence", "admin", ...(attributionResult?.tags || [])];
+
     await base44.entities.Note.create({
       title: `Platform Intelligence — ${new Date().toLocaleDateString()}`,
       content,
       source: "ai_copilot",
-      tags: ["platform-intelligence", "admin"]
+      tags,
+      metadata: {
+        attribution: attributionResult?.attribution || [{ contributor: "universe", role: "universe", share_percentage: 100 }]
+      }
     });
+
     setSavingIndex(null);
     setSavedIndex(index);
     setTimeout(() => setSavedIndex(null), 2000);
