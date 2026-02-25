@@ -194,6 +194,29 @@ export default function Workspace() {
     }
   });
 
+  const saveToNewProjectMutation = useMutation({
+    mutationFn: async ({ item, projectTitle }) => {
+      const project = await base44.entities.Project.create({
+        title: projectTitle,
+        status: "draft"
+      });
+      await base44.entities.Note.create({
+        project_id: project.id,
+        title: item.title,
+        content: item.content || "",
+        source: "ai_copilot"
+      });
+      await base44.entities.WorkspaceItem.update(item.id, { assigned_project_id: project.id });
+      return project;
+    },
+    onSuccess: (project) => {
+      queryClient.invalidateQueries({ queryKey: ["workspace-items"] });
+      queryClient.invalidateQueries({ queryKey: ["projects-list"] });
+      setSavedToProject(project);
+      setNewProjectTitle("");
+    }
+  });
+
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   const categoryCounts = items.reduce((acc, item) => {
