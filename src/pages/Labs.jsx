@@ -144,7 +144,7 @@ export default function Labs() {
             <div key={cat} className="mb-10">
                 <div className="flex items-center gap-2.5 mb-4">
                   <div className="bg-[#000021] text-emerald-600 rounded-lg w-9 h-9 flex items-center justify-center border border-emerald-100">
-                    <Icon className="lucide lucide-microscope w-4 h-4" strokeWidth={1.8} />
+                    <Icon className="text-[#00F2FF] lucide lucide-microscope w-4 h-4" strokeWidth={1.8} />
                   </div>
                   <h2 className="text-sm font-semibold text-gray-700">{meta.label}</h2>
                   <span className="text-xs text-gray-400 ml-1">({items.length})</span>
