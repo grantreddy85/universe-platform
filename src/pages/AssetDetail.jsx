@@ -57,6 +57,8 @@ export default function AssetDetail() {
   const projectId = params.get("project_id");
 
   const [marketplaceSubmitted, setMarketplaceSubmitted] = useState(false);
+  const [expandedGroups, setExpandedGroups] = useState({});
+  const toggleGroup = (key) => setExpandedGroups(prev => ({ ...prev, [key]: !prev[key] }));
   const [showInfographic, setShowInfographic] = useState(false);
   const [editingAttribution, setEditingAttribution] = useState(false);
   const [pendingAttribution, setPendingAttribution] = useState(null);
