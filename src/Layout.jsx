@@ -23,6 +23,7 @@ import {
 import UniVerseLogo from "@/components/UniVerseLogo";
 import { Button } from "@/components/ui/button";
 import AdminModeToggle from "@/components/admin/AdminModeToggle";
+import NotificationBell from "@/components/notifications/NotificationBell";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 // Theme Context

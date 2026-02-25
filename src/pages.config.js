@@ -51,6 +51,7 @@ import AdminDashboard from './pages/AdminDashboard';
 import AssetDetail from './pages/AssetDetail';
 import Home from './pages/Home';
 import Labs from './pages/Labs';
+import Pricing from './pages/Pricing';
 import Profile from './pages/Profile';
 import ProjectDetail from './pages/ProjectDetail';
 import Projects from './pages/Projects';
@@ -61,7 +62,6 @@ import TopicLibrary from './pages/TopicLibrary';
 import ValidatedAssets from './pages/ValidatedAssets';
 import Validations from './pages/Validations';
 import Workspace from './pages/Workspace';
-import Pricing from './pages/Pricing';
 import __Layout from './Layout.jsx';
 
 
@@ -70,6 +70,7 @@ export const PAGES = {
     "AssetDetail": AssetDetail,
     "Home": Home,
     "Labs": Labs,
+    "Pricing": Pricing,
     "Profile": Profile,
     "ProjectDetail": ProjectDetail,
     "Projects": Projects,
@@ -80,7 +81,6 @@ export const PAGES = {
     "ValidatedAssets": ValidatedAssets,
     "Validations": Validations,
     "Workspace": Workspace,
-    "Pricing": Pricing,
 }
 
 export const pagesConfig = {
