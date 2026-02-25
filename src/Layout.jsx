@@ -134,9 +134,9 @@ export default function Layout({ children, currentPageName }) {
             }>
 
           {/* Logo */}
-          <div className="flex items-center justify-center h-16 border-b border-gray-100 gap-2">
+          <div className="px-4 flex items-center justify-left h-16 border-b border-gray-100 gap-2">
             <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6994076dc777dd78309c97c9/6a7cc2cbe_UniVerseTDAJ-Icon2Dark.png" alt="UniVerse" className={collapsed ? "h-8 w-8 object-contain" : "h-10 w-10 object-contain"} />
-            {!collapsed && <span className="text-xl font-normal" style={{ fontFamily: "'Funnel Display', sans-serif", color: "#525153" }}>UniVerse</span>}
+            {!collapsed && <span className="text-2xl font-normal" style={{ fontFamily: "'Funnel Display', sans-serif", color: "#525153" }}>UniVerse</span>}
           </div>
 
           {/* Nav */}
