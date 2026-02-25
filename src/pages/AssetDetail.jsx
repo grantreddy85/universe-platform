@@ -232,25 +232,43 @@ export default function AssetDetail() {
             <div className="bg-white rounded-xl border border-gray-100 p-6">
               <h2 className="text-sm font-semibold text-gray-700 mb-4">Research Lineage</h2>
               <p className="text-xs text-gray-400 mb-5">All research components from this project that underpin this asset.</p>
-              {components.length === 0 ? (
+              {groupedComponents.length === 0 ? (
                 <p className="text-xs text-gray-300 text-center py-8">No components found in this project yet.</p>
               ) : (
                 <div className="space-y-2">
-                  {components.map((comp) => {
-                    const cfg = typeIcons[comp._kind] || typeIcons.publication;
+                  {groupedComponents.map((group) => {
+                    const cfg = typeIcons[group.key] || typeIcons.publication;
                     const Ico = cfg.icon;
+                    const isOpen = !!expandedGroups[group.key];
                     return (
-                      <div key={comp.id} className="flex items-center gap-3 p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors">
-                        <div className={`w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 ${cfg.bg}`}>
-                          <Ico className={`w-3.5 h-3.5 ${cfg.color}`} />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-xs font-medium text-gray-800 truncate">{comp.title}</p>
-                          <p className="text-[10px] text-gray-400">{comp.label}</p>
-                        </div>
-                        <Badge variant="outline" className="text-[10px] capitalize flex-shrink-0">
-                          {comp.status || "draft"}
-                        </Badge>
+                      <div key={group.key} className="rounded-lg border border-gray-100 overflow-hidden">
+                        <button
+                          onClick={() => toggleGroup(group.key)}
+                          className="w-full flex items-center gap-3 p-3 bg-gray-50 hover:bg-gray-100 transition-colors text-left"
+                        >
+                          <div className={`w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 ${cfg.bg}`}>
+                            <Ico className={`w-3.5 h-3.5 ${cfg.color}`} />
+                          </div>
+                          <span className="text-xs font-medium text-gray-700 flex-1">{group.label}</span>
+                          <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${cfg.bg} ${cfg.color} mr-2`}>
+                            {group.items.length}
+                          </span>
+                          <svg className={`w-3.5 h-3.5 text-gray-400 transition-transform flex-shrink-0 ${isOpen ? "rotate-180" : ""}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 9l6 6 6-6"/></svg>
+                        </button>
+                        {isOpen && (
+                          <div className="divide-y divide-gray-50">
+                            {group.items.map((comp) => (
+                              <div key={comp.id} className="flex items-center gap-3 px-4 py-2.5 bg-white hover:bg-gray-50 transition-colors">
+                                <div className="flex-1 min-w-0">
+                                  <p className="text-xs font-medium text-gray-800 truncate">{comp.title}</p>
+                                </div>
+                                <Badge variant="outline" className="text-[10px] capitalize flex-shrink-0">
+                                  {comp.status || "draft"}
+                                </Badge>
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     );
                   })}
