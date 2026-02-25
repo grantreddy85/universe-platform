@@ -98,9 +98,14 @@ export default function PlatformIntelligenceRAG({ allProjects, allNotes, allAsse
     const userMsg = { role: "user", content: text };
     setMessages(m => [...m, userMsg]);
 
-    const { projectsSummary, notesSummary, assetsSummary, hypothesesSummary } = buildContext();
+    const { projectsSummary, notesSummary, assetsSummary, hypothesesSummary, contributorsSummary } = buildContext();
 
     const systemPrompt = `You are the UniVerse Platform Intelligence assistant — a research AI with full visibility across all platform activity. You have access to the collective knowledge base of all researchers on the platform.
+
+IMPORTANT — ATTRIBUTION & WEIGHTING SYSTEM:
+Each asset on the platform has an "attribution" array. Every contributor has a role and a share_percentage. Roles include: researcher, lab, universe, investor, funder, tool_creator. Share percentages across all contributors on a single asset must sum to 100%. When generating insights or hypotheses that reference specific assets or contributors, always reflect these weighted contributions accurately — a contributor with a higher share_percentage has had a greater proportional impact on that asset. Lab equity shares dilute all other contributors proportionally.
+
+Topic clusters also have weight_percentage values per asset — these indicate how much of the asset's research belongs to each therapeutic area.
 
 PLATFORM KNOWLEDGE BASE:
 === Projects (${allProjects.length} total) ===
@@ -109,11 +114,14 @@ ${projectsSummary}
 === Research Notes (${allNotes.length} total) ===
 ${notesSummary}
 
-=== Assets (${allAssets.length} total) ===
+=== Assets with Attribution & Topic Weights (${allAssets.length} total) ===
 ${assetsSummary}
 
 === Hypotheses (${allHypotheses.length} total) ===
 ${hypothesesSummary}
+
+=== Contributor Overview (across all assets) ===
+${contributorsSummary || "No contributor data yet"}
 
 === Platform Stats ===
 - Total Projects: ${allProjects.length}
