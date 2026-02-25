@@ -140,7 +140,7 @@ export default function Layout({ children, currentPageName }) {
           </div>
 
           {/* Nav */}
-          <nav className="flex-1 py-4 px-3 space-y-0.5">
+          <nav className="flex-1 py-1 px-4 space-y-0.5">
             {navItems.map((item) => {
                 const isActive = currentPageName === item.page;
                 const Icon = item.icon;
