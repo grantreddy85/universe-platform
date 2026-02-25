@@ -11,8 +11,8 @@ export default function StatsCard({ label, value, icon: Icon, accent = "blue", l
   };
 
   const content =
-    <div className="flex items-center gap-3">
-      <div className={`w-8 h-8 rounded-lg ${accents[accent]} flex items-center justify-center flex-shrink-0`}>
+  <div className="flex items-center gap-3">
+      <div className="bg-[#000021] text-[#00f2ff] rounded-lg w-8 h-8 flex items-center justify-center flex-shrink-0">
         <Icon className="w-3.5 h-3.5" strokeWidth={1.8} />
       </div>
       <div>
