@@ -13,7 +13,7 @@ export default function StatsCard({ label, value, icon: Icon, accent = "blue", l
   const content =
   <div className="flex items-center gap-3">
       <div className="bg-[#000021] rounded-lg w-8 h-8 flex items-center justify-center flex-shrink-0">
-        <Icon className="text-black lucide lucide-shield w-3.5 h-3.5" strokeWidth={1.8} style={{ color: iconColor }} />
+        <Icon className="lucide lucide-folder-kanban text-black lucide lucide-shield w-3.5 h-3.5" strokeWidth={1.8} style={{ color: iconColor }} />
       </div>
       <div>
         <p className="text-[10px] font-medium text-gray-400 uppercase tracking-wider leading-none mb-1">{label}</p>
