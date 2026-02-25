@@ -386,7 +386,7 @@ export default function Search() {
         <input ref={fileInputRef} type="file" accept="image/*,.pdf,.csv,.xlsx,.txt" className="hidden" onChange={handleFileInputChange} />
         <div className="w-full max-w-3xl">
           <div className="mb-10 text-center flex flex-col items-center gap-3">
-            
+            <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6994076dc777dd78309c97c9/7e91c11f3_Screenshot2026-02-25at50044am.png" alt="UniVerse" className="h-40 object-contain" />
             <h1 className="text-[#525153] text-6xl font-normal tracking-tight" style={{ fontFamily: "'Funnel Display', sans-serif" }}>UniVerse</h1>
           </div>
 
