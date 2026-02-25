@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, FileText, MoreHorizontal, Trash2, FolderInput, Lightbulb, Upload, StickyNote, Edit3, FlaskConical, GitBranch, Archive, Shield, Box } from "lucide-react";
+import { Plus, FileText, MoreHorizontal, Trash2, FolderInput, Lightbulb, Upload, StickyNote, Edit3, FlaskConical, GitBranch, Archive, Shield, Box, ExternalLink, FolderPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
