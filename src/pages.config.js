@@ -61,6 +61,7 @@ import TopicLibrary from './pages/TopicLibrary';
 import ValidatedAssets from './pages/ValidatedAssets';
 import Validations from './pages/Validations';
 import Workspace from './pages/Workspace';
+import Pricing from './pages/Pricing';
 import __Layout from './Layout.jsx';
 
 
@@ -79,6 +80,7 @@ export const PAGES = {
     "ValidatedAssets": ValidatedAssets,
     "Validations": Validations,
     "Workspace": Workspace,
+    "Pricing": Pricing,
 }
 
 export const pagesConfig = {
