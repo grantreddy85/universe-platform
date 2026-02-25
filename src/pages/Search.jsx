@@ -369,11 +369,11 @@ export default function Search() {
     const conversations = savedConversations ? JSON.parse(savedConversations) : [];
 
     return (
-      <div
-        className={`min-h-screen flex items-center justify-center px-6 transition-colors ${isDragging ? "bg-blue-50" : "bg-gradient-to-br from-gray-50 via-white to-blue-50/30"}`}
-        onDragOver={(e) => {e.preventDefault();setIsDragging(true);}}
-        onDragLeave={() => setIsDragging(false)}
-        onDrop={handleDrop}>
+      <div className="bg-gradient-to-br px-6 min-h-screen flex items-center justify-center transition-colors from-gray-50 via-white to-blue-50/30"
+
+      onDragOver={(e) => {e.preventDefault();setIsDragging(true);}}
+      onDragLeave={() => setIsDragging(false)}
+      onDrop={handleDrop}>
 
         {isDragging &&
         <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none">
