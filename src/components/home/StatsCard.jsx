@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../../utils";
 
-export default function StatsCard({ label, value, icon: Icon, accent = "blue", linkTo }) {
+export default function StatsCard({ label, value, icon: Icon, accent = "blue", linkTo, iconColor = "#00f2ff" }) {
   const accents = {
     blue: "bg-blue-50 text-blue-600",
     green: "bg-emerald-50 text-emerald-600",
@@ -12,8 +12,8 @@ export default function StatsCard({ label, value, icon: Icon, accent = "blue", l
 
   const content =
   <div className="flex items-center gap-3">
-      <div className="bg-[#000021] text-[#00f2ff] rounded-lg w-8 h-8 flex items-center justify-center flex-shrink-0">
-        <Icon className="w-3.5 h-3.5" strokeWidth={1.8} />
+      <div className="bg-[#000021] rounded-lg w-8 h-8 flex items-center justify-center flex-shrink-0">
+        <Icon className="w-3.5 h-3.5" strokeWidth={1.8} style={{ color: iconColor }} />
       </div>
       <div>
         <p className="text-[10px] font-medium text-gray-400 uppercase tracking-wider leading-none mb-1">{label}</p>
