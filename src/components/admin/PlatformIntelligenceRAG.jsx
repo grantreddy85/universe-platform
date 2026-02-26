@@ -187,9 +187,11 @@ Return a JSON object with this exact schema:
 
     const tags = ["platform-intelligence", "admin", ...(attributionResult?.tags || [])];
 
+    // Detect if this is a hypothesis response (from the hypothesis synthesis prompt)
+    const isHypothesis = content.toLowerCase().includes("hypothesis") && content.toLowerCase().includes("gap");
     await base44.entities.WorkspaceItem.create({
       title: `Platform Intelligence — ${new Date().toLocaleDateString()}`,
-      type: "note",
+      type: isHypothesis ? "hypothesis" : "note",
       content,
       metadata: {
         tags,
