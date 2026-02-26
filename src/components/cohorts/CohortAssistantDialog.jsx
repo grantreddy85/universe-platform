@@ -102,16 +102,20 @@ Format your response as JSON with these fields:
   };
 
   const handleCreateCohort = async (destination) => {
+    if (!cohortName.trim() || !sampleSize) return;
+    
     setIsSaving(true);
     const cohortData = {
       name: cohortName,
       sample_size: parseInt(sampleSize),
       filters: selectedFilters,
+      status: "defined",
     };
 
     try {
       if (destination === "project") {
-        // Save as cohort in the project
+        // Save as cohort in the project via parent callback
+        onFiltersApply(selectedFilters, sampleSize);
         onCohortCreated(cohortData);
       } else if (destination === "workspace") {
         // Save as workspace item
