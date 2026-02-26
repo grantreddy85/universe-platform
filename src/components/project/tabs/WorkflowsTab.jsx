@@ -261,16 +261,16 @@ export default function WorkflowsTab({ project }) {
         onClose={() => setShowImporter(false)}
         onImport={handleImport}
       />
-    </div>
+      </div>
 
-    {/* AI Panel */}
-    {showAIPanel && (
-      <WorkflowAIPanel
-        project={project}
-        onClose={() => setShowAIPanel(false)}
-        onOpenImporter={() => { setShowAIPanel(false); setShowImporter(true); }}
-      />
-    )}
+      {/* AI Panel */}
+      {showAIPanel && (
+        <WorkflowAIPanel
+          project={project}
+          onClose={() => setShowAIPanel(false)}
+          onOpenImporter={() => { setShowAIPanel(false); setShowImporter(true); }}
+        />
+      )}
     </div>
   );
 }
