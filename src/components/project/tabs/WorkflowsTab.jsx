@@ -174,6 +174,15 @@ export default function WorkflowsTab({ project }) {
           <Button
             variant="outline"
             size="sm"
+            onClick={() => setShowAIPanel((v) => !v)}
+            className="text-xs gap-1.5"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-violet-500" />
+            Workflow Guide
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
             onClick={() => setShowImporter(true)}
             className="text-xs gap-1.5"
           >
