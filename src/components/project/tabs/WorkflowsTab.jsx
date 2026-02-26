@@ -164,7 +164,7 @@ export default function WorkflowsTab({ project }) {
   // List view
   return (
     <div className="flex h-full">
-    <div className="p-6 flex-1 max-w-5xl overflow-auto">
+      <div className="p-6 flex-1 max-w-5xl overflow-auto">
       <div className="flex items-center justify-between mb-6">
         <div>
           <h2 className="text-base font-semibold text-gray-900">Workflows</h2>
