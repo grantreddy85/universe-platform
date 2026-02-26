@@ -111,9 +111,10 @@ Format your response as JSON with these fields:
     });
 
     const genName = generateCohortName(response.filters.length, question);
+    const parsedFilters = response.filters.map(parseFilterString);
     setRecommendation(response);
     setCohortName(genName);
-    setSelectedFilters(response.filters);
+    setSelectedFilters(parsedFilters);
     setSampleSize(response.sample_size.toString());
     setStage("review");
     setIsLoading(false);
