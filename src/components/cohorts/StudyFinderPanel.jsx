@@ -16,7 +16,8 @@ const SOURCE_BADGE_COLORS = {
   "bioRxiv": "bg-purple-50 text-purple-600",
   "medRxiv": "bg-pink-50 text-pink-600",
   "PMC": "bg-amber-50 text-amber-600",
-  "EuropePMC": "bg-cyan-50 text-cyan-600"
+  "EuropePMC": "bg-cyan-50 text-cyan-600",
+  "UniVerse Index": "bg-[#000021] text-[#00F2FF]"
 };
 
 function StudyCard({ study, onAskAbout }) {
