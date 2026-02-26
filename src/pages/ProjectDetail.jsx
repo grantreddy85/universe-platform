@@ -10,7 +10,7 @@ import AITab from "../components/project/tabs/AITab";
 import NotesTab from "../components/project/tabs/NotesTab";
 import VaultTab from "../components/project/tabs/VaultTab";
 import CohortsTab from "../components/project/tabs/CohortsTab";
-import WorkflowsTab from "../components/project/tabs/WorkflowsTab";
+import WorkflowsTab from "../components/project/tabs/WorkflowsTab.jsx";
 import ValidationTab from "../components/project/tabs/ValidationTab";
 import AssetsTab from "../components/project/tabs/AssetsTab";
 import LabsTab from "../components/project/tabs/LabsTab";
