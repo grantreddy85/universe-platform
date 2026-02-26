@@ -159,6 +159,11 @@ Query: ${text}`;
     setSavingIndex(index);
     setShowContributorDialog(false);
 
+    // Build contributor context including explicitly selected source contributors
+    const sourceContributorContext = sourceContributors.length > 0
+      ? `\n\nEXPLICITLY IDENTIFIED SOURCE CONTRIBUTORS (must be included in attribution):\n${sourceContributors.map(c => `${c.email} (researcher)`).join("\n")}`
+      : "";
+
     // Ask the LLM to extract contributor attribution weights from the response
     const attributionResult = await base44.integrations.Core.InvokeLLM({
       prompt: `You are analysing an AI-generated research insight to extract contributor attribution data.
@@ -166,12 +171,12 @@ Query: ${text}`;
 PLATFORM CONTRIBUTOR DATA (from assets):
 ${allAssets.slice(0, 20).map(a =>
   (a.attribution || []).map(attr => `${attr.contributor} (${attr.role}, ${attr.share_percentage}%)`).join(", ")
-).filter(Boolean).join("\n")}
+).filter(Boolean).join("\n")}${sourceContributorContext}
 
 INSIGHT CONTENT:
 ${content.slice(0, 1500)}
 
-Task: Based on which contributors, researchers, labs or funders are referenced or implied in the insight above — and their known platform share weights — assign proportional attribution percentages for this note. Only include contributors actually mentioned or whose assets are directly relevant. Percentages must sum to 100. If no specific contributors are identifiable, assign 100% to "universe" (the platform itself).
+Task: Assign proportional attribution percentages. ${sourceContributors.length > 0 ? `The explicitly identified source contributors MUST be included and given significant researcher shares (at least 30% each if one, split proportionally if multiple). UniVerse platform gets at least 10%. Remaining share can go to universe.` : "Only include contributors actually mentioned or whose assets are directly relevant. If none identifiable, assign 100% to universe."} Percentages must sum to 100.
 
 Return a JSON object with this exact schema:
 {
