@@ -541,6 +541,7 @@ export default function Workspace() {
                     <Label className="text-xs font-medium text-gray-500">Save to a new project</Label>
                     <div className="flex gap-2">
                       <Input
+                        id="new-project-input"
                         placeholder="New project title…"
                         value={newProjectTitle}
                         onChange={(e) => setNewProjectTitle(e.target.value)}
