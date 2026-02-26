@@ -170,9 +170,11 @@ Format your response as JSON with these fields:
     onOpenChange(false);
   };
 
-  const toggleFilter = (filter) => {
+  const toggleFilter = (filterObj) => {
     setSelectedFilters((prev) =>
-      prev.includes(filter) ? prev.filter((f) => f !== filter) : [...prev, filter]
+      prev.some((f) => f.field === filterObj.field && f.value === filterObj.value)
+        ? prev.filter((f) => !(f.field === filterObj.field && f.value === filterObj.value))
+        : [...prev, filterObj]
     );
   };
 
