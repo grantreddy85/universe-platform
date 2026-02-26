@@ -22,13 +22,14 @@ export default function CohortAssistantDialog({
   onFiltersApply,
   project,
 }) {
-  const [stage, setStage] = useState("question"); // question, recommending, review
+  const [stage, setStage] = useState("question"); // question, recommending, review, destination
   const [question, setQuestion] = useState("");
   const [recommendation, setRecommendation] = useState(null);
   const [cohortName, setCohortName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [selectedFilters, setSelectedFilters] = useState(activeFilters);
   const [sampleSize, setSampleSize] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
 
   const generateCohortName = (filterCount, question) => {
     const suggestions = [
