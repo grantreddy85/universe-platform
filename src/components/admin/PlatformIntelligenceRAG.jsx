@@ -36,12 +36,16 @@ const SUGGESTED_PROMPTS = [
   },
 ];
 
-export default function PlatformIntelligenceRAG({ allProjects, allNotes, allAssets, allHypotheses, allValidations }) {
+export default function PlatformIntelligenceRAG({ allProjects, allNotes, allAssets, allHypotheses, allValidations, allUsers = [] }) {
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [savingIndex, setSavingIndex] = useState(null);
   const [savedIndex, setSavedIndex] = useState(null);
+  const [showContributorDialog, setShowContributorDialog] = useState(false);
+  const [pendingSaveContent, setPendingSaveContent] = useState(null);
+  const [pendingSaveIndex, setPendingSaveIndex] = useState(null);
+  const [selectedContributors, setSelectedContributors] = useState([]);
   const messagesEndRef = useRef(null);
   const queryClient = useQueryClient();
 
