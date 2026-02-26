@@ -315,14 +315,14 @@ Return a JSON object with this exact schema:
                   </div>
                   <div className="flex justify-end">
                     <button
-                      onClick={() => saveAsNote(m.content, i)}
+                      onClick={() => initiateSave(m.content, i)}
                       disabled={savingIndex === i}
                       className="text-[10px] flex items-center gap-1 text-gray-400 hover:text-gray-600 transition-colors"
                     >
                       {savingIndex === i ? (
                         <Loader2 className="w-3 h-3 animate-spin" />
                       ) : savedIndex === i ? (
-                        <span className="text-green-500">Saved to Notes ✓</span>
+                        <span className="text-green-500">Saved ✓</span>
                       ) : (
                         <><Save className="w-3 h-3" /> Save as note</>
                       )}
