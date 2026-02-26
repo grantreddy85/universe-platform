@@ -1,10 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { Sparkles, Send, Loader2, Globe, BookOpen, FlaskConical, TrendingUp, Lightbulb, Save, X } from "lucide-react";
+import { Sparkles, Send, Loader2, Globe, BookOpen, FlaskConical, TrendingUp, Lightbulb, Save, X, UserCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import ReactMarkdown from "react-markdown";
 import { useQueryClient } from "@tanstack/react-query";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
 
 const SUGGESTED_PROMPTS = [
   {
