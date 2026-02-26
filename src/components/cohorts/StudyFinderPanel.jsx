@@ -193,8 +193,8 @@ Focus on real, verifiable studies with actual identifiers (NCT IDs, PMIDs, DOIs)
         ) : (
           <div className="flex flex-wrap gap-1 mb-2">
             {activeFilters.slice(0, 6).map((f, idx) => {
-              const displayValue = typeof f === "string" ? f.split(":")[1] : f.value;
-              const key = typeof f === "string" ? f : `${f.field}-${f.value}`;
+              const displayValue = typeof f === "string" ? (f.includes(":") ? f.split(":")[1] : f) : f?.value || f;
+              const key = typeof f === "string" ? f : `${f?.field}-${f?.value}`;
               return (
                 <Badge key={key} className="bg-blue-50 text-blue-600 text-[10px] px-2 py-0.5">{displayValue}</Badge>
               );
