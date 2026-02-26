@@ -127,17 +127,22 @@ export default function CohortsTab({ project }) {
     <div className="flex-1 p-6 lg:p-8 overflow-y-auto">
       {selectedCohort ? (
         <>
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between mb-6">
             <div>
               <h2 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">Cohort Results</h2>
-              <p className="text-lg font-semibold text-gray-900 mt-1">{selectedCohort.name}</p>
-              <p className="text-xs text-gray-500 mt-0.5">Sample Size: {selectedCohort.sample_size} • Status: {selectedCohort.status}</p>
+              <p className="text-2xl font-bold text-gray-900 mt-2">{selectedCohort.name}</p>
+              <div className="flex items-center gap-4 mt-3 text-sm text-gray-600">
+                <span>Sample Size: {selectedCohort.sample_size?.toLocaleString()}</span>
+                <Badge className={`${statusStyles[selectedCohort.status]}`}>
+                  {selectedCohort.status}
+                </Badge>
+              </div>
             </div>
             <button
               onClick={() => setSelectedCohort(null)}
-              className="text-xs text-gray-400 hover:text-gray-600 transition-colors"
+              className="px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
             >
-              Clear
+              Back
             </button>
           </div>
           <StudyFinderPanel
