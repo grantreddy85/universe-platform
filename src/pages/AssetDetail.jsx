@@ -119,6 +119,71 @@ export default function AssetDetail() {
     setMarketplaceSubmitted(true);
   };
 
+  const handleAutoPopulate = async () => {
+    setAutoPopulating(true);
+    const contextText = [
+      asset.title,
+      asset.description || "",
+      ...hypotheses.map(h => h.title + " " + (h.description || "")),
+      ...cohorts.map(c => c.name || c.title || ""),
+      ...workflows.map(w => w.title + " " + (w.description || "")),
+      ...validations.map(v => v.title + " " + (v.results || "")),
+      linkedNote ? linkedNote.content : "",
+    ].filter(Boolean).join("\n").slice(0, 2000);
+
+    const result = await base44.integrations.Core.InvokeLLM({
+      prompt: `You are analysing a research asset to auto-populate its Topic Clusters and Attribution Breakdown.
+
+Asset Title: ${asset.title}
+Asset Type: ${asset.type}
+Description: ${asset.description || "N/A"}
+
+Research Context:
+${contextText}
+
+Task 1 - Topic Clusters: Based on the research content, assign 2-5 relevant topic clusters from the biomedical/life-sciences domain. Allocate weight_percentage values that sum to exactly 100. Use descriptive topic names (e.g. "Chemistry for Oncology", "Genomics & Epigenetics", "Drug Discovery & Design").
+
+Task 2 - Attribution: Assign a default attribution breakdown. The asset was created on the UniVerse platform, so always include "universe" with at least 10%. If the asset description mentions a researcher or lab, include them. Otherwise use a sensible default: researcher 60%, universe 40%.
+
+Return JSON only.`,
+      response_json_schema: {
+        type: "object",
+        properties: {
+          topic_clusters: {
+            type: "array",
+            items: {
+              type: "object",
+              properties: {
+                topic: { type: "string" },
+                weight_percentage: { type: "number" }
+              }
+            }
+          },
+          attribution: {
+            type: "array",
+            items: {
+              type: "object",
+              properties: {
+                contributor: { type: "string" },
+                role: { type: "string" },
+                share_percentage: { type: "number" }
+              }
+            }
+          }
+        }
+      }
+    });
+
+    if (result?.topic_clusters || result?.attribution) {
+      await base44.entities.Asset.update(assetId, {
+        ...(result.topic_clusters?.length ? { topic_clusters: result.topic_clusters } : {}),
+        ...(result.attribution?.length ? { attribution: result.attribution } : {}),
+      });
+      queryClient.invalidateQueries({ queryKey: ["asset", assetId] });
+    }
+    setAutoPopulating(false);
+  };
+
   if (assetLoading || !asset) {
     return (
       <div className="flex items-center justify-center h-screen">
