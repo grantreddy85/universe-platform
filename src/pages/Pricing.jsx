@@ -240,6 +240,87 @@ export default function Pricing() {
         })}
       </div>
 
+      {/* Data Contribution Earnings */}
+      <div className="bg-white rounded-2xl border border-gray-100 p-8 mb-8">
+        <div className="flex items-start gap-3 mb-6">
+          <div className="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center flex-shrink-0">
+            <TrendingUp className="w-4 h-4 text-emerald-600" />
+          </div>
+          <div>
+            <h2 className="text-sm font-semibold text-gray-700 mb-1">Earn Credits By Contributing</h2>
+            <p className="text-xs text-gray-400 max-w-2xl">
+              Every piece of genuine research data you share trains the UniVerse Model — a biomedical AI built exclusively from peer-validated science.
+              You're not just a user. You're a co-author of the platform's intelligence. Every time your data influences a discovery, you earn attribution and credits.
+            </p>
+          </div>
+        </div>
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          {[
+            { action: "Upload a raw dataset (linked to cohort)", credits: "+20", icon: "📤" },
+            { action: "Cohort built from your data", credits: "+10", icon: "👥" },
+            { action: "Workflow run using your dataset", credits: "+15", icon: "⚙️" },
+            { action: "Asset validated (peer-confirmed)", credits: "+30", icon: "✅" },
+            { action: "Another researcher cites your asset", credits: "+20", icon: "🔗" },
+            { action: "Your data used in a platform hypothesis", credits: "+25", icon: "💡" },
+            { action: "ORCID verified (one-time)", credits: "+10", icon: "🪪" },
+            { action: "AI-flagged duplicate upload", credits: "−10", icon: "⚠️" },
+          ].map((item) => (
+            <div key={item.action} className="flex items-start gap-3 p-4 rounded-xl bg-gray-50 border border-gray-100">
+              <span className="text-xl">{item.icon}</span>
+              <div>
+                <p className="text-xs text-gray-600 leading-snug">{item.action}</p>
+                <p className={`text-sm font-bold mt-1 ${item.credits.startsWith("+") ? "text-emerald-600" : "text-red-400"}`}>{item.credits} credits</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Data transparency box */}
+        <div className="rounded-xl border border-blue-100 bg-blue-50/40 p-5 grid sm:grid-cols-3 gap-4">
+          <div className="flex items-start gap-2">
+            <Shield className="w-4 h-4 text-blue-500 flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="text-xs font-semibold text-gray-700 mb-1">Your data remains yours</p>
+              <p className="text-[11px] text-gray-500">You retain full IP ownership. UniVerse holds a non-exclusive licence to train its models only.</p>
+            </div>
+          </div>
+          <div className="flex items-start gap-2">
+            <Bell className="w-4 h-4 text-blue-500 flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="text-xs font-semibold text-gray-700 mb-1">Full audit trail</p>
+              <p className="text-[11px] text-gray-500">Every time your data influences a platform hypothesis or output, you receive a notification with full lineage.</p>
+            </div>
+          </div>
+          <div className="flex items-start gap-2">
+            <CheckCircle2 className="w-4 h-4 text-blue-500 flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="text-xs font-semibold text-gray-700 mb-1">Opt out anytime</p>
+              <p className="text-[11px] text-gray-500">Switch to Pro to remove your data from model training entirely — takes effect immediately.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Safeguards notice */}
+      <div className="bg-white rounded-2xl border border-gray-100 p-6 mb-8">
+        <h2 className="text-sm font-semibold text-gray-700 mb-1">Data Quality Safeguards</h2>
+        <p className="text-xs text-gray-400 mb-4">We take data quality seriously — this protects the value of every contributor's attribution and ensures the UniVerse Model is trained only on genuine, reproducible science.</p>
+        <div className="grid sm:grid-cols-3 gap-4">
+          {[
+            { icon: "🔍", title: "Originality Check", desc: "Every upload is scanned for AI-generated content likelihood and similarity to existing platform assets. Duplicates do not count toward contribution." },
+            { icon: "🔬", title: "Validation Requirement", desc: "Contributor status requires at least 1 platform-validated asset every 60 days. Validation requires reproducibility scores and approver sign-off — it cannot be faked." },
+            { icon: "🧬", title: "Cohort Linkage", desc: "A contribution only counts when linked to a real cohort or analysis run. Standalone PDF uploads without supporting data carry minimal weight." },
+          ].map((item) => (
+            <div key={item.title} className="p-4 rounded-xl bg-gray-50 border border-gray-100">
+              <span className="text-xl">{item.icon}</span>
+              <p className="text-xs font-semibold text-gray-700 mt-2 mb-1">{item.title}</p>
+              <p className="text-[11px] text-gray-500 leading-relaxed">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* Credit Costs */}
       <div className="bg-white rounded-2xl border border-gray-100 p-8 mb-8">
         <h2 className="text-sm font-semibold text-gray-700 mb-1">Credit Usage</h2>

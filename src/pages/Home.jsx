@@ -20,6 +20,7 @@ import ActivityItem from "../components/home/ActivityItem";
 import MarketplaceBar from "../components/home/MarketplaceBar";
 import EcosystemBanner from "../components/home/EcosystemBanner";
 import CreditsStatusBar from "../components/home/CreditsStatusBar";
+import ContributionHealth from "../components/home/ContributionHealth";
 
 export default function Home() {
   const [user, setUser] = useState(null);
