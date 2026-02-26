@@ -65,10 +65,12 @@ export default function CohortsTab({ project }) {
         ...data,
         project_id: project.id,
       }),
-    onSuccess: () => {
+    onSuccess: (newCohort) => {
       queryClient.invalidateQueries({ queryKey: ["project-cohorts", project.id] });
       setShowAssistant(false);
-      setStudyFinderOpen(true);
+      setStudyFinderOpen(false);
+      setSelectedCohort(newCohort);
+      setShowCohortsDropdown(true);
     },
   });
 
