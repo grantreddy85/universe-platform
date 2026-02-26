@@ -40,6 +40,7 @@ export default function CohortsTab({ project }) {
   const [studyFinderOpen, setStudyFinderOpen] = useState(false);
   const [studyAiContext, setStudyAiContext] = useState(null);
   const [showCohortsDropdown, setShowCohortsDropdown] = useState(false);
+  const [selectedCohort, setSelectedCohort] = useState(null);
 
   const handleAskAboutStudy = (study) => {
     setStudyAiContext(study);
@@ -94,7 +95,15 @@ export default function CohortsTab({ project }) {
             {cohorts.map((cohort) => (
               <button
                 key={cohort.id}
-                className="w-full flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-all text-left truncate"
+                onClick={() => {
+                  setSelectedCohort(cohort);
+                  setShowCohortsDropdown(false);
+                }}
+                className={`w-full flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs transition-all text-left truncate ${
+                  selectedCohort?.id === cohort.id
+                    ? "bg-blue-50 text-blue-600 font-semibold"
+                    : "text-gray-600 hover:bg-blue-50 hover:text-blue-600"
+                }`}
               >
                 <span className="truncate">{cohort.name}</span>
                 <Badge className={`${statusStyles[cohort.status]} text-xs flex-shrink-0`}>
@@ -117,8 +126,37 @@ export default function CohortsTab({ project }) {
     </div>
     <div className="flex-1 p-6 lg:p-8 overflow-y-auto">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">Studies & Cohorts</h2>
+        <h2 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">
+          {selectedCohort ? selectedCohort.name : "Studies & Cohorts"}
+        </h2>
       </div>
+
+      {selectedCohort && (
+        <div className="bg-white rounded-xl border border-gray-100 p-6 mb-6">
+          <div className="flex items-start justify-between mb-4">
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">{selectedCohort.name}</h3>
+              <p className="text-sm text-gray-600 mb-3">Sample Size: {selectedCohort.sample_size}</p>
+            </div>
+            <Badge className={`${statusStyles[selectedCohort.status]} text-sm`}>
+              {selectedCohort.status}
+            </Badge>
+          </div>
+          {selectedCohort.filters && selectedCohort.filters.length > 0 && (
+            <div className="mb-4">
+              <p className="text-xs font-semibold text-gray-700 uppercase mb-2">Filters</p>
+              <div className="flex flex-wrap gap-2">
+                {selectedCohort.filters.map((filter, idx) => (
+                  <Badge key={idx} variant="outline" className="text-xs">
+                    {filter}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          )}
+          <p className="text-xs text-gray-500">Created: {new Date(selectedCohort.created_date).toLocaleDateString()}</p>
+        </div>
+      )}
 
       {/* Study Finder */}
       <StudyFinderPanel
