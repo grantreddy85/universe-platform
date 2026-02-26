@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, GitBranch, Loader2, ExternalLink, Trash2, Globe } from "lucide-react";
+import { Plus, GitBranch, Loader2, ExternalLink, Trash2, Globe, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import WorkflowBuilder from "@/components/workflows/WorkflowBuilder";
 import WorkflowCanvas from "@/components/workflows/WorkflowCanvas";
 import WorkflowHubImporter from "@/components/workflows/WorkflowHubImporter";
+import WorkflowAIPanel from "@/components/workflows/WorkflowAIPanel";
 
 const STATUS_COLORS = {
   draft: "bg-gray-100 text-gray-600",
