@@ -62,8 +62,71 @@ export default function AssetsTab({ project }) {
   });
 
   const createMutation = useMutation({
-    mutationFn: (data) =>
-      base44.entities.Asset.create({ ...data, project_id: project.id }),
+    mutationFn: async (data) => {
+      // Create asset first
+      const asset = await base44.entities.Asset.create({ ...data, project_id: project.id });
+
+      // Auto-populate topic clusters + attribution using AI based on project context
+      const contextText = [
+        project.title,
+        project.description || "",
+        project.field || "",
+        data.title,
+        data.description || "",
+      ].filter(Boolean).join("\n");
+
+      const result = await base44.integrations.Core.InvokeLLM({
+        prompt: `You are seeding a new research asset record with initial Topic Clusters and Attribution on the UniVerse research platform.
+
+Asset Title: ${data.title}
+Asset Type: ${data.type}
+Description: ${data.description || "N/A"}
+Project: ${project.title}
+Field: ${project.field || "N/A"}
+Project Description: ${project.description || "N/A"}
+
+Task 1 — Topic Clusters: Assign 2–5 biomedical topic clusters that best describe this research asset. Use descriptive names relevant to the field (e.g. "Chemistry for Oncology", "Genomics & Epigenetics", "Drug Discovery & Design"). weight_percentage values must sum to exactly 100.
+
+Task 2 — Attribution: Assign an initial attribution breakdown reflecting who has contributed at this point in the project lifecycle. The UniVerse platform always has at least 10% as the infrastructure provider. The primary researcher (the asset creator) should hold the majority share initially. Use role values: researcher, lab, universe, investor, funder, tool_creator. share_percentage values must sum to exactly 100.
+
+Return JSON only.`,
+        response_json_schema: {
+          type: "object",
+          properties: {
+            topic_clusters: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  topic: { type: "string" },
+                  weight_percentage: { type: "number" }
+                }
+              }
+            },
+            attribution: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  contributor: { type: "string" },
+                  role: { type: "string" },
+                  share_percentage: { type: "number" }
+                }
+              }
+            }
+          }
+        }
+      });
+
+      if (result?.topic_clusters?.length || result?.attribution?.length) {
+        await base44.entities.Asset.update(asset.id, {
+          ...(result.topic_clusters?.length ? { topic_clusters: result.topic_clusters } : {}),
+          ...(result.attribution?.length ? { attribution: result.attribution } : {}),
+        });
+      }
+
+      return asset;
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["project-assets", project.id] });
       setShowNew(false);
