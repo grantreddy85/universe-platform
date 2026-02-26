@@ -458,84 +458,182 @@ export default function Workspace() {
         </DialogContent>
       </Dialog>
 
-      <Dialog open={showNew || editingItem} onOpenChange={(open) => {
+      <Dialog open={showNew || !!editingItem} onOpenChange={(open) => {
         if (!open) {
           setShowNew(false);
           setEditingItem(null);
           setForm({ title: "", type: "note", content: "" });
+          setSavedToProject(null);
+          setNewProjectTitle("");
         }
       }}>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className={editingItem?.type === "hypothesis" ? "sm:max-w-2xl" : "sm:max-w-md"}>
           <DialogHeader>
             <DialogTitle className="text-lg font-semibold">
-              {editingItem ? "Edit Item" : "New Workspace Item"}
+              {editingItem ? `Edit ${typeLabels[editingItem.type] || "Item"}` : "New Workspace Item"}
             </DialogTitle>
           </DialogHeader>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              if (!form.title.trim()) return;
-              if (editingItem) {
-                updateMutation.mutate({ id: editingItem.id, data: form });
-              } else {
-                createMutation.mutate(form);
-              }
-            }}
-            className="space-y-4 mt-2">
 
-            <div className="space-y-1.5">
-              <Label className="text-xs font-medium text-gray-500">Title *</Label>
-              <Input
-                value={form.title}
-                onChange={(e) => setForm({ ...form, title: e.target.value })}
-                placeholder="What's on your mind?"
-                className="text-sm" />
+          {/* Hypothesis Editor — structured guided view */}
+          {editingItem?.type === "hypothesis" ? (
+            <div className="space-y-4 mt-2">
+              <div className="space-y-1.5">
+                <Label className="text-xs font-medium text-gray-500">Hypothesis Title *</Label>
+                <Input
+                  value={form.title}
+                  onChange={(e) => setForm({ ...form, title: e.target.value })}
+                  placeholder="A clear, testable statement of your hypothesis"
+                  className="text-sm font-medium" />
+              </div>
 
+              {/* Guided notes sections */}
+              <div className="rounded-xl border border-amber-100 bg-amber-50/40 p-4 space-y-3">
+                <p className="text-[11px] font-semibold text-amber-700 uppercase tracking-wider">Notes Guide — Structure Your Hypothesis</p>
+                {[
+                  { label: "Background / Rationale", placeholder: "What existing evidence or observation prompted this hypothesis?", key: "background" },
+                  { label: "Proposed Mechanism", placeholder: "What biological or chemical mechanism are you proposing?", key: "mechanism" },
+                  { label: "Predicted Outcome", placeholder: "What do you predict will happen if this hypothesis is correct?", key: "outcome" },
+                  { label: "Suggested Validation Method", placeholder: "How could this be tested? (e.g. in silico, lab assay, cohort study)", key: "validation" },
+                ].map((section) => {
+                  // Parse structured content from the content field
+                  const contentObj = (() => { try { return JSON.parse(form.content || "{}"); } catch { return { raw: form.content }; } })();
+                  const value = contentObj[section.key] || (section.key === "background" && contentObj.raw ? contentObj.raw : "");
+                  return (
+                    <div key={section.key} className="space-y-1">
+                      <Label className="text-[11px] font-medium text-gray-600">{section.label}</Label>
+                      <Textarea
+                        value={value}
+                        onChange={(e) => {
+                          const current = (() => { try { return JSON.parse(form.content || "{}"); } catch { return {}; } })();
+                          // If it was previously raw text, move it to background on first structured edit
+                          if (current.raw && section.key === "background") { delete current.raw; }
+                          setForm({ ...form, content: JSON.stringify({ ...current, [section.key]: e.target.value }) });
+                        }}
+                        placeholder={section.placeholder}
+                        className="text-xs h-16 resize-none bg-white"
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Save to new project */}
+              <div className="border-t pt-4">
+                {savedToProject ? (
+                  <div className="text-sm text-green-600 font-medium flex items-center gap-2">
+                    <FolderPlus className="w-4 h-4" /> Saved to project: <span className="font-semibold">{savedToProject.title}</span>
+                  </div>
+                ) : (
+                  <div className="space-y-1.5">
+                    <Label className="text-xs font-medium text-gray-500">Save to a new project</Label>
+                    <div className="flex gap-2">
+                      <Input
+                        placeholder="New project title…"
+                        value={newProjectTitle}
+                        onChange={(e) => setNewProjectTitle(e.target.value)}
+                        className="text-sm h-8"
+                      />
+                      <Button
+                        type="button"
+                        size="sm"
+                        disabled={!newProjectTitle.trim() || savingToProject}
+                        className="bg-[#000021] text-[#00f2ff] text-xs h-8 whitespace-nowrap"
+                        onClick={() => {
+                          setSavingToProject(true);
+                          saveToNewProjectMutation.mutate(
+                            { item: { ...editingItem, title: form.title, content: form.content }, projectTitle: newProjectTitle },
+                            { onSettled: () => setSavingToProject(false) }
+                          );
+                        }}
+                      >
+                        {savingToProject ? "Saving…" : <><FolderPlus className="w-3.5 h-3.5 mr-1" /> Create</>}
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <DialogFooter className="pt-1">
+                <Button type="button" variant="ghost" size="sm" onClick={() => { setEditingItem(null); setForm({ title: "", type: "note", content: "" }); setSavedToProject(null); setNewProjectTitle(""); }}>
+                  Cancel
+                </Button>
+                <Button
+                  size="sm"
+                  className="bg-blue-600 hover:bg-blue-700 text-xs"
+                  disabled={!form.title.trim() || updateMutation.isPending}
+                  onClick={() => updateMutation.mutate({ id: editingItem.id, data: form })}
+                >
+                  {updateMutation.isPending ? "Saving..." : "Update Hypothesis"}
+                </Button>
+              </DialogFooter>
             </div>
-            <div className="space-y-1.5">
-              <Label className="text-xs font-medium text-gray-500">Type</Label>
-              <Select value={form.type} onValueChange={(v) => setForm({ ...form, type: v })}>
-                <SelectTrigger className="text-sm">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="note">Note</SelectItem>
-                  <SelectItem value="hypothesis">Hypothesis</SelectItem>
-                  <SelectItem value="cohort">Cohort</SelectItem>
-                  <SelectItem value="workflow">Workflow</SelectItem>
-                  <SelectItem value="document">Document</SelectItem>
-                  <SelectItem value="validation">Validation Request</SelectItem>
-                  <SelectItem value="asset">Asset</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-1.5">
-              <Label className="text-xs font-medium text-gray-500">Content</Label>
-              <Textarea
-                value={form.content}
-                onChange={(e) => setForm({ ...form, content: e.target.value })}
-                placeholder="Write your thoughts..."
-                className="text-sm h-24 resize-none" />
+          ) : (
+            /* Standard editor for all other types */
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (!form.title.trim()) return;
+                if (editingItem) {
+                  updateMutation.mutate({ id: editingItem.id, data: form });
+                } else {
+                  createMutation.mutate(form);
+                }
+              }}
+              className="space-y-4 mt-2">
 
-            </div>
-            <DialogFooter className="pt-2">
-              <Button type="button" variant="ghost" size="sm" onClick={() => {
-                setShowNew(false);
-                setEditingItem(null);
-                setForm({ title: "", type: "note", content: "" });
-              }}>
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                size="sm"
-                className="bg-blue-600 hover:bg-blue-700 text-xs"
-                disabled={!form.title.trim() || createMutation.isPending || updateMutation.isPending}>
-
-                {createMutation.isPending || updateMutation.isPending ? "Saving..." : editingItem ? "Update" : "Save"}
-              </Button>
-            </DialogFooter>
-          </form>
+              <div className="space-y-1.5">
+                <Label className="text-xs font-medium text-gray-500">Title *</Label>
+                <Input
+                  value={form.title}
+                  onChange={(e) => setForm({ ...form, title: e.target.value })}
+                  placeholder="What's on your mind?"
+                  className="text-sm" />
+              </div>
+              {!editingItem && (
+                <div className="space-y-1.5">
+                  <Label className="text-xs font-medium text-gray-500">Type</Label>
+                  <Select value={form.type} onValueChange={(v) => setForm({ ...form, type: v })}>
+                    <SelectTrigger className="text-sm">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="note">Note</SelectItem>
+                      <SelectItem value="hypothesis">Hypothesis</SelectItem>
+                      <SelectItem value="cohort">Cohort</SelectItem>
+                      <SelectItem value="workflow">Workflow</SelectItem>
+                      <SelectItem value="document">Document</SelectItem>
+                      <SelectItem value="validation">Validation Request</SelectItem>
+                      <SelectItem value="asset">Asset</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
+              <div className="space-y-1.5">
+                <Label className="text-xs font-medium text-gray-500">Content</Label>
+                <Textarea
+                  value={form.content}
+                  onChange={(e) => setForm({ ...form, content: e.target.value })}
+                  placeholder="Write your thoughts..."
+                  className="text-sm h-24 resize-none" />
+              </div>
+              <DialogFooter className="pt-2">
+                <Button type="button" variant="ghost" size="sm" onClick={() => {
+                  setShowNew(false);
+                  setEditingItem(null);
+                  setForm({ title: "", type: "note", content: "" });
+                }}>
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  size="sm"
+                  className="bg-blue-600 hover:bg-blue-700 text-xs"
+                  disabled={!form.title.trim() || createMutation.isPending || updateMutation.isPending}>
+                  {createMutation.isPending || updateMutation.isPending ? "Saving..." : editingItem ? "Update" : "Save"}
+                </Button>
+              </DialogFooter>
+            </form>
+          )}
         </DialogContent>
       </Dialog>
     </div>);
