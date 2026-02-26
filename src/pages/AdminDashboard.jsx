@@ -178,6 +178,7 @@ export default function AdminDashboard() {
               allAssets={allAssets}
               allHypotheses={allHypotheses}
               allValidations={allValidations}
+              allUsers={allUsers}
             />
           </div>
         </div>
