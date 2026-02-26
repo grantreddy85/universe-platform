@@ -121,7 +121,10 @@ Format your response as JSON with these fields:
   };
 
   const handleCreateCohort = async (destination) => {
-    if (!cohortName.trim() || !sampleSize) return;
+    if (!cohortName.trim() || !sampleSize) {
+      console.warn("Missing cohort name or sample size");
+      return;
+    }
     
     setIsSaving(true);
     const cohortData = {
@@ -133,11 +136,9 @@ Format your response as JSON with these fields:
 
     try {
       if (destination === "project") {
-        // Save as cohort in the project via parent callback
-        onFiltersApply(selectedFilters, sampleSize);
         onCohortCreated(cohortData);
+        resetDialog();
       } else if (destination === "workspace") {
-        // Save as workspace item
         await base44.entities.WorkspaceItem.create({
           title: cohortName,
           type: "cohort",
@@ -151,11 +152,10 @@ Format your response as JSON with these fields:
             sample_size: parseInt(sampleSize),
           },
         });
+        resetDialog();
       }
-      resetDialog();
     } catch (error) {
       console.error("Error saving cohort:", error);
-    } finally {
       setIsSaving(false);
     }
   };
