@@ -145,6 +145,40 @@ export default function CohortsTab({ project }) {
               Back
             </button>
           </div>
+
+          {/* Cohort Details */}
+          <div className="grid grid-cols-2 gap-4 mb-8">
+            {selectedCohort.organism && (
+              <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
+                <p className="text-xs font-semibold text-gray-500 uppercase mb-1">Organism</p>
+                <p className="text-sm font-medium text-gray-900">{selectedCohort.organism}</p>
+              </div>
+            )}
+            {selectedCohort.strain && (
+              <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
+                <p className="text-xs font-semibold text-gray-500 uppercase mb-1">Strain</p>
+                <p className="text-sm font-medium text-gray-900">{selectedCohort.strain}</p>
+              </div>
+            )}
+          </div>
+
+          {/* Filters */}
+          {selectedCohort.filters && selectedCohort.filters.length > 0 && (
+            <div className="mb-8">
+              <h3 className="text-sm font-semibold text-gray-900 mb-3">Applied Filters</h3>
+              <div className="space-y-2">
+                {selectedCohort.filters.map((filter, idx) => (
+                  <div key={idx} className="flex items-center gap-2 px-3 py-2 bg-blue-50 rounded-lg border border-blue-100">
+                    <span className="text-sm font-medium text-gray-900">{filter.field}</span>
+                    <span className="text-xs text-gray-500">{filter.operator}</span>
+                    <span className="text-sm text-blue-600 font-medium">{filter.value}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <h3 className="text-sm font-semibold text-gray-900 mb-4">Matching Studies</h3>
           <StudyFinderPanel
             activeFilters={selectedCohort.filters || []}
             project={project}
