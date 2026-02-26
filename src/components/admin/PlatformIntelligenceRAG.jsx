@@ -205,18 +205,44 @@ Return a JSON object with this exact schema:
     });
 
     const tags = ["platform-intelligence", "admin", ...(attributionResult?.tags || [])];
+    const finalAttribution = attributionResult?.attribution || [{ contributor: "universe", role: "universe", share_percentage: 100 }];
 
     // Detect if this is a hypothesis response (from the hypothesis synthesis prompt)
     const isHypothesis = content.toLowerCase().includes("hypothesis") && content.toLowerCase().includes("gap");
+    const workspaceTitle = `Platform Intelligence — ${new Date().toLocaleDateString()}`;
+
     await base44.entities.WorkspaceItem.create({
-      title: `Platform Intelligence — ${new Date().toLocaleDateString()}`,
+      title: workspaceTitle,
       type: isHypothesis ? "hypothesis" : "note",
       content,
       metadata: {
         tags,
-        attribution: attributionResult?.attribution || [{ contributor: "universe", role: "universe", share_percentage: 100 }]
+        attribution: finalAttribution,
+        source_contributors: sourceContributors.map(c => c.email),
       }
     });
+
+    // Notify source contributors via in-app notification + email (using their platform login email)
+    await Promise.all(sourceContributors.map(async (contributor) => {
+      const userShare = finalAttribution.find(a => a.contributor === contributor.email);
+      const shareInfo = userShare ? `You have been attributed a ${userShare.share_percentage}% researcher share.` : "";
+
+      await Promise.all([
+        base44.entities.Notification.create({
+          user_email: contributor.email,
+          title: `Your research contributed to a new platform insight`,
+          message: `The platform intelligence AI used your research data to generate a new ${isHypothesis ? "hypothesis" : "insight"}: "${workspaceTitle}". ${shareInfo} You will be notified when this is assigned to a project.`,
+          type: "data_used",
+          related_entity_type: "asset",
+          is_read: false,
+        }).catch(() => {}),
+        base44.integrations.Core.SendEmail({
+          to: contributor.email,
+          subject: `UniVerse: Your research was used to generate a new ${isHypothesis ? "hypothesis" : "insight"}`,
+          body: `Hi ${contributor.full_name || contributor.email},\n\nThe UniVerse Platform Intelligence AI has used your research data to generate a new ${isHypothesis ? "hypothesis" : "insight"}.\n\n"${workspaceTitle}"\n\n${shareInfo}\n\nThis insight is now in the admin workspace and may be assigned to a project. When that happens, you will receive another notification and your attribution share will be formally recorded on the resulting asset.\n\nLog in to UniVerse to view your contributions and track any projects your data supports.\n\n— The UniVerse Platform`.trim(),
+        }).catch(() => {}),
+      ]);
+    }));
 
     setSavingIndex(null);
     setSavedIndex(index);
