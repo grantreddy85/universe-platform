@@ -93,8 +93,10 @@ export default function StudyFinderPanel({ activeFilters, project, onAskAboutStu
   }, [activeFilters]);
 
   const filterSummary = activeFilters.map(f => {
-    const [, val] = f.split(":");
-    return val;
+    if (typeof f === "string") {
+      return f.includes(":") ? f.split(":")[1] : f;
+    }
+    return f?.value || f;
   }).join(", ");
 
   const handleSearch = async () => {
