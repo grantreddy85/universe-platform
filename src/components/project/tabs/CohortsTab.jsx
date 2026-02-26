@@ -125,47 +125,43 @@ export default function CohortsTab({ project }) {
       />
     </div>
     <div className="flex-1 p-6 lg:p-8 overflow-y-auto">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">
-          {selectedCohort ? selectedCohort.name : "Studies & Cohorts"}
-        </h2>
-      </div>
-
-      {selectedCohort && (
-        <div className="bg-white rounded-xl border border-gray-100 p-6 mb-6">
-          <div className="flex items-start justify-between mb-4">
+      {selectedCohort ? (
+        <>
+          <div className="flex items-center justify-between mb-4">
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">{selectedCohort.name}</h3>
-              <p className="text-sm text-gray-600 mb-3">Sample Size: {selectedCohort.sample_size}</p>
+              <h2 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">Cohort Results</h2>
+              <p className="text-lg font-semibold text-gray-900 mt-1">{selectedCohort.name}</p>
+              <p className="text-xs text-gray-500 mt-0.5">Sample Size: {selectedCohort.sample_size} • Status: {selectedCohort.status}</p>
             </div>
-            <Badge className={`${statusStyles[selectedCohort.status]} text-sm`}>
-              {selectedCohort.status}
-            </Badge>
+            <button
+              onClick={() => setSelectedCohort(null)}
+              className="text-xs text-gray-400 hover:text-gray-600 transition-colors"
+            >
+              Clear
+            </button>
           </div>
-          {selectedCohort.filters && selectedCohort.filters.length > 0 && (
-            <div className="mb-4">
-              <p className="text-xs font-semibold text-gray-700 uppercase mb-2">Filters</p>
-              <div className="flex flex-wrap gap-2">
-                {selectedCohort.filters.map((filter, idx) => (
-                  <Badge key={idx} variant="outline" className="text-xs">
-                    {filter}
-                  </Badge>
-                ))}
-              </div>
-            </div>
-          )}
-          <p className="text-xs text-gray-500">Created: {new Date(selectedCohort.created_date).toLocaleDateString()}</p>
-        </div>
+          <StudyFinderPanel
+            activeFilters={selectedCohort.filters || []}
+            project={project}
+            onAskAboutStudy={handleAskAboutStudy}
+            onClose={() => {}}
+            isEmbedded={true}
+          />
+        </>
+      ) : (
+        <>
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">Studies & Cohorts</h2>
+          </div>
+          <StudyFinderPanel
+            activeFilters={activeFilters}
+            project={project}
+            onAskAboutStudy={handleAskAboutStudy}
+            onClose={() => {}}
+            isEmbedded={true}
+          />
+        </>
       )}
-
-      {/* Study Finder */}
-      <StudyFinderPanel
-        activeFilters={selectedCohort ? (selectedCohort.filters || []) : activeFilters}
-        project={project}
-        onAskAboutStudy={handleAskAboutStudy}
-        onClose={() => {}}
-        isEmbedded={true}
-      />
 
       <CohortAssistantDialog
         open={showAssistant}
