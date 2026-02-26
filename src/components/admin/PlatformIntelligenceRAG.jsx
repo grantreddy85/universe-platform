@@ -148,8 +148,16 @@ Query: ${text}`;
     setLoading(false);
   };
 
-  const saveAsNote = async (content, index) => {
+  const initiateSave = (content, index) => {
+    setPendingSaveContent(content);
+    setPendingSaveIndex(index);
+    setSelectedContributors([]);
+    setShowContributorDialog(true);
+  };
+
+  const saveAsNote = async (content, index, sourceContributors = []) => {
     setSavingIndex(index);
+    setShowContributorDialog(false);
 
     // Ask the LLM to extract contributor attribution weights from the response
     const attributionResult = await base44.integrations.Core.InvokeLLM({
