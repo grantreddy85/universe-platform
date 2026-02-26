@@ -50,6 +50,24 @@ export default function CohortAssistantDialog({
     return suggestions[Math.floor(Math.random() * suggestions.length)];
   };
 
+  const parseFilterString = (filterStr) => {
+    // Parse "field:value" or "field:operator:value" format into object
+    const parts = filterStr.split(":");
+    if (parts.length >= 2) {
+      return {
+        field: parts[0].trim(),
+        operator: parts.length === 3 ? parts[1].trim() : "is",
+        value: parts.length === 3 ? parts[2].trim() : parts.slice(1).join(":").trim(),
+      };
+    }
+    return { field: filterStr, operator: "is", value: "" };
+  };
+
+  const filterToString = (filterObj) => {
+    // Convert filter object back to display string
+    return `${filterObj.field}:${filterObj.value}`;
+  };
+
   const handleAskAssistant = async () => {
     if (!question.trim()) return;
     
