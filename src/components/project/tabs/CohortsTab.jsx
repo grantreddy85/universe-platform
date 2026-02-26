@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, FlaskConical, MoreHorizontal, Trash2, Sparkles, Search, ChevronDown } from "lucide-react";
+import { Plus, FlaskConical, MoreHorizontal, Trash2, Sparkles, Search } from "lucide-react";
 import TabAIPanel from "./TabAIPanel";
 import CohortFilters from "@/components/cohorts/CohortFilters";
 import StudyFinderPanel from "@/components/cohorts/StudyFinderPanel";
@@ -39,8 +39,6 @@ export default function CohortsTab({ project }) {
   const [sampleSize, setSampleSize] = useState("");
   const [studyFinderOpen, setStudyFinderOpen] = useState(false);
   const [studyAiContext, setStudyAiContext] = useState(null);
-  const [showCohortsDropdown, setShowCohortsDropdown] = useState(false);
-  const [selectedCohort, setSelectedCohort] = useState(null);
 
   const handleAskAboutStudy = (study) => {
     setStudyAiContext(study);
@@ -65,12 +63,10 @@ export default function CohortsTab({ project }) {
         ...data,
         project_id: project.id,
       }),
-    onSuccess: (newCohort) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["project-cohorts", project.id] });
       setShowAssistant(false);
-      setStudyFinderOpen(false);
-      setSelectedCohort(newCohort);
-      setShowCohortsDropdown(true);
+      setStudyFinderOpen(true);
     },
   });
 
@@ -81,128 +77,26 @@ export default function CohortsTab({ project }) {
 
   return (
     <div className="flex h-full">
-    <div className="w-72 border-r border-gray-200 bg-white overflow-y-auto">
-      {/* Your Cohorts Section */}
-      <div className="p-4 border-b border-gray-100">
-        <button
-          onClick={() => setShowCohortsDropdown(!showCohortsDropdown)}
-          className="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-semibold text-gray-900 hover:bg-gray-50 transition-colors"
-        >
-          <span>Your Cohorts ({cohorts.length})</span>
-          <ChevronDown className={`w-4 h-4 transition-transform ${showCohortsDropdown ? "rotate-180" : ""}`} />
-        </button>
-        
-        {showCohortsDropdown && cohorts.length > 0 && (
-          <div className="mt-2 space-y-1 border-t border-gray-100 pt-2">
-            {cohorts.map((cohort) => (
-              <button
-                key={cohort.id}
-                onClick={() => {
-                  setSelectedCohort(cohort);
-                  setShowCohortsDropdown(false);
-                }}
-                className={`w-full flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs transition-all text-left truncate ${
-                  selectedCohort?.id === cohort.id
-                    ? "bg-blue-50 text-blue-600 font-semibold"
-                    : "text-gray-600 hover:bg-blue-50 hover:text-blue-600"
-                }`}
-              >
-                <span className="truncate">{cohort.name}</span>
-                <Badge className={`${statusStyles[cohort.status]} text-xs flex-shrink-0`}>
-                  {cohort.status}
-                </Badge>
-              </button>
-            ))}
-          </div>
-        )}
+    <CohortFilters
+      selected={activeFilters}
+      onToggle={toggleFilter}
+      onClear={() => setActiveFilters([])}
+      sampleSize={sampleSize}
+      onSampleSizeChange={setSampleSize}
+    />
+    <div className="flex-1 p-6 lg:p-8 overflow-y-auto">
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">Studies & Cohorts</h2>
       </div>
 
-      {/* Filters */}
-      <CohortFilters
-        selected={activeFilters}
-        onToggle={toggleFilter}
-        onClear={() => setActiveFilters([])}
-        sampleSize={sampleSize}
-        onSampleSizeChange={setSampleSize}
+      {/* Study Finder */}
+      <StudyFinderPanel
+        activeFilters={activeFilters}
+        project={project}
+        onAskAboutStudy={handleAskAboutStudy}
+        onClose={() => {}}
+        isEmbedded={true}
       />
-    </div>
-    <div className="flex-1 p-6 lg:p-8 overflow-y-auto">
-      {selectedCohort ? (
-        <>
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h2 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">Cohort Results</h2>
-              <p className="text-2xl font-bold text-gray-900 mt-2">{selectedCohort.name}</p>
-              <div className="flex items-center gap-4 mt-3 text-sm text-gray-600">
-                <span>Sample Size: {selectedCohort.sample_size?.toLocaleString()}</span>
-                <Badge className={`${statusStyles[selectedCohort.status]}`}>
-                  {selectedCohort.status}
-                </Badge>
-              </div>
-            </div>
-            <button
-              onClick={() => setSelectedCohort(null)}
-              className="px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
-            >
-              Back
-            </button>
-          </div>
-
-          {/* Cohort Details */}
-          <div className="grid grid-cols-2 gap-4 mb-8">
-            {selectedCohort.organism && (
-              <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
-                <p className="text-xs font-semibold text-gray-500 uppercase mb-1">Organism</p>
-                <p className="text-sm font-medium text-gray-900">{selectedCohort.organism}</p>
-              </div>
-            )}
-            {selectedCohort.strain && (
-              <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
-                <p className="text-xs font-semibold text-gray-500 uppercase mb-1">Strain</p>
-                <p className="text-sm font-medium text-gray-900">{selectedCohort.strain}</p>
-              </div>
-            )}
-          </div>
-
-          {/* Filters */}
-          {selectedCohort.filters && selectedCohort.filters.length > 0 && (
-            <div className="mb-8">
-              <h3 className="text-sm font-semibold text-gray-900 mb-3">Applied Filters</h3>
-              <div className="space-y-2">
-                {selectedCohort.filters.map((filter, idx) => (
-                  <div key={idx} className="flex items-center gap-2 px-3 py-2 bg-blue-50 rounded-lg border border-blue-100">
-                    <span className="text-sm font-medium text-gray-900">{filter.field}</span>
-                    <span className="text-xs text-gray-500">{filter.operator}</span>
-                    <span className="text-sm text-blue-600 font-medium">{filter.value}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          <h3 className="text-sm font-semibold text-gray-900 mb-4">Matching Studies</h3>
-          <StudyFinderPanel
-            activeFilters={selectedCohort.filters || []}
-            project={project}
-            onAskAboutStudy={handleAskAboutStudy}
-            onClose={() => {}}
-            isEmbedded={true}
-          />
-        </>
-      ) : (
-        <>
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">Studies & Cohorts</h2>
-          </div>
-          <StudyFinderPanel
-            activeFilters={activeFilters}
-            project={project}
-            onAskAboutStudy={handleAskAboutStudy}
-            onClose={() => {}}
-            isEmbedded={true}
-          />
-        </>
-      )}
 
       <CohortAssistantDialog
         open={showAssistant}
