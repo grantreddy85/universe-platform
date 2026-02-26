@@ -241,63 +241,67 @@ export default function Pricing() {
         })}
       </div>
 
-      {/* Data Contribution Earnings */}
+      {/* Why Contribute */}
       <div className="bg-white rounded-2xl border border-gray-100 p-8 mb-8">
         <div className="flex items-start gap-3 mb-6">
           <div className="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center flex-shrink-0">
             <TrendingUp className="w-4 h-4 text-emerald-600" />
           </div>
           <div>
-            <h2 className="text-sm font-semibold text-gray-700 mb-1">Earn Credits By Contributing</h2>
-            <p className="text-xs text-gray-400 max-w-2xl">
-              Every piece of genuine research data you share trains the UniVerse Model — a biomedical AI built exclusively from peer-validated science.
-              You're not just a user. You're a co-author of the platform's intelligence. Every time your data influences a discovery, you earn attribution and credits.
+            <h2 className="text-sm font-semibold text-gray-700 mb-1">Why Share Your Data With UniVerse?</h2>
+            <p className="text-xs text-gray-400 max-w-2xl leading-relaxed">
+              Your data doesn't disappear into a black box. It trains the UniVerse Model — a biomedical AI built exclusively from peer-validated research.
+              You retain full IP ownership and receive attribution every time your work shapes a platform discovery. And when your validated research is ready,
+              you can list it on the <strong className="text-gray-600">IP Marketplace</strong> and earn real revenue from commercial licensing.
             </p>
           </div>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-          {[
-            { action: "Upload a raw dataset (linked to cohort)", credits: "+20", icon: "📤" },
-            { action: "Cohort built from your data", credits: "+10", icon: "👥" },
-            { action: "Workflow run using your dataset", credits: "+15", icon: "⚙️" },
-            { action: "Asset validated (peer-confirmed)", credits: "+30", icon: "✅" },
-            { action: "Another researcher cites your asset", credits: "+20", icon: "🔗" },
-            { action: "Your data used in a platform hypothesis", credits: "+25", icon: "💡" },
-            { action: "ORCID verified (one-time)", credits: "+10", icon: "🪪" },
-            { action: "AI-flagged duplicate upload", credits: "−10", icon: "⚠️" },
-          ].map((item) => (
-            <div key={item.action} className="flex items-start gap-3 p-4 rounded-xl bg-gray-50 border border-gray-100">
-              <span className="text-xl">{item.icon}</span>
-              <div>
-                <p className="text-xs text-gray-600 leading-snug">{item.action}</p>
-                <p className={`text-sm font-bold mt-1 ${item.credits.startsWith("+") ? "text-emerald-600" : "text-red-400"}`}>{item.credits} credits</p>
-              </div>
-            </div>
-          ))}
+        <div className="grid sm:grid-cols-3 gap-4 mb-6">
+          <div className="rounded-xl border border-emerald-100 bg-emerald-50/40 p-5">
+            <span className="text-2xl">🧠</span>
+            <p className="text-xs font-semibold text-gray-700 mt-2 mb-1">Co-author the UniVerse Model</p>
+            <p className="text-[11px] text-gray-500 leading-relaxed">
+              Every validated dataset you contribute shapes a biomedical AI that no single institution could build alone. Your name is on it.
+            </p>
+          </div>
+          <div className="rounded-xl border border-blue-100 bg-blue-50/40 p-5">
+            <span className="text-2xl">🔔</span>
+            <p className="text-xs font-semibold text-gray-700 mt-2 mb-1">Know when your work is used</p>
+            <p className="text-[11px] text-gray-500 leading-relaxed">
+              Every time your data influences a hypothesis or output on the platform, you receive a full attribution notification with lineage.
+            </p>
+          </div>
+          <div className="rounded-xl border border-violet-100 bg-violet-50/40 p-5">
+            <span className="text-2xl">💰</span>
+            <p className="text-xs font-semibold text-gray-700 mt-2 mb-1">Earn real revenue from your IP</p>
+            <p className="text-[11px] text-gray-500 leading-relaxed">
+              Validated assets can be listed on the UniVerse IP Marketplace. When institutions license your research commercially, you receive royalty payments directly.
+            </p>
+          </div>
         </div>
 
         {/* Data transparency box */}
-        <div className="rounded-xl border border-blue-100 bg-blue-50/40 p-5 grid sm:grid-cols-3 gap-4">
+        <div className="rounded-xl border border-gray-100 bg-gray-50/60 p-5 grid sm:grid-cols-3 gap-4">
           <div className="flex items-start gap-2">
-            <Shield className="w-4 h-4 text-blue-500 flex-shrink-0 mt-0.5" />
+            <Shield className="w-4 h-4 text-gray-400 flex-shrink-0 mt-0.5" />
             <div>
               <p className="text-xs font-semibold text-gray-700 mb-1">Your data remains yours</p>
-              <p className="text-[11px] text-gray-500">You retain full IP ownership. UniVerse holds a non-exclusive licence to train its models only.</p>
+              <p className="text-[11px] text-gray-500">You retain full IP ownership. UniVerse holds a non-exclusive licence to train its models only. You can opt out at any time by switching to Pro.</p>
             </div>
           </div>
           <div className="flex items-start gap-2">
-            <Bell className="w-4 h-4 text-blue-500 flex-shrink-0 mt-0.5" />
+            <Bell className="w-4 h-4 text-gray-400 flex-shrink-0 mt-0.5" />
             <div>
               <p className="text-xs font-semibold text-gray-700 mb-1">Full audit trail</p>
-              <p className="text-[11px] text-gray-500">Every time your data influences a platform hypothesis or output, you receive a notification with full lineage.</p>
+              <p className="text-[11px] text-gray-500">Complete lineage tracking on every output. You always know where your data went and what it contributed to.</p>
             </div>
           </div>
           <div className="flex items-start gap-2">
-            <CheckCircle2 className="w-4 h-4 text-blue-500 flex-shrink-0 mt-0.5" />
+            <CheckCircle2 className="w-4 h-4 text-gray-400 flex-shrink-0 mt-0.5" />
             <div>
-              <p className="text-xs font-semibold text-gray-700 mb-1">Opt out anytime</p>
-              <p className="text-[11px] text-gray-500">Switch to Pro to remove your data from model training entirely — takes effect immediately.</p>
+              <p className="text-xs font-semibold text-gray-700 mb-1">Visibility controls</p>
+              <p className="text-[11px] text-gray-500">Set each vault to Private, Collaborators, or Platform-shared. Only platform-shared data contributes to model training.</p>
             </div>
           </div>
         </div>
