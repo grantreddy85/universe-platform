@@ -258,24 +258,25 @@ Format your response as JSON with these fields:
                   Recommended Filters ({selectedFilters.length})
                 </Label>
                 <div className="space-y-2">
-                  {recommendation.filters.map((filter) => {
-                    const isSelected = selectedFilters.includes(filter);
-                    return (
-                      <button
-                        key={filter}
-                        onClick={() => toggleFilter(filter)}
-                        className={`w-full flex items-center gap-2 p-2 rounded-lg border transition-colors ${
-                          isSelected
-                            ? "bg-blue-50 border-blue-300"
-                            : "bg-gray-50 border-gray-200 hover:border-gray-300"
-                        }`}
-                      >
-                        {isSelected && <Check className="w-4 h-4 text-blue-600 flex-shrink-0" />}
-                        <span className="text-xs text-gray-700 flex-1 text-left">{filter}</span>
-                      </button>
-                    );
-                  })}
-                </div>
+                    {recommendation.filters.map((filterStr) => {
+                      const filterObj = parseFilterString(filterStr);
+                      const isSelected = selectedFilters.some((f) => f.field === filterObj.field && f.value === filterObj.value);
+                      return (
+                        <button
+                          key={filterStr}
+                          onClick={() => toggleFilter(filterObj)}
+                          className={`w-full flex items-center gap-2 p-2 rounded-lg border transition-colors ${
+                            isSelected
+                              ? "bg-blue-50 border-blue-300"
+                              : "bg-gray-50 border-gray-200 hover:border-gray-300"
+                          }`}
+                        >
+                          {isSelected && <Check className="w-4 h-4 text-blue-600 flex-shrink-0" />}
+                          <span className="text-xs text-gray-700 flex-1 text-left">{filterToString(filterObj)}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
               </div>
             </div>
 
