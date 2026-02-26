@@ -176,56 +176,58 @@ Format your response as JSON with these fields:
         )}
 
         {stage === "review" && recommendation && (
-          <div className="space-y-4 mt-4 max-h-96 overflow-y-auto">
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-              <p className="text-xs text-blue-700">{recommendation.reasoning}</p>
-            </div>
+          <div className="flex flex-col mt-4" style={{maxHeight: "70vh"}}>
+            <div className="space-y-4 overflow-y-auto flex-1 pr-1">
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                <p className="text-xs text-blue-700">{recommendation.reasoning}</p>
+              </div>
 
-            <div className="space-y-2">
-              <Label className="text-sm font-medium">Cohort Name</Label>
-              <Input
-                value={cohortName}
-                onChange={(e) => setCohortName(e.target.value)}
-                className="text-sm"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label className="text-sm font-medium">Target Sample Size</Label>
-              <Input
-                type="number"
-                value={sampleSize}
-                onChange={(e) => setSampleSize(e.target.value)}
-                className="text-sm"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label className="text-sm font-medium">
-                Recommended Filters ({selectedFilters.length})
-              </Label>
               <div className="space-y-2">
-                {recommendation.filters.map((filter) => {
-                  const isSelected = selectedFilters.includes(filter);
-                  return (
-                    <button
-                      key={filter}
-                      onClick={() => toggleFilter(filter)}
-                      className={`w-full flex items-center gap-2 p-2 rounded-lg border transition-colors ${
-                        isSelected
-                          ? "bg-blue-50 border-blue-300"
-                          : "bg-gray-50 border-gray-200 hover:border-gray-300"
-                      }`}
-                    >
-                      {isSelected && <Check className="w-4 h-4 text-blue-600 flex-shrink-0" />}
-                      <span className="text-xs text-gray-700 flex-1 text-left">{filter}</span>
-                    </button>
-                  );
-                })}
+                <Label className="text-sm font-medium">Cohort Name</Label>
+                <Input
+                  value={cohortName}
+                  onChange={(e) => setCohortName(e.target.value)}
+                  className="text-sm"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-sm font-medium">Target Sample Size</Label>
+                <Input
+                  type="number"
+                  value={sampleSize}
+                  onChange={(e) => setSampleSize(e.target.value)}
+                  className="text-sm"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-sm font-medium">
+                  Recommended Filters ({selectedFilters.length})
+                </Label>
+                <div className="space-y-2">
+                  {recommendation.filters.map((filter) => {
+                    const isSelected = selectedFilters.includes(filter);
+                    return (
+                      <button
+                        key={filter}
+                        onClick={() => toggleFilter(filter)}
+                        className={`w-full flex items-center gap-2 p-2 rounded-lg border transition-colors ${
+                          isSelected
+                            ? "bg-blue-50 border-blue-300"
+                            : "bg-gray-50 border-gray-200 hover:border-gray-300"
+                        }`}
+                      >
+                        {isSelected && <Check className="w-4 h-4 text-blue-600 flex-shrink-0" />}
+                        <span className="text-xs text-gray-700 flex-1 text-left">{filter}</span>
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
             </div>
 
-            <DialogFooter className="pt-2">
+            <DialogFooter className="pt-4 border-t mt-4 flex-shrink-0">
               <Button
                 type="button"
                 variant="ghost"
@@ -240,7 +242,7 @@ Format your response as JSON with these fields:
                 className="bg-blue-600 hover:bg-blue-700 text-xs"
               >
                 <Check className="w-3.5 h-3.5 mr-1.5" />
-                Create Cohort
+                Save Cohort
               </Button>
             </DialogFooter>
           </div>
