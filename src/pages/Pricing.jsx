@@ -307,15 +307,18 @@ export default function Pricing() {
         </div>
       </div>
 
-      {/* Safeguards notice */}
+      {/* Contributor Requirements */}
       <div className="bg-white rounded-2xl border border-gray-100 p-6 mb-8">
-        <h2 className="text-sm font-semibold text-gray-700 mb-1">Data Quality Safeguards</h2>
-        <p className="text-xs text-gray-400 mb-4">We take data quality seriously — this protects the value of every contributor's attribution and ensures the UniVerse Model is trained only on genuine, reproducible science.</p>
+        <h2 className="text-sm font-semibold text-gray-700 mb-1">Keeping Your Contributor Access</h2>
+        <p className="text-xs text-gray-400 mb-4 max-w-2xl">
+          Contributor access is free because the platform relies on genuine, reproducible research data to build the UniVerse Model.
+          To maintain access, you need to stay active and contribute real science — not just files.
+        </p>
         <div className="grid sm:grid-cols-3 gap-4">
           {[
-            { icon: "🔍", title: "Originality Check", desc: "Every upload is scanned for AI-generated content likelihood and similarity to existing platform assets. Duplicates do not count toward contribution." },
-            { icon: "🔬", title: "Validation Requirement", desc: "Contributor status requires at least 1 platform-validated asset every 60 days. Validation requires reproducibility scores and approver sign-off — it cannot be faked." },
-            { icon: "🧬", title: "Cohort Linkage", desc: "A contribution only counts when linked to a real cohort or analysis run. Standalone PDF uploads without supporting data carry minimal weight." },
+            { icon: "📅", title: "1 validated upload every 30 days", desc: "Upload must be original research data linked to a real cohort or analysis run. AI-generated content, duplicates, and standalone PDFs without supporting data do not qualify." },
+            { icon: "✅", title: "1 validated asset every 60 days", desc: "A validated asset requires a completed workflow run, a reproducibility score, and approver sign-off. This ensures your contribution is genuine and reproducible — it cannot be shortcut." },
+            { icon: "🪪", title: "ORCID verification recommended", desc: "Verifying your ORCID iD links your platform contributions to your academic identity, making your attribution citable and your IP Marketplace listings more credible to licensees." },
           ].map((item) => (
             <div key={item.title} className="p-4 rounded-xl bg-gray-50 border border-gray-100">
               <span className="text-xl">{item.icon}</span>
@@ -324,6 +327,9 @@ export default function Pricing() {
             </div>
           ))}
         </div>
+        <p className="text-[11px] text-gray-400 mt-4 border-t border-gray-100 pt-4">
+          If activity requirements are not met, your account will revert to a credit-only plan. All your existing projects and data remain accessible — you'll just need credits to use AI features.
+        </p>
       </div>
 
       {/* Credit Costs */}
