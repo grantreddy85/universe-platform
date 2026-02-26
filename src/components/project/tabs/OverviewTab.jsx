@@ -71,6 +71,10 @@ export default function OverviewTab({ project, onTabChange }) {
   const pendingValidations = validations.filter((v) => v.status === "pending" || v.status === "in_review");
   const tokenisedAssets = assets.filter((a) => a.tokenisation?.is_tokenised);
 
+  // Workflow nudge: recommend if cohort or hypothesis exists but no workflow yet
+  const hasCohortsOrHypotheses = hypotheses.length > 0;
+  const shouldNudgeWorkflow = hasCohortsOrHypotheses && workflows.length === 0;
+
   return (
     <div className="p-6 lg:p-8 space-y-6">
       {/* Research Progress Guidance */}
