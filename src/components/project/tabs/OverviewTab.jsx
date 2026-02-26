@@ -5,9 +5,12 @@ import {
   Activity,
   Users,
   TrendingUp,
-  Clock
+  Clock,
+  GitBranch,
+  Sparkles
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import ResearchProgress from "../ResearchProgress";
 
