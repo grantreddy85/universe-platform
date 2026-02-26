@@ -77,13 +77,43 @@ export default function CohortsTab({ project }) {
 
   return (
     <div className="flex h-full">
-    <CohortFilters
-      selected={activeFilters}
-      onToggle={toggleFilter}
-      onClear={() => setActiveFilters([])}
-      sampleSize={sampleSize}
-      onSampleSizeChange={setSampleSize}
-    />
+    <div className="w-72 border-r border-gray-200 bg-white overflow-y-auto">
+      {/* Your Cohorts Section */}
+      <div className="p-4 border-b border-gray-100">
+        <button
+          onClick={() => setShowCohortsDropdown(!showCohortsDropdown)}
+          className="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-semibold text-gray-900 hover:bg-gray-50 transition-colors"
+        >
+          <span>Your Cohorts ({cohorts.length})</span>
+          <ChevronDown className={`w-4 h-4 transition-transform ${showCohortsDropdown ? "rotate-180" : ""}`} />
+        </button>
+        
+        {showCohortsDropdown && cohorts.length > 0 && (
+          <div className="mt-2 space-y-1 border-t border-gray-100 pt-2">
+            {cohorts.map((cohort) => (
+              <button
+                key={cohort.id}
+                className="w-full flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-all text-left truncate"
+              >
+                <span className="truncate">{cohort.name}</span>
+                <Badge className={`${statusStyles[cohort.status]} text-xs flex-shrink-0`}>
+                  {cohort.status}
+                </Badge>
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Filters */}
+      <CohortFilters
+        selected={activeFilters}
+        onToggle={toggleFilter}
+        onClear={() => setActiveFilters([])}
+        sampleSize={sampleSize}
+        onSampleSizeChange={setSampleSize}
+      />
+    </div>
     <div className="flex-1 p-6 lg:p-8 overflow-y-auto">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">Studies & Cohorts</h2>
