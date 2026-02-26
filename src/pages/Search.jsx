@@ -198,8 +198,26 @@ export default function Search() {
     setLoading(true);
 
     try {
+      // Search our internal ResearchPaper index for relevant papers
+      let internalPapersContext = "";
+      if (text) {
+        const keywords = text.toLowerCase().split(/\s+/).filter(w => w.length > 4).slice(0, 5);
+        if (keywords.length > 0) {
+          const paperResults = await base44.entities.ResearchPaper.list("-created_date", 50);
+          const relevant = paperResults.filter(p =>
+            keywords.some(kw => p.title?.toLowerCase().includes(kw))
+          ).slice(0, 10);
+          if (relevant.length > 0) {
+            internalPapersContext = `\n\nYou also have access to the following relevant papers from our internal research index (2021–2025). Reference them where appropriate and include links:\n` +
+              relevant.map(p =>
+                `- "${p.title}" (PMID: ${p.article_id})${p.s3_url ? ` [PDF](${p.s3_url})` : ""}${p.pmc_link ? ` [PMC](${p.pmc_link})` : ""}`
+              ).join("\n");
+          }
+        }
+      }
+
       const response = await base44.integrations.Core.InvokeLLM({
-        prompt: text || "Please analyse the attached file(s).",
+        prompt: (text || "Please analyse the attached file(s).") + internalPapersContext,
         add_context_from_internet: true,
         file_urls: files.length > 0 ? files.map((f) => f.url) : undefined
       });

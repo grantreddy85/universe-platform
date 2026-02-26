@@ -99,7 +99,23 @@ export default function StudyFinderPanel({ activeFilters, project, onAskAboutStu
   const handleSearch = async () => {
     setLoading(true);
     setResults(null);
-    const prompt = `You are a biomedical research assistant. Find real, existing studies from multiple sources matching these cohort criteria: ${filterSummary || "human clinical research"}.
+
+    // Query internal ResearchPaper index
+    let internalContext = "";
+    const allPapers = await base44.entities.ResearchPaper.list("-created_date", 200);
+    const terms = filterSummary.toLowerCase().split(/[,\s]+/).filter(t => t.length > 3);
+    const internalMatches = allPapers.filter(p =>
+      terms.some(t => p.title?.toLowerCase().includes(t))
+    ).slice(0, 15);
+    if (internalMatches.length > 0) {
+      internalContext = `\n\nAdditionally, from our internal curated index of 50,000+ neurodegenerative disease papers (2021–2025), these are relevant:\n` +
+        internalMatches.map(p =>
+          `- "${p.title}" (PMID: ${p.article_id})${p.s3_url ? ` PDF: ${p.s3_url}` : ""}${p.pmc_link ? ` PMC: ${p.pmc_link}` : ""}`
+        ).join("\n") +
+        `\nInclude these internal papers in your "studies" array where relevant, using source: "UniVerse Index".`;
+    }
+
+    const prompt = `You are a biomedical research assistant. Find real, existing studies from multiple sources matching these cohort criteria: ${filterSummary || "human clinical research"}.${internalContext}
 
 Search from these sources:
 - ClinicalTrials.gov (clinical trials)
