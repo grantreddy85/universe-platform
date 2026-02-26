@@ -54,19 +54,30 @@ Deno.serve(async (req) => {
     // Send email notification
     await base44.asServiceRole.integrations.Core.SendEmail({
       to: recipientEmail,
-      subject: `UniVerse: Your data was used in "${project_title}"`,
+      subject: `🔬 Your research is making waves — "${asset.title}" was just used`,
       body: `
 Hi there,
 
-Great news — your research asset "${asset.title}" has been referenced or used as a data source in the platform project "${project_title}".
+Something exciting just happened.
 
-${context ? `Context: ${context}\n` : ''}
+Your research asset — "${asset.title}" — has been picked up and used in the platform project "${project_title}". That means your work isn't sitting on a shelf. It's actively contributing to science being done right now, by other researchers in the UniVerse ecosystem.
+${context ? `\nHow it's being used: ${context}\n` : ''}
+This is exactly what UniVerse is built for — turning individual contributions into collective breakthroughs.
 
-This contributes to your data contribution score and may generate royalty attribution when this project produces validated assets.
+Here's what this means for you:
 
-Log in to UniVerse to view the full details.
+  ✦  Your data contribution score has increased
+  ✦  You're building a track record of research that others trust
+  ✦  If this project produces validated assets, you may be eligible for royalty attribution
 
-— The UniVerse Platform
+The more you contribute, the more your work compounds. Researchers who consistently upload quality data are already seeing their assets referenced across multiple projects — and that recognition translates directly into attribution when those projects hit validation and tokenisation.
+
+Want to keep the momentum going? Log into UniVerse, check your contribution dashboard, and see how your work is shaping the platform.
+
+Your research matters. Keep going.
+
+— The UniVerse Team
+https://universe.com
       `.trim(),
     });
 
