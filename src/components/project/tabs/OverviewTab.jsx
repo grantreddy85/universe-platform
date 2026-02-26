@@ -83,6 +83,30 @@ export default function OverviewTab({ project, onTabChange }) {
         onTabChange={onTabChange}
       />
 
+      {/* Workflow nudge */}
+      {shouldNudgeWorkflow && (
+        <div className="bg-violet-50 border border-violet-100 rounded-xl p-4 flex items-start gap-3">
+          <div className="w-8 h-8 rounded-lg bg-violet-100 flex items-center justify-center flex-shrink-0">
+            <Sparkles className="w-4 h-4 text-violet-500" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-medium text-violet-900">Ready to model your hypothesis?</p>
+            <p className="text-xs text-violet-600 mt-0.5">
+              You have {hypotheses.length > 1 ? `${hypotheses.length} hypotheses` : "a hypothesis"} ready — a computational workflow could help test {hypotheses.length > 1 ? "them" : "it"} before lab validation.
+            </p>
+          </div>
+          <Button
+            size="sm"
+            variant="outline"
+            className="text-xs border-violet-200 text-violet-700 hover:bg-violet-100 flex-shrink-0 gap-1.5"
+            onClick={() => onTabChange("workflows")}
+          >
+            <GitBranch className="w-3.5 h-3.5" />
+            Add Workflow
+          </Button>
+        </div>
+      )}
+
       {/* Project Status Overview */}
       <div className="bg-white rounded-xl border border-gray-100 p-6">
         <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-4">
