@@ -107,79 +107,97 @@ export default function Workspace() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["workspace-items"] })
   });
 
+  const seedAssetAI = async (asset, item, project) => {
+    const result = await base44.integrations.Core.InvokeLLM({
+      prompt: `You are seeding a new research asset on the UniVerse platform with initial Topic Clusters and Attribution.
+
+Asset Title: ${asset.title}
+Asset Type: ${asset.type}
+Description: ${item.content || "N/A"}
+Project: ${project?.title || "N/A"}
+Field: ${project?.field || "N/A"}
+
+Task 1 — Topic Clusters: Assign 2–5 biomedical topic clusters. weight_percentage values must sum to exactly 100.
+Task 2 — Attribution: Assign initial attribution. UniVerse platform always has at least 10%. The primary researcher should hold the majority share. Roles: researcher, lab, universe, investor, funder, tool_creator. share_percentage values must sum to exactly 100.
+
+Return JSON only.`,
+      response_json_schema: {
+        type: "object",
+        properties: {
+          topic_clusters: { type: "array", items: { type: "object", properties: { topic: { type: "string" }, weight_percentage: { type: "number" } } } },
+          attribution: { type: "array", items: { type: "object", properties: { contributor: { type: "string" }, role: { type: "string" }, share_percentage: { type: "number" } } } }
+        }
+      }
+    });
+    if (result?.topic_clusters?.length || result?.attribution?.length) {
+      await base44.entities.Asset.update(asset.id, {
+        ...(result.topic_clusters?.length ? { topic_clusters: result.topic_clusters } : {}),
+        ...(result.attribution?.length ? { attribution: result.attribution } : {}),
+      });
+    }
+    return result;
+  };
+
+  const notifyAttributedContributors = async (attribution, projectTitle, assetTitle) => {
+    if (!attribution?.length) return;
+    // Notify non-universe contributors that their work fed into a project
+    const toNotify = attribution.filter(a => a.role !== "universe" && a.contributor && a.contributor.includes("@"));
+    await Promise.all(toNotify.map(attr =>
+      base44.integrations.Core.SendEmail({
+        to: attr.contributor,
+        subject: `UniVerse: Your work contributed to "${projectTitle}"`,
+        body: `Hi there,\n\nYour research contribution has been attributed to the project "${projectTitle}" on the UniVerse platform.\n\nAsset: "${assetTitle}"\nYour share: ${attr.share_percentage}% (${attr.role})\n\nAs this project progresses through validation and tokenisation, your attribution share will be tracked and applied to any resulting royalties.\n\nLog in to UniVerse to follow the project's progress.\n\n— The UniVerse Platform`.trim(),
+      }).catch(() => {})
+    ));
+    // Also create in-app notifications
+    await Promise.all(toNotify.map(attr =>
+      base44.entities.Notification.create({
+        user_email: attr.contributor,
+        title: `Your work was used in "${projectTitle}"`,
+        message: `Your research contribution "${assetTitle}" has been attributed ${attr.share_percentage}% in the project "${projectTitle}". Track this project to follow its progress.`,
+        type: "data_used",
+        related_entity_type: "asset",
+        is_read: false,
+      }).catch(() => {})
+    ));
+  };
+
   const assignMutation = useMutation({
     mutationFn: async ({ id, projectId, item }) => {
-      // Create the appropriate entity based on type
-      const entityData = {
-        project_id: projectId,
-        title: item.title,
-        description: item.content,
-        content: item.content
-      };
+      const project = projects.find(p => p.id === projectId);
 
       switch (item.type) {
         case "note":
-          await base44.entities.Note.create({
-            project_id: projectId,
-            title: item.title,
-            content: item.content || "",
-            source: "manual"
-          });
+          await base44.entities.Note.create({ project_id: projectId, title: item.title, content: item.content || "", source: "manual" });
           break;
-        case "hypothesis":
-          await base44.entities.Hypothesis.create({
-            project_id: projectId,
-            title: item.title,
-            description: item.content || "",
-            status: "draft"
-          });
+        case "hypothesis": {
+          await base44.entities.Hypothesis.create({ project_id: projectId, title: item.title, description: item.content || "", status: "draft" });
+          // Also create an Asset and seed it with AI attribution + topic clusters
+          const asset = await base44.entities.Asset.create({ project_id: projectId, title: item.title, type: "hypothesis", description: item.content || "", status: "draft" });
+          const aiResult = await seedAssetAI(asset, item, project);
+          await notifyAttributedContributors(aiResult?.attribution, project?.title || "Unnamed Project", item.title);
           break;
+        }
         case "cohort":
-          await base44.entities.Cohort.create({
-            project_id: projectId,
-            name: item.title,
-            status: "draft"
-          });
+          await base44.entities.Cohort.create({ project_id: projectId, name: item.title, status: "draft" });
           break;
         case "workflow":
-          await base44.entities.Workflow.create({
-            project_id: projectId,
-            title: item.title,
-            description: item.content || "",
-            status: "draft",
-            type: "other"
-          });
+          await base44.entities.Workflow.create({ project_id: projectId, title: item.title, description: item.content || "", status: "draft", type: "other" });
           break;
         case "document":
-          if (item.file_url) {
-            await base44.entities.ProjectDocument.create({
-              project_id: projectId,
-              title: item.title,
-              file_url: item.file_url,
-              file_type: "other"
-            });
-          }
+          if (item.file_url) await base44.entities.ProjectDocument.create({ project_id: projectId, title: item.title, file_url: item.file_url, file_type: "other" });
           break;
         case "validation":
-          await base44.entities.ValidationRequest.create({
-            project_id: projectId,
-            title: item.title,
-            type: "in_silico",
-            status: "pending"
-          });
+          await base44.entities.ValidationRequest.create({ project_id: projectId, title: item.title, type: "in_silico", status: "pending" });
           break;
-        case "asset":
-          await base44.entities.Asset.create({
-            project_id: projectId,
-            title: item.title,
-            type: "hypothesis",
-            description: item.content || "",
-            status: "draft"
-          });
+        case "asset": {
+          const asset = await base44.entities.Asset.create({ project_id: projectId, title: item.title, type: "hypothesis", description: item.content || "", status: "draft" });
+          const aiResult = await seedAssetAI(asset, item, project);
+          await notifyAttributedContributors(aiResult?.attribution, project?.title || "Unnamed Project", item.title);
           break;
+        }
       }
 
-      // Update workspace item as assigned
       await base44.entities.WorkspaceItem.update(id, { assigned_project_id: projectId });
     },
     onSuccess: () => {
