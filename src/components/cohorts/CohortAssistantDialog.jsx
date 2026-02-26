@@ -267,25 +267,6 @@ Format your response as JSON with these fields:
               >
                 Back
               </Button>
-              <div className="flex gap-2">
-                <Button
-                  onClick={() => handleCreateCohort("workspace")}
-                  disabled={!cohortName.trim() || !sampleSize || isSaving}
-                  variant="outline"
-                  className="text-xs"
-                >
-                  {isSaving ? <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" /> : <Check className="w-3.5 h-3.5 mr-1.5" />}
-                  Save to Workspace
-                </Button>
-                <Button
-                  onClick={() => handleCreateCohort("project")}
-                  disabled={!cohortName.trim() || !sampleSize || isSaving}
-                  className="bg-blue-600 hover:bg-blue-700 text-xs"
-                >
-                  {isSaving ? <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" /> : <Check className="w-3.5 h-3.5 mr-1.5" />}
-                  Save to Project
-                </Button>
-              </div>
             </DialogFooter>
           </div>
         )}
