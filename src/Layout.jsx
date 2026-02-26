@@ -35,12 +35,11 @@ const navItems = [
 { name: "Home", icon: Home, page: "Home" },
 { name: "Projects", icon: FolderKanban, page: "Projects" },
 { name: "Workspace", icon: Briefcase, page: "Workspace" },
-{ name: "Workflows", icon: GitBranch, page: null, external: true },
 { name: "Labs", icon: FlaskConical, page: "Labs" },
-{ name: "Tokenomics", icon: Coins, page: "Tokenomics", adminOnly: true },
 { name: "Marketplace", icon: Store, page: null, external: true },
 { name: "Topic Library", icon: Coins, page: "TopicLibrary", adminOnly: true },
 { name: "Admin", icon: Shield, page: "AdminDashboard", adminOnly: true },
+{ name: "Tokenomics", icon: Coins, page: "Tokenomics", adminOnly: true },
 { name: "Plans & Credits", icon: Zap, page: "Pricing" }];
 
 
