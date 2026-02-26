@@ -101,14 +101,40 @@ Format your response as JSON with these fields:
     setIsLoading(false);
   };
 
-  const handleCreateCohort = () => {
-    onFiltersApply(selectedFilters, sampleSize);
-    onCohortCreated({
+  const handleCreateCohort = async (destination) => {
+    setIsSaving(true);
+    const cohortData = {
       name: cohortName,
       sample_size: parseInt(sampleSize),
       filters: selectedFilters,
-    });
-    resetDialog();
+    };
+
+    try {
+      if (destination === "project") {
+        // Save as cohort in the project
+        onCohortCreated(cohortData);
+      } else if (destination === "workspace") {
+        // Save as workspace item
+        await base44.entities.WorkspaceItem.create({
+          title: cohortName,
+          type: "cohort",
+          content: JSON.stringify({
+            sample_size: parseInt(sampleSize),
+            filters: selectedFilters,
+            reasoning: recommendation.reasoning,
+          }),
+          metadata: {
+            filters: selectedFilters,
+            sample_size: parseInt(sampleSize),
+          },
+        });
+      }
+      resetDialog();
+    } catch (error) {
+      console.error("Error saving cohort:", error);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const resetDialog = () => {
