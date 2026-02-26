@@ -366,10 +366,23 @@ export default function Workspace() {
                         onClick={() => {
                           setEditingItem(item);
                           setForm({ title: item.title, type: item.type, content: item.content || "" });
+                          setSavedToProject(null);
+                          setNewProjectTitle("");
                         }}>
-
                           <Edit3 className="w-3.5 h-3.5 mr-2" />
-                          Edit
+                          Edit Item
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                        onClick={() => {
+                          setEditingItem(item);
+                          setForm({ title: item.title, type: item.type, content: item.content || "" });
+                          setSavedToProject(null);
+                          setNewProjectTitle("");
+                          // Scroll to new project input after dialog opens
+                          setTimeout(() => document.getElementById("new-project-input")?.focus(), 200);
+                        }}>
+                          <FolderPlus className="w-3.5 h-3.5 mr-2" />
+                          Save to New Project
                         </DropdownMenuItem>
                         {projects.length > 0 &&
                       <>
