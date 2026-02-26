@@ -30,6 +30,7 @@ export default function WorkflowsTab({ project }) {
 
   const [showBuilder, setShowBuilder] = useState(false);
   const [showImporter, setShowImporter] = useState(false);
+  const [showAIPanel, setShowAIPanel] = useState(false);
   const [selectedWorkflow, setSelectedWorkflow] = useState(null);
   const [canvasState, setCanvasState] = useState({ nodes: [], edges: [] });
 
