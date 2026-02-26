@@ -258,14 +258,24 @@ Format your response as JSON with these fields:
               </div>
             </div>
 
-            <DialogFooter className="pt-4 border-t mt-4 flex-shrink-0">
+            <DialogFooter className="pt-4 border-t mt-4 flex-shrink-0 gap-2">
               <Button
                 type="button"
                 variant="ghost"
                 size="sm"
                 onClick={() => setStage("question")}
+                disabled={isSaving}
               >
                 Back
+              </Button>
+              <Button
+                type="button"
+                onClick={() => handleCreateCohort("project")}
+                disabled={!cohortName.trim() || !sampleSize || isSaving}
+                className="bg-blue-600 hover:bg-blue-700"
+              >
+                {isSaving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Check className="w-4 h-4 mr-2" />}
+                Save Cohort
               </Button>
             </DialogFooter>
           </div>
