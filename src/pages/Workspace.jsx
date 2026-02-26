@@ -214,16 +214,18 @@ Return JSON only.`,
 
   const saveToNewProjectMutation = useMutation({
     mutationFn: async ({ item, projectTitle }) => {
-      const project = await base44.entities.Project.create({
-        title: projectTitle,
-        status: "draft"
-      });
-      await base44.entities.Note.create({
-        project_id: project.id,
-        title: item.title,
-        content: item.content || "",
-        source: "ai_copilot"
-      });
+      const project = await base44.entities.Project.create({ title: projectTitle, status: "draft" });
+
+      if (item.type === "hypothesis") {
+        // For hypotheses: create both the hypothesis entity and an asset with AI seeding
+        await base44.entities.Hypothesis.create({ project_id: project.id, title: item.title, description: item.content || "", status: "draft" });
+        const asset = await base44.entities.Asset.create({ project_id: project.id, title: item.title, type: "hypothesis", description: item.content || "", status: "draft" });
+        const aiResult = await seedAssetAI(asset, item, project);
+        await notifyAttributedContributors(aiResult?.attribution, projectTitle, item.title);
+      } else {
+        await base44.entities.Note.create({ project_id: project.id, title: item.title, content: item.content || "", source: "ai_copilot" });
+      }
+
       await base44.entities.WorkspaceItem.update(item.id, { assigned_project_id: project.id });
       return project;
     },
