@@ -87,6 +87,13 @@ export default function CohortsTab({ project }) {
     <div className="flex-1 p-6 lg:p-8 overflow-y-auto">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">Studies & Cohorts</h2>
+        <Button
+          onClick={() => setShowAssistant(true)}
+          className="bg-emerald-600 hover:bg-emerald-700 text-white gap-2"
+        >
+          <Plus className="w-4 h-4" />
+          Save Cohort
+        </Button>
       </div>
 
       {/* Study Finder */}
