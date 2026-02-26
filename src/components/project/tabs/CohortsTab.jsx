@@ -160,7 +160,7 @@ export default function CohortsTab({ project }) {
 
       {/* Study Finder */}
       <StudyFinderPanel
-        activeFilters={activeFilters}
+        activeFilters={selectedCohort ? (selectedCohort.filters || []) : activeFilters}
         project={project}
         onAskAboutStudy={handleAskAboutStudy}
         onClose={() => {}}
