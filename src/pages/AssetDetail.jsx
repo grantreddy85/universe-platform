@@ -258,6 +258,21 @@ Return JSON only.`,
           {asset.description && (
             <p className="text-sm text-gray-500 mt-4 max-w-2xl">{asset.description}</p>
           )}
+          {(!asset.topic_clusters?.length || !asset.attribution?.length) && (
+            <div className="mt-4 flex items-center gap-3 p-3 rounded-lg bg-amber-50 border border-amber-100">
+              <Sparkles className="w-4 h-4 text-amber-500 flex-shrink-0" />
+              <p className="text-xs text-amber-700 flex-1">Topic clusters and attribution are not yet set for this asset.</p>
+              <Button
+                size="sm"
+                variant="outline"
+                className="text-xs border-amber-200 text-amber-700 hover:bg-amber-100 flex-shrink-0"
+                onClick={handleAutoPopulate}
+                disabled={autoPopulating}
+              >
+                {autoPopulating ? <><Loader2 className="w-3 h-3 mr-1.5 animate-spin" /> Populating…</> : <><Sparkles className="w-3 h-3 mr-1.5" /> Auto-populate with AI</>}
+              </Button>
+            </div>
+          )}
         </div>
       </div>
 
