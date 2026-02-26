@@ -342,6 +342,57 @@ Return a JSON object with this exact schema:
         <div ref={messagesEndRef} />
       </div>
 
+      {/* Contributor Attribution Dialog */}
+      <Dialog open={showContributorDialog} onOpenChange={setShowContributorDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-base font-semibold flex items-center gap-2">
+              <UserCheck className="w-4 h-4 text-indigo-500" />
+              Tag Source Contributors
+            </DialogTitle>
+            <p className="text-xs text-gray-400 mt-1">Select the researchers whose data or work informed this insight. They will be notified via email and receive attribution when this is assigned to a project.</p>
+          </DialogHeader>
+          <div className="space-y-3 my-2 max-h-60 overflow-y-auto">
+            {allUsers.filter(u => u.email).map(user => {
+              const isSelected = selectedContributors.some(c => c.email === user.email);
+              return (
+                <button
+                  key={user.email}
+                  onClick={() => setSelectedContributors(prev =>
+                    isSelected ? prev.filter(c => c.email !== user.email) : [...prev, user]
+                  )}
+                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg border text-left text-sm transition-all ${
+                    isSelected ? "border-indigo-300 bg-indigo-50 text-indigo-800" : "border-gray-200 bg-white text-gray-600 hover:border-gray-300"
+                  }`}
+                >
+                  <div className={`w-4 h-4 rounded border flex items-center justify-center flex-shrink-0 ${isSelected ? "bg-indigo-500 border-indigo-500" : "border-gray-300"}`}>
+                    {isSelected && <span className="text-white text-[10px]">✓</span>}
+                  </div>
+                  <div>
+                    <p className="font-medium text-xs">{user.full_name || user.email}</p>
+                    <p className="text-[10px] text-gray-400">{user.email}</p>
+                  </div>
+                </button>
+              );
+            })}
+            {allUsers.length === 0 && <p className="text-xs text-gray-400 text-center py-4">No platform users found.</p>}
+          </div>
+          <DialogFooter className="gap-2">
+            <Button variant="ghost" size="sm" onClick={() => saveAsNote(pendingSaveContent, pendingSaveIndex, [])}>
+              Skip — Save without tagging
+            </Button>
+            <Button
+              size="sm"
+              className="bg-indigo-600 hover:bg-indigo-700 text-xs"
+              onClick={() => saveAsNote(pendingSaveContent, pendingSaveIndex, selectedContributors)}
+            >
+              <UserCheck className="w-3 h-3 mr-1.5" />
+              Save & Notify {selectedContributors.length > 0 ? `(${selectedContributors.length})` : ""}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       {/* Input */}
       <div className="p-4 border-t border-gray-100 flex gap-2 flex-shrink-0">
         <Input
