@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import {
   ArrowLeft, Sparkles, Send, TrendingUp, Globe, Users, DollarSign,
   CheckCircle2, Clock, FlaskConical, Lightbulb, Database, BarChart3,
-  FileText, ShieldCheck, BookOpen, ExternalLink, Star, Image, FileSearch, Edit2, Save, X
+  FileText, ShieldCheck, BookOpen, ExternalLink, Star, Image, FileSearch, Edit2, Save, X, Loader2
 } from "lucide-react";
 import InfographicModal from "@/components/project/tabs/InfographicModal";
 import AttributionEditor from "@/components/asset/AttributionEditor";
