@@ -107,6 +107,89 @@ export default function CohortsTab({ project }) {
         <h2 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">Studies & Cohorts</h2>
       </div>
 
+      {/* Saved Cohorts */}
+      {cohorts.length > 0 && (
+        <div className="mb-6">
+          <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Saved Cohorts ({cohorts.length})</h3>
+          <div className="grid gap-2">
+            {cohorts.map((cohort) => (
+              <div
+                key={cohort.id}
+                onClick={() => setSelectedCohort(selectedCohort?.id === cohort.id ? null : cohort)}
+                className="flex items-center justify-between p-3 rounded-lg border border-gray-100 bg-white hover:border-blue-200 hover:bg-blue-50/30 cursor-pointer transition-all"
+              >
+                <div className="flex items-center gap-3 flex-1 min-w-0">
+                  <div className="w-7 h-7 rounded-md bg-blue-50 flex items-center justify-center flex-shrink-0">
+                    <Users className="w-3.5 h-3.5 text-blue-500" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-medium text-gray-800 truncate">{cohort.name}</span>
+                      <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium ${statusStyles[cohort.status] || statusStyles.draft}`}>
+                        {cohort.status}
+                      </span>
+                    </div>
+                    <div className="flex flex-wrap gap-1 mt-1">
+                      {cohort.filters?.slice(0, 3).map((f, i) => (
+                        <span key={i} className="text-[10px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded">
+                          {f.field}: {f.value}
+                        </span>
+                      ))}
+                      {cohort.filters?.length > 3 && (
+                        <span className="text-[10px] text-gray-400">+{cohort.filters.length - 3} more</span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  {cohort.sample_size && (
+                    <span className="text-xs text-gray-400">n={cohort.sample_size}</span>
+                  )}
+                  <button
+                    onClick={(e) => { e.stopPropagation(); deleteMutation.mutate(cohort.id); }}
+                    className="p-1 rounded hover:bg-red-50 hover:text-red-400 text-gray-300 transition-colors"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                  </button>
+                  <ChevronRight className={`w-4 h-4 text-gray-300 transition-transform ${selectedCohort?.id === cohort.id ? "rotate-90" : ""}`} />
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Expanded Cohort Detail */}
+          {selectedCohort && (
+            <div className="mt-2 p-4 rounded-lg border border-blue-200 bg-blue-50/40">
+              <div className="flex items-start justify-between mb-3">
+                <div>
+                  <h4 className="text-sm font-semibold text-gray-800">{selectedCohort.name}</h4>
+                  {selectedCohort.organism && <p className="text-xs text-gray-500 mt-0.5">Organism: {selectedCohort.organism}</p>}
+                </div>
+                <button onClick={() => setSelectedCohort(null)} className="p-1 rounded hover:bg-blue-100 text-gray-400">
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              </div>
+              <div className="grid grid-cols-2 gap-2 mb-3">
+                {selectedCohort.filters?.map((f, i) => (
+                  <div key={i} className="flex items-center gap-2 bg-white rounded-md px-2.5 py-1.5 border border-blue-100">
+                    <Tag className="w-3 h-3 text-blue-400 flex-shrink-0" />
+                    <span className="text-xs text-gray-500 capitalize">{f.field.replace(/_/g, " ")}:</span>
+                    <span className="text-xs font-medium text-gray-700">{f.value}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="flex items-center gap-4 text-xs text-gray-500">
+                {selectedCohort.sample_size && <span>Target sample: <strong>{selectedCohort.sample_size}</strong></span>}
+                {selectedCohort.linked_hypothesis_id && <span>Linked to hypothesis</span>}
+                <span className={`px-2 py-0.5 rounded-full font-medium ${statusStyles[selectedCohort.status] || statusStyles.draft}`}>
+                  {selectedCohort.status}
+                </span>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Study Finder */}
       <StudyFinderPanel
         activeFilters={activeFilters}
