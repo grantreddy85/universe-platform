@@ -12,6 +12,7 @@ export default function TabAIPanel({ tabName, contextData, isOpen, onToggle, onR
   const [suggestedFilters, setSuggestedFilters] = useState(null);
   const [suggestedCohort, setSuggestedCohort] = useState(null);
   const [filtersApplied, setFiltersApplied] = useState(false);
+  const [cohortCreated, setCohortCreated] = useState(false);
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
