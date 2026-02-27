@@ -546,16 +546,32 @@ export default function Search() {
             <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6994076dc777dd78309c97c9/7e91c11f3_Screenshot2026-02-25at50044am.png" alt="UniVerse" className="h-6 object-contain" />
           </div>
           {tabs.map((tab) =>
-          <button
+          <div
             key={tab.id}
             onClick={() => switchTab(tab.id)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-colors ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-colors cursor-pointer ${
             activeTab === tab.id ?
             "bg-gray-100 text-gray-900 font-medium" :
             "text-gray-500 hover:bg-gray-50"}`
             }>
 
-              {tab.name}
+              {renamingTabId === tab.id ? (
+                <input
+                  autoFocus
+                  value={renameValue}
+                  onChange={(e) => setRenameValue(e.target.value)}
+                  onBlur={() => commitRename(tab.id)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") commitRename(tab.id);
+                    if (e.key === "Escape") setRenamingTabId(null);
+                    e.stopPropagation();
+                  }}
+                  onClick={(e) => e.stopPropagation()}
+                  className="bg-white border border-blue-400 rounded px-1.5 py-0.5 text-xs text-gray-900 outline-none w-24"
+                />
+              ) : (
+                <span onDoubleClick={(e) => startRenaming(tab.id, tab.name, e)}>{tab.name}</span>
+              )}
               <button
               onClick={(e) => {
                 e.stopPropagation();
@@ -565,7 +581,7 @@ export default function Search() {
 
                 <X className="w-3 h-3" />
               </button>
-            </button>
+            </div>
           )}
           <button
             onClick={createNewChat}
