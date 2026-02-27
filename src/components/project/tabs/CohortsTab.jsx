@@ -178,34 +178,18 @@ export default function CohortsTab({ project }) {
             ))}
           </div>
 
-          {/* Expanded Cohort Detail */}
+          {/* Expanded Cohort Detail — full Study Finder view */}
           {selectedCohort && (
-            <div className="mt-2 p-4 rounded-lg border border-blue-200 bg-blue-50/40">
-              <div className="flex items-start justify-between mb-3">
-                <div>
-                  <h4 className="text-sm font-semibold text-gray-800">{selectedCohort.name}</h4>
-                  {selectedCohort.organism && <p className="text-xs text-gray-500 mt-0.5">Organism: {selectedCohort.organism}</p>}
-                </div>
-                <button onClick={() => setSelectedCohort(null)} className="p-1 rounded hover:bg-blue-100 text-gray-400">
-                  <X className="w-3.5 h-3.5" />
-                </button>
-              </div>
-              <div className="grid grid-cols-2 gap-2 mb-3">
-                {selectedCohort.filters?.map((f, i) => (
-                  <div key={i} className="flex items-center gap-2 bg-white rounded-md px-2.5 py-1.5 border border-blue-100">
-                    <Tag className="w-3 h-3 text-blue-400 flex-shrink-0" />
-                    <span className="text-xs text-gray-500 capitalize">{f.field.replace(/_/g, " ")}:</span>
-                    <span className="text-xs font-medium text-gray-700">{f.value}</span>
-                  </div>
-                ))}
-              </div>
-              <div className="flex items-center gap-4 text-xs text-gray-500">
-                {selectedCohort.sample_size && <span>Target sample: <strong>{selectedCohort.sample_size}</strong></span>}
-                {selectedCohort.linked_hypothesis_id && <span>Linked to hypothesis</span>}
-                <span className={`px-2 py-0.5 rounded-full font-medium ${statusStyles[selectedCohort.status] || statusStyles.draft}`}>
-                  {selectedCohort.status}
-                </span>
-              </div>
+            <div className="mt-2 rounded-lg border border-blue-200 overflow-hidden" style={{ height: 600 }}>
+              <StudyFinderPanel
+                key={selectedCohort.id}
+                activeFilters={(selectedCohort.filters || []).map((f) => `${f.field}:${f.value}`)}
+                project={project}
+                onAskAboutStudy={handleAskAboutStudy}
+                onClose={() => setSelectedCohort(null)}
+                isEmbedded={true}
+                autoSearch={true}
+              />
             </div>
           )}
         </div>
