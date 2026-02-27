@@ -116,7 +116,7 @@ export default function CohortsTab({ project }) {
     </div>
     <TabAIPanel
       tabName="Cohorts"
-      contextData={studyAiContext ? { cohorts, focusStudy: studyAiContext } : cohorts}
+      contextData={studyAiContext ? { cohorts, focusStudy: studyAiContext, activeFilters, sampleSize, currentCohortName: cohortName } : { cohorts, activeFilters, sampleSize, currentCohortName: cohortName }}
       project={project}
       availableFilters={`Age, Sex, Region, Organism, Data Type, Omics Layer, Library Strategy, Library Source, Platform, Phenotype/Disease`}
       isOpen={true}
