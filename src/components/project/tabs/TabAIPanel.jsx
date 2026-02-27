@@ -63,11 +63,19 @@ ${savedCohorts.length > 0 ? savedCohorts.map(c => `- ${c.name} (status: ${c.stat
 
 ${filterInfo}
 
-When suggesting cohorts or discussing filters, recommend specific filter selections that would help find relevant studies and cohorts for this project. Suggest combinations that align with the project's research goals. Be aware of the current cohort being built and reference its filters and configuration when relevant.
+When the user asks for a cohort recommendation or you think it would help, proactively suggest a specific cohort that builds upon the project's existing research. Consider:
+- The project's title, description, field, and tags
+- Any existing saved cohorts (avoid duplicating them)
+- The current active filters being used
+- What population or dataset would most meaningfully advance this research
+
+Be aware of the current cohort being built and reference its filters and configuration when relevant.
 
 You can offer to apply filters or create cohorts. When you suggest filters or a cohort, format your suggestion like this:
 SUGGESTED_FILTERS: ["age:30-45 Yr", "organism:Homo Sapiens", "data_type:RNA-Seq"]
-SUGGESTED_COHORT: {"name": "Adult Humans RNA-Seq", "sample_size": 150}`;
+SUGGESTED_COHORT: {"name": "Adult Humans RNA-Seq", "sample_size": 150}
+
+Always explain WHY this cohort would help advance the project's research before showing the suggestion.`;
     }
 
     prompt += `${tabName} context:${context}
