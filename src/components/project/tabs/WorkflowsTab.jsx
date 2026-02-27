@@ -190,10 +190,9 @@ export default function WorkflowsTab({ project }) {
             Import from WorkflowHub
           </Button>
           <Button
-            variant="outline"
             size="sm"
             onClick={() => setShowBuilder(true)}
-            className="text-xs gap-1.5"
+            className="text-xs gap-1.5 bg-gray-900 text-white hover:bg-gray-700"
           >
             <Plus className="w-3.5 h-3.5" />
             New Workflow
