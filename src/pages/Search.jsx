@@ -45,6 +45,8 @@ export default function Search() {
   const [attachedFiles, setAttachedFiles] = useState([]);
   const [uploadingFile, setUploadingFile] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+  const [renamingTabId, setRenamingTabId] = useState(null);
+  const [renameValue, setRenameValue] = useState("");
   const [customLogoUrl, setCustomLogoUrl] = useState(null);
   const fileInputRef = useRef(null);
   const messagesEndRef = useRef(null);
