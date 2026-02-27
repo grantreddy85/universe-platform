@@ -5,7 +5,7 @@ import { base44 } from "@/api/base44Client";
 import { useQueryClient } from "@tanstack/react-query";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, MoreHorizontal, Trash2, Edit2 } from "lucide-react";
+import { ChevronLeft, MoreHorizontal, Trash2, Edit2, Globe, Lock } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
