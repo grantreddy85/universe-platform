@@ -13,6 +13,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import ResearchProgress from "../ResearchProgress";
+import ProjectIntelligence from "../ProjectIntelligence";
 
 export default function OverviewTab({ project, onTabChange }) {
   const { data: notes = [] } = useQuery({
