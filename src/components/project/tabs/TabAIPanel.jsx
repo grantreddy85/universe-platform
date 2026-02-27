@@ -32,7 +32,8 @@ export default function TabAIPanel({ tabName, contextData, isOpen, onToggle, onR
 - Answer questions about the current ${tabName.toLowerCase()} data
 - Provide guidance, suggestions, and best practices
 - Help interpret and improve the research
-- Identify patterns and insights`;
+- Identify patterns and insights
+- Proactively recommend cohorts that will advance the project's research goals`;
 
     if (tabName === "Cohorts" && project) {
       const filterInfo = availableFilters
