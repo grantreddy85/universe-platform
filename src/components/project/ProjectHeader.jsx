@@ -157,7 +157,6 @@ export default function ProjectHeader({ project, onProjectUpdated }) {
             <p className="text-sm text-gray-400 mt-1 max-w-2xl">{project.description}</p>
           )}
           </div>
-          </div>
           <div className="flex items-center gap-2">
           <Button
             variant="outline"
