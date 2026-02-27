@@ -175,7 +175,7 @@ export default function WorkflowsTab({ project }) {
             variant="outline"
             size="sm"
             onClick={() => setShowAIPanel((v) => !v)}
-            className={`text-xs gap-1.5 border-violet-200 ${showAIPanel ? "bg-violet-50 text-violet-700 border-violet-300" : "text-violet-600 hover:bg-violet-50 hover:border-violet-300"}`}
+            className="text-xs gap-1.5"
           >
             <Sparkles className="w-3.5 h-3.5 text-violet-500" />
             Workflow Guide
