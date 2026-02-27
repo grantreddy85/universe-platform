@@ -284,6 +284,52 @@ export default function ProjectHeader({ project, onProjectUpdated }) {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Project Image Dialog */}
+      <Dialog open={imageOpen} onOpenChange={setImageOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Project Image</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            {projectImage && (
+              <div className="relative">
+                <img src={projectImage} alt={project.title} className="w-full h-48 rounded-lg object-cover bg-gray-100" />
+                <Button
+                  type="button"
+                  variant="destructive"
+                  size="sm"
+                  onClick={handleRemoveImage}
+                  className="absolute top-2 right-2"
+                >
+                  <X className="w-4 h-4" />
+                </Button>
+              </div>
+            )}
+            <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+              <input
+                type="file"
+                id="image-input"
+                accept="image/*"
+                onChange={handleImageUpload}
+                disabled={uploading}
+                className="hidden"
+              />
+              <label htmlFor="image-input" className="cursor-pointer">
+                <ImageIcon className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                <p className="text-sm text-gray-600">
+                  {uploading ? "Uploading..." : "Click to upload or drag and drop"}
+                </p>
+              </label>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setImageOpen(false)}>
+              Done
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
       </div>
       );
       }
