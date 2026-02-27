@@ -222,25 +222,29 @@ Provide concise, insightful responses tailored to this research context.`;
                   <p className="font-semibold">{suggestedCohort.name}</p>
                   {suggestedCohort.sample_size && <p className="text-gray-500">Sample size: {suggestedCohort.sample_size}</p>}
                 </div>
-                <Button
-                  size="sm"
-                  className="w-full bg-emerald-600 hover:bg-emerald-700 text-xs h-7"
-                  onClick={() => {
-                    const cohortPayload = {
-                      ...suggestedCohort,
-                      filters: (suggestedFilters || []).map((f) => {
-                        const [field, ...rest] = f.split(":");
-                        return { field: field.trim(), operator: "equals", value: rest.join(":").trim() };
-                      }),
-                    };
-                    onCreateCohort?.(cohortPayload);
-                    setSuggestedFilters(null);
-                    setSuggestedCohort(null);
-                    setFiltersApplied(false);
-                  }}
-                >
-                  Create & Save Cohort
-                </Button>
+                {!cohortCreated ? (
+                  <Button
+                    size="sm"
+                    className="w-full bg-emerald-600 hover:bg-emerald-700 text-xs h-7"
+                    onClick={() => {
+                      const cohortPayload = {
+                        ...suggestedCohort,
+                        filters: (suggestedFilters || []).map((f) => {
+                          const [field, ...rest] = f.split(":");
+                          return { field: field.trim(), operator: "equals", value: rest.join(":").trim() };
+                        }),
+                      };
+                      onCreateCohort?.(cohortPayload);
+                      setCohortCreated(true);
+                    }}
+                  >
+                    Create Cohort from Applied Filters
+                  </Button>
+                ) : (
+                  <div className="text-[10px] text-emerald-700 font-medium flex items-center gap-1">
+                    ✓ Cohort created in Study Finder
+                  </div>
+                )}
               </div>
             )}
           </div>
