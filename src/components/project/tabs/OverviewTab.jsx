@@ -95,7 +95,7 @@ export default function OverviewTab({ project, onTabChange }) {
       />
     </div>
 
-    <div className="flex-1 min-w-0 space-y-6">
+    <div className="w-80 flex-shrink-0 space-y-6">
       {/* Research Progress Guidance */}
       <ResearchProgress
         counts={{ notes, hypotheses, workflows, labRequests, validations, assets, vaultDocs }}
