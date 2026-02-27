@@ -58,6 +58,21 @@ export default function CohortsTab({ project }) {
     queryFn: () => base44.entities.Cohort.filter({ project_id: project.id }, "-created_date", 100),
   });
 
+  const { data: hypotheses = [] } = useQuery({
+    queryKey: ["project-hypotheses", project.id],
+    queryFn: () => base44.entities.Hypothesis.filter({ project_id: project.id }, "-created_date", 50),
+  });
+
+  const { data: notes = [] } = useQuery({
+    queryKey: ["project-notes-cohorts", project.id],
+    queryFn: () => base44.entities.Note.filter({ project_id: project.id }, "-created_date", 50),
+  });
+
+  const { data: documents = [] } = useQuery({
+    queryKey: ["project-documents-cohorts", project.id],
+    queryFn: () => base44.entities.ProjectDocument.filter({ project_id: project.id }, "-created_date", 50),
+  });
+
   const createMutation = useMutation({
     mutationFn: (data) =>
       base44.entities.Cohort.create({
