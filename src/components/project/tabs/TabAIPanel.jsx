@@ -39,6 +39,12 @@ export default function TabAIPanel({ tabName, contextData, isOpen, onToggle, onR
         ? `\n\nAvailable filters to define cohorts:
 ${availableFilters}`
         : "";
+
+      const cohortData = typeof contextData === "object" && contextData !== null ? contextData : {};
+      const activeFilters = cohortData.activeFilters || [];
+      const sampleSize = cohortData.sampleSize || "";
+      const currentCohortName = cohortData.currentCohortName || "";
+      const savedCohorts = cohortData.cohorts || [];
       
       prompt += `\n\nProject Context:
 - Title: ${project.title}
@@ -46,9 +52,17 @@ ${availableFilters}`
 - Field: ${project.field || "Not specified"}
 - Tags: ${project.tags?.join(", ") || "None"}
 
+Current Cohort Being Built:
+- Name: ${currentCohortName || "Not yet named"}
+- Active Filters: ${activeFilters.length > 0 ? activeFilters.join(", ") : "None selected"}
+- Sample Size: ${sampleSize || "Not specified"}
+
+Saved Cohorts in Project (${savedCohorts.length}):
+${savedCohorts.length > 0 ? savedCohorts.map(c => `- ${c.name} (status: ${c.status}, sample size: ${c.sample_size || "N/A"})`).join("\n") : "None yet"}
+
 ${filterInfo}
 
-When suggesting cohorts or discussing filters, recommend specific filter selections that would help find relevant studies and cohorts for this project. Suggest combinations that align with the project's research goals.
+When suggesting cohorts or discussing filters, recommend specific filter selections that would help find relevant studies and cohorts for this project. Suggest combinations that align with the project's research goals. Be aware of the current cohort being built and reference its filters and configuration when relevant.
 
 You can offer to apply filters or create cohorts. When you suggest filters or a cohort, format your suggestion like this:
 SUGGESTED_FILTERS: ["age:30-45 Yr", "organism:Homo Sapiens", "data_type:RNA-Seq"]
