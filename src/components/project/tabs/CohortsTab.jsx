@@ -134,6 +134,9 @@ export default function CohortsTab({ project }) {
       tabName="Cohorts"
       contextData={studyAiContext ? { cohorts, focusStudy: studyAiContext, activeFilters, sampleSize, currentCohortName: cohortName } : { cohorts, activeFilters, sampleSize, currentCohortName: cohortName }}
       project={project}
+      hypotheses={hypotheses}
+      notes={notes}
+      documents={documents}
       availableFilters={`Age, Sex, Region, Organism, Data Type, Omics Layer, Library Strategy, Library Source, Platform, Phenotype/Disease`}
       isOpen={true}
       onToggle={() => { setAiOpen(!aiOpen); setStudyAiContext(null); }}
