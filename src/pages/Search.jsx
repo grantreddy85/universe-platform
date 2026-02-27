@@ -151,6 +151,21 @@ export default function Search() {
     localStorage.setItem("search_drafts", JSON.stringify(tabs));
   };
 
+  const startRenaming = (tabId, currentName, e) => {
+    e.stopPropagation();
+    setRenamingTabId(tabId);
+    setRenameValue(currentName);
+  };
+
+  const commitRename = (tabId) => {
+    if (!renameValue.trim()) { setRenamingTabId(null); return; }
+    const updated = tabs.map((t) => t.id === tabId ? { ...t, name: renameValue.trim() } : t);
+    setTabs(updated);
+    localStorage.setItem("search_drafts", JSON.stringify(updated));
+    window.dispatchEvent(new CustomEvent("search_drafts_updated"));
+    setRenamingTabId(null);
+  };
+
   const saveConversationToHistory = (tabName, tabMessages) => {
     const conversations = localStorage.getItem("search_conversations");
     const parsed = conversations ? JSON.parse(conversations) : [];
