@@ -52,6 +52,11 @@ export default function OverviewTab({ project, onTabChange }) {
     queryFn: () => base44.entities.ProjectDocument.filter({ project_id: project.id }, "-created_date", 100),
   });
 
+  const { data: cohorts = [] } = useQuery({
+    queryKey: ["project-cohorts", project.id],
+    queryFn: () => base44.entities.Cohort.filter({ project_id: project.id }, "-created_date", 100),
+  });
+
   const { data: activities = [] } = useQuery({
     queryKey: ["project-activities", project.id],
     queryFn: () =>
