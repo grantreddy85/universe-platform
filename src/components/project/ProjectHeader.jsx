@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { createPageUrl } from "../../utils";
 import { base44 } from "@/api/base44Client";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQueryClient, useQuery } from "@tanstack/react-query";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, MoreHorizontal, Trash2, Edit2, Globe, Lock } from "lucide-react";
+import { ChevronLeft, MoreHorizontal, Trash2, Edit2, Globe, Lock, AlertCircle, Zap } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
