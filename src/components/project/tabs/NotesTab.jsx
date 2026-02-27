@@ -189,18 +189,18 @@ export default function NotesTab({ project }) {
           isEditorOpen ? "w-64 flex-shrink-0" : "flex-1"
         }`}
       >
-        <div className="sticky top-0 z-10 flex items-center justify-between px-5 py-4 border-b border-gray-100 bg-white">
-          <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Notes</span>
-          <div className="flex items-center gap-1.5">
+        <div className="sticky top-0 z-10 flex items-center justify-between px-3 py-4 border-b border-gray-100 bg-white gap-2">
+          <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider flex-shrink-0">Notes</span>
+          <div className="flex items-center gap-1 flex-shrink-0">
             <Button
               variant="ghost"
               size="sm"
               onClick={() => setAssistantOpen(!assistantOpen)}
-              className={`text-xs h-7 px-2.5 ${assistantOpen ? "text-blue-600 bg-blue-50" : "text-gray-500 hover:text-blue-600"}`}
+              className={`text-xs h-7 px-2 ${assistantOpen ? "text-blue-600 bg-blue-50" : "text-gray-500 hover:text-blue-600"}`}
               title="Notes Guide"
             >
-              <Sparkles className="w-3.5 h-3.5 mr-1" />
-              Notes Guide
+              <Sparkles className="w-3.5 h-3.5" />
+              {!isEditorOpen && <span className="ml-1">Notes Guide</span>}
             </Button>
             <Button
               variant="ghost"
@@ -217,8 +217,8 @@ export default function NotesTab({ project }) {
               size="sm"
               className="bg-blue-600 hover:bg-blue-700 text-xs h-7 px-2.5"
             >
-              <Plus className="w-3.5 h-3.5 mr-1" />
-              New
+              <Plus className="w-3.5 h-3.5" />
+              {!isEditorOpen && <span className="ml-1">New</span>}
             </Button>
           </div>
         </div>
