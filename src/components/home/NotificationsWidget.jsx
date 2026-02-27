@@ -26,9 +26,7 @@ export default function NotificationsWidget({ userEmail }) {
     enabled: !!userEmail
   });
 
-  if (notifications.length === 0) {
-    return null;
-  }
+
 
   return (
     <div>
