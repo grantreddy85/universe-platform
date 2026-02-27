@@ -142,13 +142,40 @@ export default function CohortsTab({ project }) {
       onToggle={() => { setAiOpen(!aiOpen); setStudyAiContext(null); }}
       onRecommendCohort={() => setShowAssistant(true)}
       onSetFilters={(filters) => {
-        // Normalize AI-suggested filters to match the "key:Value" format used by CohortFilters
-        // AI may produce formats like "age:30-45 Yr" or "organism:Homo Sapiens"
-        // We just set them directly as the format should match
+        const FILTER_GROUPS = [
+          { key: "age", options: ["<1 Mo", "1 Mo–1 Yr", "1–5 Yr", "5–10 Yr", "10–15 Yr", "15–30 Yr", "30–45 Yr", "45–60 Yr", "60–70 Yr", "70–80 Yr", "80+ Yr"] },
+          { key: "sex", options: ["Female", "Male", "Other", "Mixed/Pooled"] },
+          { key: "region", options: ["North America", "South America", "Western Europe", "Eastern Europe", "Sub-Saharan Africa", "North Africa", "Middle East", "South Asia", "East Asia", "Southeast Asia", "Oceania", "Central Asia", "Han Chinese", "European", "African", "South Asian", "Hispanic/Latino", "Ashkenazi Jewish", "Indigenous / Aboriginal", "Mixed / Admixed"] },
+          { key: "organism", options: ["Homo Sapiens", "Mus Musculus", "Rattus Norvegicus", "Danio Rerio", "Drosophila Melanogaster", "Caenorhabditis Elegans", "Saccharomyces Cerevisiae", "Staphylococcus Aureus", "Escherichia Coli", "Human Gut Metagenome", "Canis Lupus Familiaris"] },
+          { key: "data_type", options: ["Raw Sequence Reads", "Transcriptome / Gene Expression", "Genome Sequencing & Assembly", "Epigenomics", "Targeted Locus/Loci", "Metagenome", "Variation / SNP", "Exome", "Proteomics – Mass Spectrometry", "Proteomics – Antibody-based", "Lipidomics", "Metabolomics", "Glycomics", "Multi-omics"] },
+          { key: "omics_layer", options: ["Genomics", "Transcriptomics", "Epigenomics", "Proteomics", "Phosphoproteomics", "Ubiquitinomics", "Lipidomics", "Metabolomics", "Glycomics", "Single-cell Multi-omics", "Spatial Omics", "Metagenomics", "Metatranscriptomics"] },
+          { key: "library_strategy", options: ["WGS", "WXS", "RNA-Seq", "scRNA-Seq", "ATAC-Seq", "ChIP-Seq", "Bisulfite-Seq", "miRNA-Seq", "Amplicon", "Targeted Capture", "Other"] },
+          { key: "library_source", options: ["Genomic", "Transcriptomic", "Transcriptomic Single Cell", "Metagenomic", "Metatranscriptomic", "Synthetic", "Genomic Single Cell"] },
+          { key: "platform", options: ["Illumina", "Oxford Nanopore", "PacBio SMRT", "Ion Torrent", "BGIseq / DNBseq", "10x Genomics", "Agilent", "Bruker (MS)", "Thermo Fisher (MS)", "AB Sciex", "Waters", "LS454", "Capillary"] },
+          { key: "phenotype", options: ["Healthy Control", "Cancer", "Neurodegenerative", "Cardiovascular", "Diabetes / Metabolic", "Infectious Disease", "Autoimmune", "Rare / Genetic Disorder", "Respiratory", "Psychiatric"] },
+        ];
+
         const normalized = filters.map((f) => {
-          // Already in key:value format — pass through
-          return f;
+          const colonIdx = f.indexOf(":");
+          if (colonIdx === -1) return f;
+          const aiKey = f.slice(0, colonIdx).trim().toLowerCase().replace(/[^a-z0-9]/g, "_");
+          const aiVal = f.slice(colonIdx + 1).trim().toLowerCase();
+
+          // Find matching group by key similarity
+          const group = FILTER_GROUPS.find((g) => {
+            const gk = g.key.toLowerCase();
+            return gk === aiKey || aiKey.includes(gk) || gk.includes(aiKey);
+          });
+          if (!group) return f;
+
+          // Find best matching option by comparing lowercased values
+          const match = group.options.find((opt) =>
+            opt.toLowerCase() === aiVal ||
+            opt.toLowerCase().replace(/[^a-z0-9]/g, "") === aiVal.replace(/[^a-z0-9]/g, "")
+          );
+          return match ? `${group.key}:${match}` : `${group.key}:${f.slice(colonIdx + 1).trim()}`;
         });
+
         setActiveFilters(normalized);
       }}
       onCreateCohort={(cohortData) => {
