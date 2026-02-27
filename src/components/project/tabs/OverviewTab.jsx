@@ -261,7 +261,6 @@ export default function OverviewTab({ project, onTabChange }) {
   );
 }
 
-
 function ProgressItem({ label, value, total, description }) {
   const percentage = Math.round((value / total) * 100);
   return (
