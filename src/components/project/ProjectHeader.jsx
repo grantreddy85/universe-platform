@@ -35,6 +35,7 @@ export default function ProjectHeader({ project, onProjectUpdated }) {
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [editedDescription, setEditedDescription] = useState(project.description || "");
+  const [visibility, setVisibility] = useState(project.visibility_setting || "private");
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
