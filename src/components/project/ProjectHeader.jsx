@@ -34,10 +34,25 @@ const statusStyles = {
 export default function ProjectHeader({ project, onProjectUpdated }) {
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [visibilityOpen, setVisibilityOpen] = useState(false);
   const [editedDescription, setEditedDescription] = useState(project.description || "");
   const [visibility, setVisibility] = useState(project.visibility_setting || "private");
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+
+  const { data: user } = useQuery({
+    queryKey: ["user"],
+    queryFn: () => base44.auth.me(),
+  });
+
+  const { data: subscription } = useQuery({
+    queryKey: ["subscription", user?.email],
+    queryFn: () => base44.entities.UserSubscription.filter({ user_email: user?.email }, "-created_date", 1),
+    enabled: !!user?.email,
+  });
+
+  const currentPlan = subscription?.[0]?.plan || "trial";
+  const supportsPrivate = ["pro"].includes(currentPlan);
 
   const handleUpdateDescription = async () => {
     await base44.entities.Project.update(project.id, {
