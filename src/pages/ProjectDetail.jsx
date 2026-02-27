@@ -58,6 +58,12 @@ export default function ProjectDetail() {
     }
   }, [activeTab]);
 
+  React.useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = 0;
+    }
+  }, [projectId]);
+
   const tabCounts = {
     notes: notes.length || null,
     validation: validations.length || null,
