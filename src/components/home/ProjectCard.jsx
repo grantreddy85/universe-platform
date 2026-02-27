@@ -59,8 +59,8 @@ export default function ProjectCard({ project }) {
            variant="secondary"
            className={`text-[10px] font-medium uppercase tracking-wider px-2 py-0.5`}
            style={{
-             backgroundColor: `var(--color-status-${project.status || 'draft'}-bg)`,
-             color: `var(--color-status-${project.status || 'draft'}-text)`
+             backgroundColor: getStatusStyle(project.status).bg,
+             color: getStatusStyle(project.status).text
            }}>
 
           {project.status || "draft"}
