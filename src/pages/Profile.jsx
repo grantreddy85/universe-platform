@@ -22,6 +22,11 @@ export default function Profile() {
     base44.auth.me().then((u) => {
       setUser(u);
       setOrcidInput(u?.orcid_id || "");
+      setEditData({
+        full_name: u?.full_name || "",
+        location: u?.location || "",
+        field_of_interest: u?.field_of_interest || "",
+      });
     }).catch(() => {});
   }, []);
 
