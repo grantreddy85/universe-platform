@@ -23,13 +23,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 
-const statusStyles = {
-  draft: "bg-gray-100 text-gray-600",
-  active: "bg-blue-50 text-blue-600",
-  validation: "bg-amber-50 text-amber-600",
-  validated: "bg-emerald-50 text-emerald-600",
-  tokenised: "bg-violet-50 text-violet-600",
-};
+
 
 export default function ProjectHeader({ project, onProjectUpdated }) {
   const [editOpen, setEditOpen] = useState(false);
@@ -141,20 +135,22 @@ export default function ProjectHeader({ project, onProjectUpdated }) {
             </button>
           )}
           <div>
-            <h1 className="text-xl font-semibold text-gray-900 tracking-tight">
+            <h1 className="text-xl font-semibold tracking-tight" style={{ color: 'var(--color-text-primary)' }}>
               {project.title}
             </h1>
             <Badge
               variant="secondary"
-              className={`text-[10px] font-medium uppercase tracking-wider px-2 py-0.5 ${
-                statusStyles[project.status] || statusStyles.draft
-              }`}
+              className={`text-[10px] font-medium uppercase tracking-wider px-2 py-0.5`}
+              style={{
+                backgroundColor: `var(--color-status-${project.status || 'draft'}-bg)`,
+                color: `var(--color-status-${project.status || 'draft'}-text)`
+              }}
             >
               {project.status || "draft"}
             </Badge>
           </div>
           {project.description && (
-            <p className="text-sm text-gray-400 mt-1 max-w-2xl">{project.description}</p>
+            <p className="text-sm mt-1 max-w-2xl" style={{ color: 'var(--color-neutral-400)' }}>{project.description}</p>
           )}
           </div>
           <div className="flex items-center gap-2">
@@ -261,9 +257,9 @@ export default function ProjectHeader({ project, onProjectUpdated }) {
               Your current plan is <strong className="text-gray-900 uppercase">{currentPlan}</strong>.
               Private projects are only available on the <strong>Pro</strong> plan.
             </p>
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 space-y-2">
-              <p className="text-xs font-semibold text-blue-900">Pro Plan Benefits:</p>
-              <ul className="text-xs text-blue-800 space-y-1">
+            <div className="border rounded-lg p-3 space-y-2" style={{ backgroundColor: 'var(--color-status-active-bg)', borderColor: 'var(--color-status-active-text)' }}>
+              <p className="text-xs font-semibold" style={{ color: 'var(--color-status-active-text)' }}>Pro Plan Benefits:</p>
+              <ul className="text-xs space-y-1" style={{ color: 'var(--color-status-active-text)' }}>
                 <li>✓ Keep projects private</li>
                 <li>✓ Control project visibility</li>
                 <li>✓ Advanced features</li>
