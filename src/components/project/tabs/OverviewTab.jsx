@@ -244,8 +244,19 @@ export default function OverviewTab({ project, onTabChange }) {
           </div>
         )}
       </div>
+    </div>
 
-
+    {/* Project Intelligence Sidebar */}
+    <div className="w-80 flex-shrink-0 h-[700px]">
+      <ProjectIntelligence
+        project={project}
+        notes={notes}
+        documents={vaultDocs}
+        hypotheses={hypotheses}
+        cohorts={cohorts}
+        workflows={workflows}
+      />
+    </div>
     </div>
   );
 }
