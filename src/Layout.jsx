@@ -346,6 +346,7 @@ export default function Layout({ children, currentPageName }) {
 
         {/* Main Content */}
         <main className="flex-1 overflow-auto">{children}</main>
+        <OnboardingTour />
       </div>
     </TooltipProvider>
     </ThemeProvider>);
