@@ -5,17 +5,6 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowRight, Clock, Globe, Lock } from "lucide-react";
 import { format } from "date-fns";
 
-const getStatusStyle = (status) => {
-  const styles = {
-    draft: { bg: 'var(--color-status-draft-bg)', text: 'var(--color-status-draft-text)' },
-    active: { bg: 'var(--color-status-active-bg)', text: 'var(--color-status-active-text)' },
-    validation: { bg: 'var(--color-status-validation-bg)', text: 'var(--color-status-validation-text)' },
-    validated: { bg: 'var(--color-status-validated-bg)', text: 'var(--color-status-validated-text)' },
-    tokenised: { bg: 'var(--color-status-tokenised-bg)', text: 'var(--color-status-tokenised-text)' }
-  };
-  return styles[status] || styles.draft;
-};
-
 const FIELD_IMAGES = {
   biology:       "https://images.unsplash.com/photo-1576086213369-97a306d36557?w=600&q=80",
   chemistry:     "https://images.unsplash.com/photo-1603126857599-f6e157fa2fe6?w=600&q=80",
@@ -38,6 +27,14 @@ function getFieldImage(field, title = "") {
   return key ? FIELD_IMAGES[key] : FIELD_IMAGES.default;
 }
 
+const statusStyles = {
+  draft: "bg-gray-100 text-gray-600",
+  active: "bg-blue-50 text-blue-600",
+  validation: "bg-amber-50 text-amber-600",
+  validated: "bg-emerald-50 text-emerald-600",
+  tokenised: "bg-violet-50 text-violet-600"
+};
+
 export default function ProjectCard({ project }) {
   return (
     <Link
@@ -54,24 +51,22 @@ export default function ProjectCard({ project }) {
       </div>
 
       <div className="p-4">
-       <div className="flex items-start justify-between mb-3">
-         <Badge
-           variant="secondary"
-           className={`text-[10px] font-medium uppercase tracking-wider px-2 py-0.5`}
-           style={{
-             backgroundColor: getStatusStyle(project.status).bg,
-             color: getStatusStyle(project.status).text
-           }}>
+      <div className="flex items-start justify-between mb-3">
+        <Badge
+          variant="secondary"
+          className={`text-[10px] font-medium uppercase tracking-wider px-2 py-0.5 ${
+          statusStyles[project.status] || statusStyles.draft}`
+          }>
 
           {project.status || "draft"}
         </Badge>
         <ArrowRight className="w-4 h-4 text-gray-300 group-hover:text-blue-500 group-hover:translate-x-0.5 transition-all" />
       </div>
-      <h3 className="mb-1 text-sm font-semibold line-clamp-1" style={{ color: 'var(--color-text-primary)' }}>{project.title}</h3>
-      <p className="text-xs line-clamp-2 mb-4 min-h-[32px]" style={{ color: 'var(--color-neutral-400)' }}>
+      <h3 className="text-[#525153] mb-1 text-sm font-semibold line-clamp-1">{project.title}</h3>
+      <p className="text-xs text-gray-400 line-clamp-2 mb-4 min-h-[32px]">
         {project.description || "No description yet"}
       </p>
-      <div className="flex items-center gap-3 text-[11px]" style={{ color: 'var(--color-neutral-400)' }}>
+      <div className="flex items-center gap-3 text-[11px] text-gray-400">
         <div className="flex items-center gap-1">
           <Clock className="w-3 h-3" />
           {project.updated_date ?
@@ -79,13 +74,13 @@ export default function ProjectCard({ project }) {
           "Recently"}
         </div>
         {project.field &&
-        <span className="px-2 py-0.5 rounded" style={{ backgroundColor: 'var(--color-neutral-100)', color: 'var(--color-neutral-500)' }}>{project.field}</span>
+        <span className="bg-gray-50 px-2 py-0.5 rounded text-gray-500">{project.field}</span>
         }
-        <span className={`ml-auto flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium`}
-        style={{
-          backgroundColor: project.visibility_setting === "private" ? 'var(--color-neutral-100)' : 'var(--color-status-active-bg)',
-          color: project.visibility_setting === "private" ? 'var(--color-neutral-500)' : 'var(--color-interactive-blue)'
-        }}>
+        <span className={`ml-auto flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium ${
+        project.visibility_setting === "private" ?
+        "bg-gray-100 text-gray-500" :
+        "bg-blue-50 text-blue-500"}`
+        }>
           {project.visibility_setting === "private" ?
           <><Lock className="w-2.5 h-2.5" /> Private</> :
           <><Globe className="w-2.5 h-2.5" /> Shared</>
