@@ -168,46 +168,61 @@ Provide concise, insightful responses tailored to this research context.`;
         )}
         
         {(suggestedFilters || suggestedCohort) && !isLoading && (
-          <div className="space-y-2">
+          <div className="bg-gradient-to-br from-blue-50 to-emerald-50 border border-blue-200 rounded-lg p-3 space-y-3">
+            <p className="text-xs font-semibold text-gray-800">Recommended Cohort Plan</p>
+
             {suggestedFilters && (
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-                <p className="text-xs font-medium text-blue-900 mb-2">Suggested Filters:</p>
-                <div className="space-y-1 mb-2">
+              <div>
+                <p className="text-xs font-medium text-blue-900 mb-1">Step 1 — Filters:</p>
+                <div className="flex flex-wrap gap-1 mb-2">
                   {suggestedFilters.map((filter) => (
-                    <div key={filter} className="text-xs text-blue-800">{filter}</div>
+                    <span key={filter} className="bg-blue-100 text-blue-800 text-[10px] px-2 py-0.5 rounded-full">{filter}</span>
                   ))}
                 </div>
-                <Button
-                  size="sm"
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-xs h-7"
-                  onClick={() => {
-                    onSetFilters?.(suggestedFilters);
-                    setSuggestedFilters(null);
-                  }}
-                >
-                  Apply Filters
-                </Button>
+                {!filtersApplied ? (
+                  <Button
+                    size="sm"
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-xs h-7"
+                    onClick={() => {
+                      onSetFilters?.(suggestedFilters);
+                      setFiltersApplied(true);
+                    }}
+                  >
+                    Apply Filters to Study Finder
+                  </Button>
+                ) : (
+                  <div className="text-[10px] text-emerald-700 font-medium flex items-center gap-1">
+                    ✓ Filters applied to Study Finder
+                  </div>
+                )}
               </div>
             )}
-            
+
             {suggestedCohort && (
-              <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-3">
-                <p className="text-xs font-medium text-emerald-900 mb-2">Suggested Cohort:</p>
-                <div className="text-xs text-emerald-800 mb-2">
-                  <p><strong>{suggestedCohort.name}</strong></p>
-                  {suggestedCohort.sample_size && (
-                    <p>Sample Size: {suggestedCohort.sample_size}</p>
-                  )}
+              <div>
+                <p className="text-xs font-medium text-emerald-900 mb-1">Step 2 — Create Cohort:</p>
+                <div className="text-xs text-gray-700 mb-2">
+                  <p className="font-semibold">{suggestedCohort.name}</p>
+                  {suggestedCohort.sample_size && <p className="text-gray-500">Sample size: {suggestedCohort.sample_size}</p>}
                 </div>
                 <Button
                   size="sm"
                   className="w-full bg-emerald-600 hover:bg-emerald-700 text-xs h-7"
                   onClick={() => {
-                    onCreateCohort?.(suggestedCohort);
+                    const cohortPayload = {
+                      ...suggestedCohort,
+                      filters: (suggestedFilters || []).map((f) => {
+                        const [field, ...rest] = f.split(":");
+                        return { field: field.trim(), operator: "equals", value: rest.join(":").trim() };
+                      }),
+                    };
+                    onCreateCohort?.(cohortPayload);
+                    setSuggestedFilters(null);
                     setSuggestedCohort(null);
+                    setFiltersApplied(false);
                   }}
                 >
-                  Create Cohort
+                  Create & Save Cohort
                 </Button>
               </div>
             )}
