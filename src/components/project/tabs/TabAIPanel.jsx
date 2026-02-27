@@ -262,6 +262,7 @@ Provide concise, insightful responses tailored to this research context.`;
           <Button
             onClick={() => {
               setFiltersApplied(false);
+              setCohortCreated(false);
               setSuggestedFilters(null);
               setSuggestedCohort(null);
               setInput("Based on this project's research goals and any existing cohorts, recommend the most useful cohort I should build next — including specific filters and sample size.");
