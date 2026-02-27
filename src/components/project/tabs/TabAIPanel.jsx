@@ -159,25 +159,32 @@ Provide concise, insightful responses tailored to this research context.`;
             </p>
           </div>
         ) : (
-          messages.map((msg, idx) => (
-            <div key={idx} className={`flex gap-2 ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
-              <div
-                className={`max-w-[85%] rounded-xl px-3 py-2 text-xs leading-relaxed ${
-                  msg.role === "user"
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-50 text-gray-800 border border-gray-100"
-                }`}
-              >
-                {msg.role === "assistant" ? (
-                  <ReactMarkdown className="prose prose-xs max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
-                    {msg.content}
-                  </ReactMarkdown>
-                ) : (
-                  msg.content
-                )}
+          messages.map((msg, idx) => {
+            // Strip SUGGESTED_FILTERS / SUGGESTED_COHORT lines from assistant display
+            const displayContent = msg.role === "assistant"
+              ? msg.content.replace(/SUGGESTED_FILTERS:\s*\[.*?\]/gs, "").replace(/SUGGESTED_COHORT:\s*\{.*?\}/gs, "").trim()
+              : msg.content;
+
+            return (
+              <div key={idx} className={`flex gap-2 ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
+                <div
+                  className={`max-w-[85%] rounded-xl px-3 py-2 text-xs leading-relaxed ${
+                    msg.role === "user"
+                      ? "bg-blue-600 text-white"
+                      : "bg-gray-50 text-gray-800 border border-gray-100"
+                  }`}
+                >
+                  {msg.role === "assistant" ? (
+                    <ReactMarkdown className="prose prose-xs max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
+                      {displayContent}
+                    </ReactMarkdown>
+                  ) : (
+                    msg.content
+                  )}
+                </div>
               </div>
-            </div>
-          ))
+            );
+          })
         )}
         {isLoading && (
           <div className="flex gap-2 justify-start">
