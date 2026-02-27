@@ -106,17 +106,20 @@ Provide concise, insightful responses tailored to this research context.`;
     
     // Extract suggested filters and cohort from response
     if (tabName === "Cohorts") {
-      const filterMatch = response.match(/SUGGESTED_FILTERS:\s*(\[.*?\])/);
-      const cohortMatch = response.match(/SUGGESTED_COHORT:\s*(\{.*?\})/);
+      const filterMatch = response.match(/SUGGESTED_FILTERS:\s*(\[[\s\S]*?\])/);
+      const cohortMatch = response.match(/SUGGESTED_COHORT:\s*(\{[\s\S]*?\})/);
       
       if (filterMatch) {
         try {
-          setSuggestedFilters(JSON.parse(filterMatch[1]));
+          const parsed = JSON.parse(filterMatch[1]);
+          setSuggestedFilters(parsed);
           setFiltersApplied(false);
           setCohortCreated(false);
         } catch (e) {
           setSuggestedFilters(null);
         }
+      } else {
+        setSuggestedFilters(null);
       }
       if (cohortMatch) {
         try {
@@ -125,6 +128,8 @@ Provide concise, insightful responses tailored to this research context.`;
         } catch (e) {
           setSuggestedCohort(null);
         }
+      } else {
+        setSuggestedCohort(null);
       }
     }
     
