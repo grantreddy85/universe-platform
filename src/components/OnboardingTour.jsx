@@ -25,6 +25,7 @@ const steps = [
       "Use the Research tab like a supercharged AI search engine. Ask anything about your field, explore biomedical literature, and save key findings directly to your project notes.",
     color: "from-blue-900 to-blue-800",
     textColor: "text-blue-200",
+    navigateTo: "Search",
   },
   {
     icon: FolderKanban,
@@ -34,6 +35,7 @@ const steps = [
       "Create a Project for each research initiative. Upload your existing documents and data into the Vault first — this gives the AI full context before you start writing notes or hypotheses.",
     color: "from-purple-900 to-purple-800",
     textColor: "text-purple-200",
+    navigateTo: "Projects",
   },
   {
     icon: Users,
@@ -43,6 +45,7 @@ const steps = [
       "Formulate hypotheses from your notes, then use the Cohort Builder to define your study population. The AI will suggest filters, sample sizes, and can link cohorts directly to your hypotheses.",
     color: "from-emerald-900 to-emerald-800",
     textColor: "text-emerald-200",
+    navigateTo: "Projects",
   },
   {
     icon: FlaskConical,
@@ -52,6 +55,7 @@ const steps = [
       "Design analytical workflows and connect with lab services for physical experiments. The AI can match your workflow requirements to available lab services automatically.",
     color: "from-orange-900 to-orange-800",
     textColor: "text-orange-200",
+    navigateTo: "Labs",
   },
   {
     icon: Coins,
@@ -61,6 +65,7 @@ const steps = [
       "Validate your findings, generate reproducibility scores, and publish your research as a tokenised asset on the UniVerse marketplace. Every step of your journey is saved and queryable.",
     color: "from-yellow-900 to-yellow-800",
     textColor: "text-yellow-200",
+    navigateTo: "Validations",
   },
 ];
 
