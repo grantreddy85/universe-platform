@@ -70,6 +70,10 @@ export default function ProjectHeader({ project, onProjectUpdated }) {
   };
 
   const handleToggleVisibility = async () => {
+    if (visibility === "platform_shared" && !supportsPrivate) {
+      setVisibilityOpen(true);
+      return;
+    }
     const newVisibility = visibility === "private" ? "platform_shared" : "private";
     await base44.entities.Project.update(project.id, {
       visibility_setting: newVisibility,
