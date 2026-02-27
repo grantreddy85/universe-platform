@@ -14,6 +14,9 @@ export default function Profile() {
   const [inviteStatus, setInviteStatus] = useState(null); // "success" | "error"
   const [orcidInput, setOrcidInput] = useState("");
   const [orcidSaving, setOrcidSaving] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+  const [editData, setEditData] = useState({});
+  const [uploadingProfile, setUploadingProfile] = useState(false);
 
   useEffect(() => {
     base44.auth.me().then((u) => {
