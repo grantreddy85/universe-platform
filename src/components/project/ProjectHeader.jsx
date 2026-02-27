@@ -200,6 +200,43 @@ export default function ProjectHeader({ project, onProjectUpdated }) {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </div>
-  );
-}
+
+      {/* Visibility Plan Dialog */}
+      <Dialog open={visibilityOpen} onOpenChange={setVisibilityOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <AlertCircle className="w-5 h-5 text-amber-600" />
+              Plan Required for Private Projects
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <p className="text-sm text-gray-600">
+              Your current plan is <strong className="text-gray-900 uppercase">{currentPlan}</strong>.
+              Private projects are only available on the <strong>Pro</strong> plan.
+            </p>
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 space-y-2">
+              <p className="text-xs font-semibold text-blue-900">Pro Plan Benefits:</p>
+              <ul className="text-xs text-blue-800 space-y-1">
+                <li>✓ Keep projects private</li>
+                <li>✓ Control project visibility</li>
+                <li>✓ Advanced features</li>
+              </ul>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setVisibilityOpen(false)}>
+              Cancel
+            </Button>
+            <Link to={createPageUrl("Pricing")}>
+              <Button className="gap-2">
+                <Zap className="w-4 h-4" />
+                Upgrade Plan
+              </Button>
+            </Link>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      </div>
+      );
+      }
