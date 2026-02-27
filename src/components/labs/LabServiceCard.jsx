@@ -10,11 +10,7 @@ const CATEGORY_IMAGES = {
   default: "https://images.unsplash.com/photo-1582719471384-894fbb16e074?w=400&q=80"
 };
 
-const STATUS_STYLES = {
-  available: "bg-emerald-50 text-emerald-600",
-  busy: "bg-amber-50 text-amber-600",
-  maintenance: "bg-red-50 text-red-500"
-};
+
 
 export default function LabServiceCard({ service, categoryMeta, onRequest }) {
   const statusLabel = service.status?.replace("_", " ") || "available";
@@ -43,13 +39,17 @@ export default function LabServiceCard({ service, categoryMeta, onRequest }) {
       {/* Body */}
       <div className="p-4 flex flex-col flex-1">
         <div className="flex items-start justify-between gap-2 mb-2">
-          <h3 className="text-[#525153] text-sm font-semibold leading-snug">{service.name}</h3>
-          <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full capitalize flex-shrink-0 ${STATUS_STYLES[service.status] || STATUS_STYLES.available}`}>
+          <h3 className="text-sm font-semibold leading-snug" style={{ color: 'var(--color-text-primary)' }}>{service.name}</h3>
+          <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full capitalize flex-shrink-0`}
+          style={{
+            backgroundColor: service.status === 'available' ? 'var(--color-status-validated-bg)' : service.status === 'busy' ? 'var(--color-status-validation-bg)' : '#fee2e2',
+            color: service.status === 'available' ? 'var(--color-status-validated-text)' : service.status === 'busy' ? 'var(--color-status-validation-text)' : '#991b1b'
+          }}>
             {statusLabel}
           </span>
         </div>
 
-        <p className="text-xs text-gray-500 leading-relaxed mb-3 line-clamp-3">
+        <p className="text-xs leading-relaxed mb-3 line-clamp-3" style={{ color: 'var(--color-neutral-500)' }}>
           {service.description}
         </p>
 
@@ -57,18 +57,18 @@ export default function LabServiceCard({ service, categoryMeta, onRequest }) {
         {service.capabilities?.length > 0 &&
         <div className="flex flex-wrap gap-1 mb-3">
             {service.capabilities.slice(0, 3).map((cap, i) =>
-          <span key={i} className="text-[10px] bg-gray-50 text-gray-500 border border-gray-100 rounded px-1.5 py-0.5">
+          <span key={i} className="text-[10px] rounded px-1.5 py-0.5" style={{ backgroundColor: 'var(--color-neutral-100)', color: 'var(--color-neutral-500)', border: '1px solid var(--color-neutral-100)' }}>
                 {cap}
               </span>
           )}
             {service.capabilities.length > 3 &&
-          <span className="text-[10px] text-gray-400">+{service.capabilities.length - 3} more</span>
+          <span className="text-[10px]" style={{ color: 'var(--color-neutral-400)' }}>+{service.capabilities.length - 3} more</span>
           }
           </div>
         }
 
-        <div className="mt-auto flex items-center justify-between pt-3 border-t border-gray-50">
-          <div className="flex items-center gap-3 text-xs text-gray-400">
+        <div className="mt-auto flex items-center justify-between pt-3" style={{ borderTop: '1px solid var(--color-neutral-100)' }}>
+          <div className="flex items-center gap-3 text-xs" style={{ color: 'var(--color-neutral-400)' }}>
             {service.turnaround_days &&
             <span className="flex items-center gap-1">
                 <Clock className="w-3 h-3" />
@@ -76,14 +76,15 @@ export default function LabServiceCard({ service, categoryMeta, onRequest }) {
               </span>
             }
             {service.price_from &&
-            <span className="text-gray-500 font-medium" style={{ fontFamily: "'IBM Plex Mono', monospace" }}>
+            <span className="font-medium" style={{ fontFamily: "'IBM Plex Mono', monospace", color: 'var(--color-neutral-500)' }}>
                 From ${service.price_from}
               </span>
             }
           </div>
           <Button
             size="sm"
-            className="h-8 text-xs bg-blue-600 hover:bg-blue-700 text-white"
+            className="h-8 text-xs text-white"
+            style={{ backgroundColor: 'var(--color-interactive-blue)', ':hover': { backgroundColor: 'var(--color-interactive-blue-dark)' } }}
             disabled={service.status === "maintenance"}
             onClick={onRequest}>
             Request
