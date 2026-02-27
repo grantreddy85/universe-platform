@@ -224,7 +224,8 @@ export default function Home() {
                             {sc.label}
                           </span>
                         </div>
-                      </div>);
+                        </div>
+                        </div>);
 
                 })}
                 </div>
