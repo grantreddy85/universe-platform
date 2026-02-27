@@ -112,6 +112,8 @@ Provide concise, insightful responses tailored to this research context.`;
       if (filterMatch) {
         try {
           setSuggestedFilters(JSON.parse(filterMatch[1]));
+          setFiltersApplied(false);
+          setCohortCreated(false);
         } catch (e) {
           setSuggestedFilters(null);
         }
@@ -119,6 +121,7 @@ Provide concise, insightful responses tailored to this research context.`;
       if (cohortMatch) {
         try {
           setSuggestedCohort(JSON.parse(cohortMatch[1]));
+          setCohortCreated(false);
         } catch (e) {
           setSuggestedCohort(null);
         }
