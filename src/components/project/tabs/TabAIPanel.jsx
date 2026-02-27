@@ -257,6 +257,7 @@ Provide concise, insightful responses tailored to this research context.`;
             disabled={isLoading}
           />
           <Button
+            id="ai-panel-send-btn"
             onClick={sendMessage}
             size="icon"
             className="bg-blue-600 hover:bg-blue-700 h-8 w-8"
