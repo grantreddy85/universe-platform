@@ -88,7 +88,11 @@ export default function OnboardingTour() {
 
   const handleNext = () => {
     if (currentStep < steps.length - 1) {
+      const nextStep = steps[currentStep + 1];
       setCurrentStep((s) => s + 1);
+      if (nextStep.navigateTo) {
+        navigate(createPageUrl(nextStep.navigateTo));
+      }
     } else {
       handleClose();
     }
