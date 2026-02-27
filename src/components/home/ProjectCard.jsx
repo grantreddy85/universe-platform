@@ -5,6 +5,17 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowRight, Clock, Globe, Lock } from "lucide-react";
 import { format } from "date-fns";
 
+const getStatusStyle = (status) => {
+  const styles = {
+    draft: { bg: 'var(--color-status-draft-bg)', text: 'var(--color-status-draft-text)' },
+    active: { bg: 'var(--color-status-active-bg)', text: 'var(--color-status-active-text)' },
+    validation: { bg: 'var(--color-status-validation-bg)', text: 'var(--color-status-validation-text)' },
+    validated: { bg: 'var(--color-status-validated-bg)', text: 'var(--color-status-validated-text)' },
+    tokenised: { bg: 'var(--color-status-tokenised-bg)', text: 'var(--color-status-tokenised-text)' }
+  };
+  return styles[status] || styles.draft;
+};
+
 const FIELD_IMAGES = {
   biology:       "https://images.unsplash.com/photo-1576086213369-97a306d36557?w=600&q=80",
   chemistry:     "https://images.unsplash.com/photo-1603126857599-f6e157fa2fe6?w=600&q=80",
