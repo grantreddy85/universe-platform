@@ -48,11 +48,33 @@ ${availableFilters}`
       const currentCohortName = cohortData.currentCohortName || "";
       const savedCohorts = cohortData.cohorts || [];
       
+      // Build rich project context from all modules
+      const hypothesesContext = hypotheses?.length > 0
+        ? hypotheses.map(h => `  - [${h.status}] ${h.title}: ${h.description || ""}`).join("\n")
+        : "  None yet";
+
+      const notesContext = notes?.length > 0
+        ? notes.slice(0, 10).map(n => `  - ${n.title}: ${(n.content || "").slice(0, 200)}`).join("\n")
+        : "  None yet";
+
+      const documentsContext = documents?.length > 0
+        ? documents.map(d => `  - ${d.title} (${d.file_type || "file"}): ${d.summary || d.methodology || "No summary"}`).join("\n")
+        : "  None yet";
+
       prompt += `\n\nProject Context:
 - Title: ${project.title}
 - Description: ${project.description || "Not specified"}
 - Field: ${project.field || "Not specified"}
 - Tags: ${project.tags?.join(", ") || "None"}
+
+Project Hypotheses:
+${hypothesesContext}
+
+Project Notes (most recent):
+${notesContext}
+
+Uploaded Documents & Data Files:
+${documentsContext}
 
 Current Cohort Being Built:
 - Name: ${currentCohortName || "Not yet named"}
@@ -64,19 +86,13 @@ ${savedCohorts.length > 0 ? savedCohorts.map(c => `- ${c.name} (status: ${c.stat
 
 ${filterInfo}
 
-When the user asks for a cohort recommendation or you think it would help, proactively suggest a specific cohort that builds upon the project's existing research. Consider:
-- The project's title, description, field, and tags
-- Any existing saved cohorts (avoid duplicating them)
-- The current active filters being used
-- What population or dataset would most meaningfully advance this research
-
-Be aware of the current cohort being built and reference its filters and configuration when relevant.
+When the user asks for a cohort recommendation or you think it would help, proactively suggest a specific cohort that builds upon the project's existing research. Consider ALL of the above context — the hypotheses, notes, uploaded documents, and existing cohorts — to make a highly relevant and specific suggestion. Also use your knowledge of current biomedical literature relevant to this research area.
 
 You can offer to apply filters or create cohorts. When you suggest filters or a cohort, format your suggestion like this:
 SUGGESTED_FILTERS: ["age:30-45 Yr", "organism:Homo Sapiens", "data_type:RNA-Seq"]
 SUGGESTED_COHORT: {"name": "Adult Humans RNA-Seq", "sample_size": 150}
 
-Always explain WHY this cohort would help advance the project's research before showing the suggestion.`;
+Always explain WHY this cohort would help advance the project's research before showing the suggestion, referencing specific hypotheses, notes or documents from this project where relevant.`;
     }
 
     prompt += `${tabName} context:${context}
