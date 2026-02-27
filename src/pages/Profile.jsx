@@ -31,13 +31,15 @@ export default function Profile() {
   }, []);
 
   const { data: projects = [] } = useQuery({
-    queryKey: ["user-projects"],
-    queryFn: () => base44.entities.Project.list("-updated_date", 100),
+    queryKey: ["user-projects", user?.email],
+    queryFn: () => base44.entities.Project.filter({ created_by: user.email }, "-updated_date", 100),
+    enabled: !!user?.email,
   });
 
   const { data: assets = [] } = useQuery({
-    queryKey: ["user-assets"],
-    queryFn: () => base44.entities.Asset.list("-created_date", 100),
+    queryKey: ["user-assets", user?.email],
+    queryFn: () => base44.entities.Asset.filter({ created_by: user.email }, "-created_date", 100),
+    enabled: !!user?.email,
   });
 
   if (!user) return null;
