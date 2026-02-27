@@ -42,24 +42,6 @@ export default function CohortsTab({ project }) {
   const [cohortName, setCohortName] = useState("");
   const [selectedCohort, setSelectedCohort] = useState(null);
 
-  // Listen for "Save Cohort" event from StudyFinderPanel
-  React.useEffect(() => {
-    const handler = (e) => {
-      const filters = e.detail?.activeFilters || [];
-      createMutation.mutate({
-        name: "Cohort from Filters",
-        filters: filters.map((f) => {
-          const [field, value] = f.split(":");
-          return { field, value, operator: "is" };
-        }),
-        sample_size: sampleSize ? parseInt(sampleSize) : null,
-        status: "defined",
-      });
-    };
-    window.addEventListener("save_cohort_from_filters", handler);
-    return () => window.removeEventListener("save_cohort_from_filters", handler);
-  }, [sampleSize]);
-
   const handleAskAboutStudy = (study) => {
     setStudyAiContext(study);
     setAiOpen(true);
