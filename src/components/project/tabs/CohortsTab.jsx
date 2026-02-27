@@ -109,6 +109,7 @@ export default function CohortsTab({ project }) {
           setActiveFilters(filters);
           setSampleSize(size);
         }}
+        onCohortNameChange={(name) => setCohortName(name)}
         onCohortCreated={(cohortData) => {
           createMutation.mutate(cohortData);
         }}
