@@ -83,10 +83,9 @@ export default function LabServiceCard({ service, categoryMeta, onRequest }) {
           </div>
           <Button
             size="sm"
-            className="h-7 text-xs"
+            className="h-8 text-xs bg-blue-600 hover:bg-blue-700 text-white"
             disabled={service.status === "maintenance"}
             onClick={onRequest}>
-
             Request
           </Button>
         </div>
