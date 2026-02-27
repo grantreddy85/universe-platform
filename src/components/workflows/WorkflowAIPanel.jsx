@@ -157,14 +157,20 @@ Based on the project context above, recommend specific workflows from WorkflowHu
         {messages.length === 0 && (
           <div className="text-center py-4">
             <Sparkles className="w-6 h-6 text-violet-200 mx-auto mb-2" />
-            <p className="text-xs text-gray-400 mb-3">Ask which WorkflowHub workflows suit your research.</p>
+            <p className="text-xs text-gray-400 mb-1">Ask for WorkflowHub recommendations or let AI generate a workflow from scratch.</p>
+            <p className="text-[10px] text-violet-400 mb-3 font-medium">✦ Use "generate" or "create" to build an AI workflow</p>
             <div className="space-y-1.5">
               {SUGGESTED_PROMPTS.map((p, i) => (
                 <button
                   key={i}
                   onClick={() => handleSend(p)}
-                  className="w-full text-left text-[11px] text-violet-600 bg-violet-50 hover:bg-violet-100 rounded-lg px-3 py-2 transition-colors"
+                  className={`w-full text-left text-[11px] rounded-lg px-3 py-2 transition-colors ${
+                    i > 0
+                      ? "text-violet-700 bg-violet-100 hover:bg-violet-200 border border-violet-200"
+                      : "text-violet-600 bg-violet-50 hover:bg-violet-100"
+                  }`}
                 >
+                  {i > 0 && <Zap className="w-3 h-3 inline mr-1 text-violet-500" />}
                   {p}
                 </button>
               ))}
