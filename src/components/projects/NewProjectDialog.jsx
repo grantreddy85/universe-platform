@@ -15,10 +15,18 @@ import VisibilitySelector from "./VisibilitySelector";
 
 export default function NewProjectDialog({ open, onOpenChange, onSubmit, isSubmitting }) {
   const [form, setForm] = useState({ title: "", description: "", field: "", visibility_setting: "platform_shared" });
-  const [subscribed, setSubscribed] = useState(false);
+  const [user, setUser] = useState(null);
+  const [currentPlan, setCurrentPlan] = useState("trial");
 
   useEffect(() => {
-    base44.auth.me().then(u => setSubscribed(u?.subscription_status === "subscribed")).catch(() => {});
+    base44.auth.me().then(u => {
+      setUser(u);
+      if (u?.email) {
+        base44.entities.UserSubscription.filter({ user_email: u.email }, "-created_date", 1)
+          .then(subs => setCurrentPlan(subs?.[0]?.plan || "trial"))
+          .catch(() => setCurrentPlan("trial"));
+      }
+    }).catch(() => {});
   }, []);
 
   const handleSubmit = (e) => {
