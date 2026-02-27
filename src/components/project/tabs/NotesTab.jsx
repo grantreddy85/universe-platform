@@ -421,6 +421,7 @@ export default function NotesTab({ project }) {
         isOpen={assistantOpen}
         onToggle={() => setAssistantOpen(!assistantOpen)}
       />
+      </div>
 
       {/* Lightbox */}
       {lightboxUrl && (
@@ -455,7 +456,6 @@ export default function NotesTab({ project }) {
           queryClient.invalidateQueries({ queryKey: ["project-notes", project.id] });
         }}
       />
-      </div>
     </div>
   );
 }
