@@ -46,19 +46,23 @@ export default function NotificationsWidget({ userEmail }) {
       </div>
 
       <div className="bg-white rounded-xl border border-gray-100 p-5">
-        <div className="divide-y divide-gray-50 space-y-0">
-          {notifications.map((notification) => (
-            <div key={notification.id} className="flex items-start gap-3 py-3 first:pt-0 last:pb-0">
-              <span className="text-lg flex-shrink-0">
-                {NOTIFICATION_ICONS[notification.type] || NOTIFICATION_ICONS.system}
-              </span>
-              <div className="flex-1 min-w-0">
-                <p className="text-xs font-semibold text-gray-800">{notification.title}</p>
-                <p className="text-[11px] text-gray-500 mt-0.5 line-clamp-2">{notification.message}</p>
+        {notifications.length === 0 ? (
+          <p className="text-xs text-gray-400 text-center py-8">No notifications yet</p>
+        ) : (
+          <div className="divide-y divide-gray-50 space-y-0">
+            {notifications.map((notification) => (
+              <div key={notification.id} className="flex items-start gap-3 py-3 first:pt-0 last:pb-0">
+                <span className="text-lg flex-shrink-0">
+                  {NOTIFICATION_ICONS[notification.type] || NOTIFICATION_ICONS.system}
+                </span>
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs font-semibold text-gray-800">{notification.title}</p>
+                  <p className="text-[11px] text-gray-500 mt-0.5 line-clamp-2">{notification.message}</p>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
