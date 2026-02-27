@@ -39,6 +39,7 @@ export default function CohortsTab({ project }) {
   const [sampleSize, setSampleSize] = useState("");
   const [studyFinderOpen, setStudyFinderOpen] = useState(false);
   const [studyAiContext, setStudyAiContext] = useState(null);
+  const [cohortName, setCohortName] = useState("");
 
   const handleAskAboutStudy = (study) => {
     setStudyAiContext(study);
