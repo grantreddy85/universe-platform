@@ -51,6 +51,22 @@ export default function NotesTab({ project }) {
     queryFn: () => base44.entities.Note.filter({ project_id: project.id }, "-created_date", 100),
   });
 
+  const { data: vaultDocs = [] } = useQuery({
+    queryKey: ["project-documents", project.id],
+    queryFn: () => base44.entities.ProjectDocument.filter({ project_id: project.id }, "-created_date", 1),
+  });
+
+  const [vaultBannerDismissed, setVaultBannerDismissed] = useState(
+    () => !!localStorage.getItem(`vault_banner_dismissed_${project.id}`)
+  );
+
+  const dismissVaultBanner = () => {
+    localStorage.setItem(`vault_banner_dismissed_${project.id}`, "true");
+    setVaultBannerDismissed(true);
+  };
+
+  const showVaultBanner = !vaultBannerDismissed && vaultDocs.length === 0;
+
   const createMutation = useMutation({
     mutationFn: (data) =>
       base44.entities.Note.create({ ...data, project_id: project.id, source: "manual" }),
