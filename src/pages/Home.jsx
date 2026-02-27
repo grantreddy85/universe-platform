@@ -77,7 +77,15 @@ export default function Home() {
   const firstName = user?.full_name?.split(" ")[0] || "Researcher";
 
   return (
-    <div className="min-h-screen p-6 lg:p-10 max-w-7xl mx-auto">
+    <div className="min-h-screen">
+      {/* Ecosystem Banner at Top */}
+      <div className="border-b border-gray-100 bg-gradient-to-b from-blue-50/40 to-white">
+        <div className="p-6 lg:p-10 max-w-7xl mx-auto">
+          <EcosystemBanner projects={projects} subscriptionStatus={subscriptionStatus} />
+        </div>
+      </div>
+
+      <div className="p-6 lg:p-10 max-w-7xl mx-auto">
       {/* Header / Profile */}
       <div className="mb-10 flex items-center gap-5">
         <div className="w-14 h-14 rounded-full bg-[#000021] flex items-center justify-center flex-shrink-0 text-[#00F2FF] text-xl font-semibold">
