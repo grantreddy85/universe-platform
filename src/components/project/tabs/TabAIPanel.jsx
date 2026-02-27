@@ -218,12 +218,21 @@ Provide concise, insightful responses tailored to this research context.`;
       </div>
 
       {/* Actions */}
-      {tabName === "Cohorts" && onRecommendCohort && (
+      {tabName === "Cohorts" && (
         <div className="border-t border-gray-100 p-3">
           <Button
-            onClick={onRecommendCohort}
+            onClick={() => {
+              setFiltersApplied(false);
+              setSuggestedFilters(null);
+              setSuggestedCohort(null);
+              setInput("Based on this project's research goals and any existing cohorts, recommend the most useful cohort I should build next — including specific filters and sample size.");
+              setTimeout(() => {
+                document.getElementById("ai-panel-send-btn")?.click();
+              }, 50);
+            }}
             size="sm"
             className="w-full bg-blue-600 hover:bg-blue-700 text-xs"
+            disabled={isLoading}
           >
             <Sparkles className="w-3.5 h-3.5 mr-2" />
             Recommend Cohort
