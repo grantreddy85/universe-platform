@@ -45,11 +45,17 @@ export default function ProjectDetail() {
     queryFn: () => base44.entities.Asset.filter({ project_id: projectId }, "-created_date", 100),
     enabled: !!projectId,
   });
+  const { data: cohorts = [] } = useQuery({
+    queryKey: ["project-cohorts-count", projectId],
+    queryFn: () => base44.entities.Cohort.filter({ project_id: projectId }, "-created_date", 100),
+    enabled: !!projectId,
+  });
 
   const tabCounts = {
     notes: notes.length || null,
     validation: validations.length || null,
     assets: assets.length || null,
+    cohorts: cohorts.length || null,
   };
 
   if (isLoading || !project) {
