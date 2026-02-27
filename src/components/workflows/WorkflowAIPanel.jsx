@@ -11,20 +11,28 @@ const SUGGESTED_PROMPTS = [
   "Create an in-silico simulation workflow for this project.",
 ];
 
-export default function WorkflowAIPanel({ project, onClose, onOpenImporter }) {
+export default function WorkflowAIPanel({ project, onClose, onOpenImporter, onGenerateWorkflow }) {
   const [query, setQuery] = useState("");
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [generatedWorkflow, setGeneratedWorkflow] = useState(null);
+  const [savingWorkflow, setSavingWorkflow] = useState(false);
   const bottomRef = useRef(null);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, loading]);
+  }, [messages, loading, generatedWorkflow]);
+
+  const isGenerateRequest = (text) => {
+    const lower = text.toLowerCase();
+    return lower.includes("generate") || lower.includes("create") || lower.includes("build") || lower.includes("design") || lower.includes("ai workflow") || lower.includes("in-silico") || lower.includes("in silico");
+  };
 
   const handleSend = async (text) => {
     const userMessage = (text || query).trim();
     if (!userMessage || loading) return;
     setQuery("");
+    setGeneratedWorkflow(null);
     setMessages((prev) => [...prev, { role: "user", content: userMessage }]);
     setLoading(true);
 
@@ -36,23 +44,89 @@ Tags: ${project?.tags?.join(", ") || "None"}
 Status: ${project?.status || "draft"}
     `.trim();
 
-    const response = await base44.integrations.Core.InvokeLLM({
-      prompt: `You are a scientific workflow advisor helping a researcher find suitable workflows from the WorkflowHub registry (workflowhub.eu).
+    if (isGenerateRequest(userMessage)) {
+      // AI-generate a full workflow definition
+      const result = await base44.integrations.Core.InvokeLLM({
+        prompt: `You are a scientific workflow architect. Generate a complete, ready-to-use scientific workflow based on this request and project context.
+
+${projectContext}
+User request: ${userMessage}
+
+Return a structured workflow that a researcher can immediately use.`,
+        response_json_schema: {
+          type: "object",
+          properties: {
+            title: { type: "string" },
+            type: { type: "string", enum: ["in_silico_simulation", "meta_analysis", "comparative_modelling", "statistical_analysis", "other"] },
+            description: { type: "string" },
+            rationale: { type: "string" },
+            steps: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  step: { type: "number" },
+                  name: { type: "string" },
+                  description: { type: "string" },
+                  tools: { type: "array", items: { type: "string" } },
+                  outputs: { type: "array", items: { type: "string" } }
+                }
+              }
+            },
+            parameters: {
+              type: "object",
+              properties: {
+                input_data_type: { type: "string" },
+                statistical_method: { type: "string" },
+                software_requirements: { type: "array", items: { type: "string" } },
+                estimated_runtime: { type: "string" }
+              }
+            }
+          },
+          required: ["title", "type", "description", "steps"]
+        }
+      });
+
+      setGeneratedWorkflow(result);
+      const summary = `I've designed a **${result.title}** workflow for you.\n\n**Rationale:** ${result.rationale || result.description}\n\n**Steps:**\n${result.steps?.map((s) => `${s.step}. **${s.name}** — ${s.description}`).join("\n")}\n\nClick **"Add to Project"** below to save this workflow instantly.`;
+      setMessages((prev) => [...prev, { role: "assistant", content: summary }]);
+    } else {
+      // Standard WorkflowHub recommendation
+      const response = await base44.integrations.Core.InvokeLLM({
+        prompt: `You are a scientific workflow advisor helping a researcher find suitable workflows from the WorkflowHub registry (workflowhub.eu).
 
 ${projectContext}
 
 User question: ${userMessage}
 
-Based on the project context above, recommend specific types of workflows from WorkflowHub that would be suitable. 
+Based on the project context above, recommend specific workflows from WorkflowHub that would be suitable. 
 - Suggest 2-4 concrete workflow categories or specific named workflows where you know them.
 - Explain briefly why each is relevant to this project.
-- Mention that they can search and import directly using the "Import from WorkflowHub" button.
 - Keep your response concise and actionable.`,
-      add_context_from_internet: true,
-    });
+        add_context_from_internet: true,
+      });
+      setMessages((prev) => [...prev, { role: "assistant", content: response }]);
+    }
 
-    setMessages((prev) => [...prev, { role: "assistant", content: response }]);
     setLoading(false);
+  };
+
+  const handleAddToProject = async () => {
+    if (!generatedWorkflow) return;
+    setSavingWorkflow(true);
+    await onGenerateWorkflow({
+      title: generatedWorkflow.title,
+      type: generatedWorkflow.type,
+      description: generatedWorkflow.description,
+      status: "draft",
+      parameters: {
+        source: "ai_generated",
+        steps: generatedWorkflow.steps,
+        ...generatedWorkflow.parameters,
+      }
+    });
+    setSavingWorkflow(false);
+    setGeneratedWorkflow(null);
   };
 
   return (
