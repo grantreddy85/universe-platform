@@ -42,6 +42,27 @@ export default function CohortsTab({ project }) {
   const [cohortName, setCohortName] = useState("");
   const [selectedCohort, setSelectedCohort] = useState(null);
 
+  // Listen for "Save Cohort" event dispatched by StudyFinderPanel's Save button
+  useEffect(() => {
+    const handler = (e) => {
+      const filters = (e.detail?.activeFilters || []).map((f) => {
+        const [field, ...rest] = f.split(":");
+        return { field: field.trim(), value: rest.join(":").trim(), operator: "is" };
+      });
+      base44.entities.Cohort.create({
+        project_id: project.id,
+        name: "Cohort from Study Finder",
+        filters,
+        sample_size: null,
+        status: "defined",
+      }).then(() => {
+        queryClient.invalidateQueries({ queryKey: ["project-cohorts", project.id] });
+      });
+    };
+    window.addEventListener("save_cohort_from_filters", handler);
+    return () => window.removeEventListener("save_cohort_from_filters", handler);
+  }, [project.id]);
+
   const handleAskAboutStudy = (study) => {
     setStudyAiContext(study);
     setAiOpen(true);
