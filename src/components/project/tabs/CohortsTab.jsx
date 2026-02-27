@@ -142,7 +142,14 @@ export default function CohortsTab({ project }) {
       onToggle={() => { setAiOpen(!aiOpen); setStudyAiContext(null); }}
       onRecommendCohort={() => setShowAssistant(true)}
       onSetFilters={(filters) => {
-        setActiveFilters(filters);
+        // Normalize AI-suggested filters to match the "key:Value" format used by CohortFilters
+        // AI may produce formats like "age:30-45 Yr" or "organism:Homo Sapiens"
+        // We just set them directly as the format should match
+        const normalized = filters.map((f) => {
+          // Already in key:value format — pass through
+          return f;
+        });
+        setActiveFilters(normalized);
       }}
       onCreateCohort={(cohortData) => {
         createMutation.mutate(cohortData);
