@@ -20,6 +20,7 @@ export default function ProjectDetail() {
   const projectId = urlParams.get("id");
   const initialTab = urlParams.get("tab") || "overview";
   const [activeTab, setActiveTab] = useState(initialTab);
+  const scrollRef = React.useRef(null);
 
   const { data: project, isLoading } = useQuery({
     queryKey: ["project", projectId],
@@ -50,6 +51,12 @@ export default function ProjectDetail() {
     queryFn: () => base44.entities.Cohort.filter({ project_id: projectId }, "-created_date", 100),
     enabled: !!projectId,
   });
+
+  React.useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = 0;
+    }
+  }, [activeTab]);
 
   const tabCounts = {
     notes: notes.length || null,
