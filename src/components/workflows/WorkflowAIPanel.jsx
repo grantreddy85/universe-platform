@@ -208,9 +208,22 @@ Based on the project context above, recommend specific workflows from WorkflowHu
         <div ref={bottomRef} />
       </div>
 
-      {/* Import shortcut */}
+      {/* Action buttons */}
       {messages.length > 0 && (
-        <div className="px-3 pt-2">
+        <div className="px-3 pt-2 space-y-1.5">
+          {generatedWorkflow && (
+            <button
+              onClick={handleAddToProject}
+              disabled={savingWorkflow}
+              className="w-full flex items-center justify-center gap-1.5 text-[11px] text-white bg-violet-600 hover:bg-violet-700 rounded-lg px-3 py-2 transition-colors font-medium"
+            >
+              {savingWorkflow
+                ? <Loader2 className="w-3 h-3 animate-spin" />
+                : <CheckCircle className="w-3 h-3" />
+              }
+              Add to Project
+            </button>
+          )}
           <button
             onClick={onOpenImporter}
             className="w-full flex items-center justify-center gap-1.5 text-[11px] text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg px-3 py-2 transition-colors"
