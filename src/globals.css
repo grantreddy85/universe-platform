@@ -30,6 +30,31 @@ css
     --input: 220 13% 91%;
     --ring: 213 60% 45%;
     --radius: 0.5rem;
+
+    /* Theme colors - dark/cyan */
+    --color-primary-dark: #000021;
+    --color-primary-cyan: #00F2FF;
+    --color-text-primary: #525153;
+    --color-text-secondary: #ffffff;
+    --color-neutral-50: #f8f9fa;
+    --color-neutral-100: #f0f1f3;
+    --color-neutral-200: #e5e6e8;
+    --color-neutral-300: #d0d1d3;
+    --color-neutral-400: #a0a0a0;
+    --color-neutral-500: #808080;
+    --color-neutral-600: #606060;
+    --color-status-draft-bg: #f0f1f3;
+    --color-status-draft-text: #606060;
+    --color-status-active-bg: #dbeafe;
+    --color-status-active-text: #1e40af;
+    --color-status-validation-bg: #fef3c7;
+    --color-status-validation-text: #92400e;
+    --color-status-validated-bg: #d1fae5;
+    --color-status-validated-text: #065f46;
+    --color-status-tokenised-bg: #ede9fe;
+    --color-status-tokenised-text: #6b21a8;
+    --color-interactive-blue: #2563eb;
+    --color-interactive-blue-dark: #1e40af;
   }
 }
 
