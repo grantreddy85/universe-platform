@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useLocation } from "react-router-dom";
-import { Plus, X, RotateCcw, Send, Loader2, Sparkles, Save, FileText, CheckSquare, Square, BookOpen, AlignLeft, Paperclip, Image as ImageIcon } from "lucide-react";
+import { Plus, X, RotateCcw, Send, Loader2, Sparkles, Save, FileText, CheckSquare, Square, BookOpen, AlignLeft, Paperclip, Image as ImageIcon, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import ReactMarkdown from "react-markdown";
