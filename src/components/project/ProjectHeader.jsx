@@ -120,8 +120,27 @@ export default function ProjectHeader({ project, onProjectUpdated }) {
         Projects
       </Link>
       <div className="flex items-start justify-between">
-        <div>
-          <div className="flex items-center gap-3">
+        <div className="flex items-start gap-4">
+          {projectImage && (
+            <div className="relative">
+              <img src={projectImage} alt={project.title} className="w-16 h-16 rounded-lg object-cover bg-gray-100" />
+              <button
+                onClick={() => setImageOpen(true)}
+                className="absolute inset-0 bg-black/0 hover:bg-black/40 rounded-lg flex items-center justify-center opacity-0 hover:opacity-100 transition-all"
+              >
+                <ImageIcon className="w-5 h-5 text-white" />
+              </button>
+            </div>
+          )}
+          {!projectImage && (
+            <button
+              onClick={() => setImageOpen(true)}
+              className="w-16 h-16 rounded-lg bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
+            >
+              <ImageIcon className="w-5 h-5 text-gray-400" />
+            </button>
+          )}
+          <div>
             <h1 className="text-xl font-semibold text-gray-900 tracking-tight">
               {project.title}
             </h1>
