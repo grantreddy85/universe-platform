@@ -4,7 +4,6 @@ import { createPageUrl } from "../../utils";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, Clock, Globe, Lock } from "lucide-react";
 import { format } from "date-fns";
-import { COLORS, getStatusStyle } from "@/lib/colors";
 
 const FIELD_IMAGES = {
   biology:       "https://images.unsplash.com/photo-1576086213369-97a306d36557?w=600&q=80",
@@ -49,19 +48,19 @@ export default function ProjectCard({ project }) {
            variant="secondary"
            className={`text-[10px] font-medium uppercase tracking-wider px-2 py-0.5`}
            style={{
-             backgroundColor: getStatusStyle(project.status).bg,
-             color: getStatusStyle(project.status).text
+             backgroundColor: `var(--color-status-${project.status || 'draft'}-bg)`,
+             color: `var(--color-status-${project.status || 'draft'}-text)`
            }}>
 
           {project.status || "draft"}
         </Badge>
         <ArrowRight className="w-4 h-4 text-gray-300 group-hover:text-blue-500 group-hover:translate-x-0.5 transition-all" />
       </div>
-      <h3 className="mb-1 text-sm font-semibold line-clamp-1" style={{ color: COLORS.text.primary }}>{project.title}</h3>
-      <p className="text-xs line-clamp-2 mb-4 min-h-[32px]" style={{ color: COLORS.neutral[400] }}>
+      <h3 className="mb-1 text-sm font-semibold line-clamp-1" style={{ color: 'var(--color-text-primary)' }}>{project.title}</h3>
+      <p className="text-xs line-clamp-2 mb-4 min-h-[32px]" style={{ color: 'var(--color-neutral-400)' }}>
         {project.description || "No description yet"}
       </p>
-      <div className="flex items-center gap-3 text-[11px]" style={{ color: COLORS.neutral[400] }}>
+      <div className="flex items-center gap-3 text-[11px]" style={{ color: 'var(--color-neutral-400)' }}>
         <div className="flex items-center gap-1">
           <Clock className="w-3 h-3" />
           {project.updated_date ?
@@ -69,12 +68,12 @@ export default function ProjectCard({ project }) {
           "Recently"}
         </div>
         {project.field &&
-        <span className="px-2 py-0.5 rounded" style={{ backgroundColor: COLORS.neutral[100], color: COLORS.neutral[500] }}>{project.field}</span>
+        <span className="px-2 py-0.5 rounded" style={{ backgroundColor: 'var(--color-neutral-100)', color: 'var(--color-neutral-500)' }}>{project.field}</span>
         }
         <span className={`ml-auto flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium`}
         style={{
-          backgroundColor: project.visibility_setting === "private" ? COLORS.neutral[100] : COLORS.status.active.bg,
-          color: project.visibility_setting === "private" ? COLORS.neutral[500] : COLORS.interactive.blue
+          backgroundColor: project.visibility_setting === "private" ? 'var(--color-neutral-100)' : 'var(--color-status-active-bg)',
+          color: project.visibility_setting === "private" ? 'var(--color-neutral-500)' : 'var(--color-interactive-blue)'
         }}>
           {project.visibility_setting === "private" ?
           <><Lock className="w-2.5 h-2.5" /> Private</> :
