@@ -54,6 +54,16 @@ export default function ProjectHeader({ project, onProjectUpdated }) {
     navigate(createPageUrl("Projects"));
   };
 
+  const handleToggleVisibility = async () => {
+    const newVisibility = visibility === "private" ? "platform_shared" : "private";
+    await base44.entities.Project.update(project.id, {
+      visibility_setting: newVisibility,
+    });
+    setVisibility(newVisibility);
+    queryClient.invalidateQueries({ queryKey: ["project", project.id] });
+    queryClient.invalidateQueries({ queryKey: ["projects"] });
+  };
+
   return (
     <div className="border-b border-gray-100 bg-white px-6 lg:px-10 py-5">
       <Link
