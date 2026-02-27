@@ -39,8 +39,7 @@ export default function TabAIPanel({ tabName, contextData, isOpen, onToggle, onR
 
     if (tabName === "Cohorts" && project) {
       const filterInfo = availableFilters
-        ? `\n\nAvailable filters to define cohorts:
-${availableFilters}`
+        ? `\n\nAvailable filters to define cohorts:\n${availableFilters}`
         : "";
 
       const cohortData = typeof contextData === "object" && contextData !== null ? contextData : {};
@@ -49,7 +48,6 @@ ${availableFilters}`
       const currentCohortName = cohortData.currentCohortName || "";
       const savedCohorts = cohortData.cohorts || [];
       
-      // Build rich project context from all modules
       const hypothesesContext = hypotheses?.length > 0
         ? hypotheses.map(h => `  - [${h.status}] ${h.title}: ${h.description || ""}`).join("\n")
         : "  None yet";
@@ -87,28 +85,23 @@ ${savedCohorts.length > 0 ? savedCohorts.map(c => `- ${c.name} (status: ${c.stat
 
 ${filterInfo}
 
-When the user asks for a cohort recommendation or you think it would help, proactively suggest a specific cohort that builds upon the project's existing research. Consider ALL of the above context — the hypotheses, notes, uploaded documents, and existing cohorts — to make a highly relevant and specific suggestion. Also use your knowledge of current biomedical literature relevant to this research area.
-
-You can offer to apply filters or create cohorts. When you suggest filters or a cohort, format your suggestion like this:
+When the user asks for a cohort recommendation or you think it would help, proactively suggest a specific cohort. IMPORTANT: you MUST output the suggestion markers on their own lines like this:
 SUGGESTED_FILTERS: ["age:30-45 Yr", "organism:Homo Sapiens", "data_type:RNA-Seq"]
 SUGGESTED_COHORT: {"name": "Adult Humans RNA-Seq", "sample_size": 150}
 
-Always explain WHY this cohort would help advance the project's research before showing the suggestion, referencing specific hypotheses, notes or documents from this project where relevant.`;
+Always explain WHY this cohort would help advance the project's research before showing the suggestion.`;
     }
 
-    prompt += `${tabName} context:${context}
-
-User question: ${input}
-
-Provide concise, insightful responses tailored to this research context.`;
+    prompt += `\n\n${tabName} context:${context}\n\nUser question: ${input}\n\nProvide concise, insightful responses tailored to this research context.`;
 
     const response = await base44.integrations.Core.InvokeLLM({ prompt, add_context_from_internet: tabName === "Cohorts" });
     
     // Extract suggested filters and cohort from response
     if (tabName === "Cohorts") {
-      const filterMatch = response.match(/SUGGESTED_FILTERS:\s*(\[[\s\S]*?\])/);
-      const cohortMatch = response.match(/SUGGESTED_COHORT:\s*(\{[\s\S]*?\})/);
-      
+      // Try to extract SUGGESTED_FILTERS array
+      const filterMatch = response.match(/SUGGESTED_FILTERS:\s*(\[[\s\S]*?\])/m);
+      const cohortMatch = response.match(/SUGGESTED_COHORT:\s*(\{[^}]+\})/m);
+
       if (filterMatch) {
         try {
           const parsed = JSON.parse(filterMatch[1]);
@@ -121,9 +114,11 @@ Provide concise, insightful responses tailored to this research context.`;
       } else {
         setSuggestedFilters(null);
       }
+
       if (cohortMatch) {
         try {
-          setSuggestedCohort(JSON.parse(cohortMatch[1]));
+          const parsed = JSON.parse(cohortMatch[1]);
+          setSuggestedCohort(parsed);
           setCohortCreated(false);
         } catch (e) {
           setSuggestedCohort(null);
@@ -168,9 +163,12 @@ Provide concise, insightful responses tailored to this research context.`;
             const isLastAssistant = msg.role === "assistant" && idx === messages.length - 1;
             const hasSuggestion = isLastAssistant && (suggestedFilters || suggestedCohort);
 
-            // Strip SUGGESTED_FILTERS / SUGGESTED_COHORT lines from assistant display
+            // Strip SUGGESTED_FILTERS / SUGGESTED_COHORT lines from display
             const displayContent = msg.role === "assistant"
-              ? msg.content.replace(/SUGGESTED_FILTERS:\s*\[[\s\S]*?\]/g, "").replace(/SUGGESTED_COHORT:\s*\{[\s\S]*?\}/g, "").trim()
+              ? msg.content
+                  .replace(/SUGGESTED_FILTERS:\s*\[[\s\S]*?\]/gm, "")
+                  .replace(/SUGGESTED_COHORT:\s*\{[^}]+\}/gm, "")
+                  .trim()
               : msg.content;
 
             return (
@@ -193,7 +191,7 @@ Provide concise, insightful responses tailored to this research context.`;
                   </div>
                 </div>
 
-                {/* Inline action card directly after the message that has suggestions */}
+                {/* Inline action card directly after the assistant message that has suggestions */}
                 {hasSuggestion && (
                   <div className="bg-gradient-to-br from-blue-50 to-emerald-50 border border-blue-200 rounded-lg p-3 space-y-3">
                     <p className="text-xs font-semibold text-gray-800">Recommended Cohort Plan</p>
@@ -266,13 +264,10 @@ Provide concise, insightful responses tailored to this research context.`;
             </div>
           </div>
         )}
-        
-
-        
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Actions */}
+      {/* Recommend Cohort Button */}
       {tabName === "Cohorts" && (
         <div className="border-t border-gray-100 p-3">
           <Button
