@@ -81,7 +81,7 @@ function StudyCard({ study, onAskAbout }) {
   );
 }
 
-export default function StudyFinderPanel({ activeFilters, project, onAskAboutStudy, onClose, isEmbedded }) {
+export default function StudyFinderPanel({ activeFilters, project, onAskAboutStudy, onClose, isEmbedded, autoSearch }) {
   const [results, setResults] = useState(null);
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("overview");
@@ -91,6 +91,12 @@ export default function StudyFinderPanel({ activeFilters, project, onAskAboutStu
       handleSearch();
     }
   }, [activeFilters]);
+
+  React.useEffect(() => {
+    if (autoSearch && activeFilters.length > 0) {
+      handleSearch();
+    }
+  }, [autoSearch]);
 
   const filterSummary = activeFilters.map(f => {
     const [, val] = f.split(":");
