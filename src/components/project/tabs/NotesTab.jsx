@@ -34,7 +34,7 @@ const sourceLabel = {
   ai_copilot: "AI Copilot",
 };
 
-export default function NotesTab({ project }) {
+export default function NotesTab({ project, onTabChange }) {
   const [selectedNote, setSelectedNote] = useState(null);
   const [form, setForm] = useState({ title: "", content: "", image_urls: [] });
   const [isDirty, setIsDirty] = useState(false);
@@ -47,6 +47,11 @@ export default function NotesTab({ project }) {
   const { data: notes = [], isLoading } = useQuery({
     queryKey: ["project-notes", project.id],
     queryFn: () => base44.entities.Note.filter({ project_id: project.id }, "-created_date", 100),
+  });
+
+  const { data: vaultDocs = [] } = useQuery({
+    queryKey: ["project-docs", project.id],
+    queryFn: () => base44.entities.ProjectDocument.filter({ project_id: project.id }, "-created_date", 5),
   });
 
   const createMutation = useMutation({
