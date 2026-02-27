@@ -86,13 +86,6 @@ export default function ProjectDetail() {
   };
 
   const ActiveComponent = tabComponents[activeTab] || OverviewTab;
-  const scrollRef = React.useRef(null);
-
-  React.useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = 0;
-    }
-  }, [activeTab]);
 
   return (
     <div className="flex flex-col h-screen bg-[#fafbfc] overflow-hidden">
