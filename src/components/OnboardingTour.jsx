@@ -72,6 +72,7 @@ const steps = [
 export default function OnboardingTour() {
   const [isOpen, setIsOpen] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const seen = localStorage.getItem(ONBOARDING_KEY);
