@@ -101,7 +101,7 @@ User question: ${input}
 
 Provide concise, insightful responses tailored to this research context.`;
 
-    const response = await base44.integrations.Core.InvokeLLM({ prompt });
+    const response = await base44.integrations.Core.InvokeLLM({ prompt, add_context_from_internet: tabName === "Cohorts" });
     
     // Extract suggested filters and cohort from response
     if (tabName === "Cohorts") {
