@@ -116,7 +116,10 @@ export default function ProjectHeader({ project, onProjectUpdated }) {
             variant="outline"
             size="sm"
             onClick={handleToggleVisibility}
-            className="text-xs h-8 px-3 flex items-center gap-1.5"
+            className={`text-xs h-8 px-3 flex items-center gap-1.5 ${
+              visibility === "platform_shared" && !supportsPrivate ? "opacity-60 cursor-not-allowed" : ""
+            }`}
+            disabled={visibility === "platform_shared" && !supportsPrivate}
           >
             {visibility === "private" ? (
               <>
