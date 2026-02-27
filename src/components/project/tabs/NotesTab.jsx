@@ -455,6 +455,7 @@ export default function NotesTab({ project }) {
           queryClient.invalidateQueries({ queryKey: ["project-notes", project.id] });
         }}
       />
+      </div>
     </div>
   );
 }
