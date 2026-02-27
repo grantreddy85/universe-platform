@@ -269,6 +269,12 @@ export default function WorkflowsTab({ project }) {
           project={project}
           onClose={() => setShowAIPanel(false)}
           onOpenImporter={() => { setShowAIPanel(false); setShowImporter(true); }}
+          onGenerateWorkflow={async (wfData) => {
+            const wf = await base44.entities.Workflow.create({ project_id: projectId, ...wfData });
+            queryClient.invalidateQueries({ queryKey: ["workflows", projectId] });
+            setShowAIPanel(false);
+            openWorkflow(wf);
+          }}
         />
       )}
     </div>
