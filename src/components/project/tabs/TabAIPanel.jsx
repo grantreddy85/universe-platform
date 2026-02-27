@@ -165,29 +165,97 @@ Provide concise, insightful responses tailored to this research context.`;
           </div>
         ) : (
           messages.map((msg, idx) => {
+            const isLastAssistant = msg.role === "assistant" && idx === messages.length - 1;
+            const hasSuggestion = isLastAssistant && (suggestedFilters || suggestedCohort);
+
             // Strip SUGGESTED_FILTERS / SUGGESTED_COHORT lines from assistant display
             const displayContent = msg.role === "assistant"
-              ? msg.content.replace(/SUGGESTED_FILTERS:\s*\[.*?\]/gs, "").replace(/SUGGESTED_COHORT:\s*\{.*?\}/gs, "").trim()
+              ? msg.content.replace(/SUGGESTED_FILTERS:\s*\[[\s\S]*?\]/g, "").replace(/SUGGESTED_COHORT:\s*\{[\s\S]*?\}/g, "").trim()
               : msg.content;
 
             return (
-              <div key={idx} className={`flex gap-2 ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
-                <div
-                  className={`max-w-[85%] rounded-xl px-3 py-2 text-xs leading-relaxed ${
-                    msg.role === "user"
-                      ? "bg-blue-600 text-white"
-                      : "bg-gray-50 text-gray-800 border border-gray-100"
-                  }`}
-                >
-                  {msg.role === "assistant" ? (
-                    <ReactMarkdown className="prose prose-xs max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
-                      {displayContent}
-                    </ReactMarkdown>
-                  ) : (
-                    msg.content
-                  )}
+              <React.Fragment key={idx}>
+                <div className={`flex gap-2 ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
+                  <div
+                    className={`max-w-[85%] rounded-xl px-3 py-2 text-xs leading-relaxed ${
+                      msg.role === "user"
+                        ? "bg-blue-600 text-white"
+                        : "bg-gray-50 text-gray-800 border border-gray-100"
+                    }`}
+                  >
+                    {msg.role === "assistant" ? (
+                      <ReactMarkdown className="prose prose-xs max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
+                        {displayContent}
+                      </ReactMarkdown>
+                    ) : (
+                      msg.content
+                    )}
+                  </div>
                 </div>
-              </div>
+
+                {/* Inline action card directly after the message that has suggestions */}
+                {hasSuggestion && (
+                  <div className="bg-gradient-to-br from-blue-50 to-emerald-50 border border-blue-200 rounded-lg p-3 space-y-3">
+                    <p className="text-xs font-semibold text-gray-800">Recommended Cohort Plan</p>
+
+                    {suggestedFilters && (
+                      <div>
+                        <p className="text-[10px] font-medium text-blue-700 uppercase tracking-wide mb-1.5">Suggested Filters</p>
+                        <div className="flex flex-wrap gap-1 mb-2">
+                          {suggestedFilters.map((filter) => (
+                            <span key={filter} className="bg-blue-100 text-blue-800 text-[10px] px-2 py-0.5 rounded-full">{filter}</span>
+                          ))}
+                        </div>
+                        {!filtersApplied ? (
+                          <Button
+                            size="sm"
+                            className="w-full bg-blue-600 hover:bg-blue-700 text-xs h-7"
+                            onClick={() => {
+                              onSetFilters?.(suggestedFilters);
+                              setFiltersApplied(true);
+                            }}
+                          >
+                            ✦ Apply Filters to Study Finder
+                          </Button>
+                        ) : (
+                          <div className="text-[10px] text-emerald-700 font-medium">✓ Filters applied to Study Finder</div>
+                        )}
+                      </div>
+                    )}
+
+                    {suggestedCohort && (
+                      <div>
+                        <p className="text-[10px] font-medium text-emerald-700 uppercase tracking-wide mb-1.5">Suggested Cohort</p>
+                        <div className="text-xs text-gray-700 mb-2">
+                          <p className="font-semibold">{suggestedCohort.name}</p>
+                          {suggestedCohort.sample_size && <p className="text-gray-500">Sample size: {suggestedCohort.sample_size}</p>}
+                        </div>
+                        {!cohortCreated ? (
+                          <Button
+                            size="sm"
+                            className="w-full bg-emerald-600 hover:bg-emerald-700 text-xs h-7"
+                            onClick={() => {
+                              const cohortPayload = {
+                                ...suggestedCohort,
+                                filters: (suggestedFilters || []).map((f) => {
+                                  const [field, ...rest] = f.split(":");
+                                  return { field: field.trim(), operator: "equals", value: rest.join(":").trim() };
+                                }),
+                              };
+                              onCreateCohort?.(cohortPayload);
+                              setCohortCreated(true);
+                            }}
+                          >
+                            ✦ Create Cohort from Filters
+                          </Button>
+                        ) : (
+                          <div className="text-[10px] text-emerald-700 font-medium">✓ Cohort created</div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </React.Fragment>
             );
           })
         )}
