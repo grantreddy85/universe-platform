@@ -1,7 +1,10 @@
 import React from "react";
-import { Globe, Lock } from "lucide-react";
+import { Globe, Lock, AlertCircle } from "lucide-react";
+import { Link } from "react-router-dom";
+import { createPageUrl } from "../../utils";
 
-export default function VisibilitySelector({ value, onChange, subscribed }) {
+export default function VisibilitySelector({ value, onChange, plan = "trial" }) {
+  const supportsPrivate = ["pro"].includes(plan);
   return (
     <div className="space-y-2">
       <button
