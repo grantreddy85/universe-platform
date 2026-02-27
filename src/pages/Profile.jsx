@@ -50,25 +50,158 @@ export default function Profile() {
 
       {/* User Info */}
       <div className="bg-white rounded-xl border border-gray-100 p-6 mb-6">
-        <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-full bg-blue-50 flex items-center justify-center">
-            <User className="w-6 h-6 text-blue-500" />
-          </div>
-          <div>
-            <h2 className="text-lg font-semibold text-gray-900">
-              {user.full_name || "Researcher"}
-            </h2>
-            <div className="flex items-center gap-1 text-sm text-gray-400">
-              <Mail className="w-3.5 h-3.5" />
-              {user.email}
+        {editMode ? (
+          <div className="space-y-4">
+            <div className="flex items-start justify-between mb-4">
+              <h3 className="text-sm font-semibold text-gray-900">Edit Profile</h3>
+              <button
+                onClick={() => setEditMode(false)}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Profile Picture Upload */}
+            <div>
+              <label className="text-xs font-medium text-gray-600 mb-2 block">Profile Picture</label>
+              <div className="flex items-center gap-3">
+                <div className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 ${
+                  user.profile_picture_url ? "bg-gray-100" : "bg-blue-50"
+                }`}>
+                  {user.profile_picture_url ? (
+                    <img src={user.profile_picture_url} alt="Profile" className="w-full h-full rounded-full object-cover" />
+                  ) : (
+                    <User className="w-5 h-5 text-blue-500" />
+                  )}
+                </div>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={async (e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      setUploadingProfile(true);
+                      try {
+                        const { file_url } = await base44.integrations.Core.UploadFile({ file });
+                        await base44.auth.updateMe({ profile_picture_url: file_url });
+                        const updated = await base44.auth.me();
+                        setUser(updated);
+                      } finally {
+                        setUploadingProfile(false);
+                      }
+                    }
+                  }}
+                  disabled={uploadingProfile}
+                  className="text-xs"
+                />
+              </div>
+            </div>
+
+            {/* Full Name */}
+            <div>
+              <label className="text-xs font-medium text-gray-600 mb-1 block">Full Name</label>
+              <Input
+                value={editData.full_name}
+                onChange={(e) => setEditData({ ...editData, full_name: e.target.value })}
+                placeholder="Your full name"
+                className="text-sm"
+              />
+            </div>
+
+            {/* Location */}
+            <div>
+              <label className="text-xs font-medium text-gray-600 mb-1 block">Location</label>
+              <Input
+                value={editData.location}
+                onChange={(e) => setEditData({ ...editData, location: e.target.value })}
+                placeholder="e.g., Sydney, Australia"
+                className="text-sm"
+              />
+            </div>
+
+            {/* Field of Interest */}
+            <div>
+              <label className="text-xs font-medium text-gray-600 mb-1 block">Field of Interest</label>
+              <Input
+                value={editData.field_of_interest}
+                onChange={(e) => setEditData({ ...editData, field_of_interest: e.target.value })}
+                placeholder="e.g., Oncology, Neuroscience"
+                className="text-sm"
+              />
+            </div>
+
+            <div className="flex gap-2 pt-2">
+              <Button
+                size="sm"
+                className="bg-[#000021] text-[#00F2FF] hover:bg-[#000021]/90"
+                onClick={async () => {
+                  await base44.auth.updateMe({
+                    full_name: editData.full_name,
+                    location: editData.location,
+                    field_of_interest: editData.field_of_interest
+                  });
+                  const updated = await base44.auth.me();
+                  setUser(updated);
+                  setEditMode(false);
+                }}
+              >
+                Save Changes
+              </Button>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => setEditMode(false)}
+              >
+                Cancel
+              </Button>
             </div>
           </div>
-        </div>
-        {user.created_date && (
-          <p className="text-xs text-gray-400 mt-4 flex items-center gap-1">
-            <Calendar className="w-3 h-3" />
-            Member since {format(new Date(user.created_date), "MMMM yyyy")}
-          </p>
+        ) : (
+          <>
+            <div className="flex items-start justify-between mb-4">
+              <div className="flex items-center gap-4 flex-1">
+                <div className={`w-14 h-14 rounded-full flex items-center justify-center flex-shrink-0 ${
+                  user.profile_picture_url ? "bg-gray-100" : "bg-blue-50"
+                }`}>
+                  {user.profile_picture_url ? (
+                    <img src={user.profile_picture_url} alt="Profile" className="w-full h-full rounded-full object-cover" />
+                  ) : (
+                    <User className="w-6 h-6 text-blue-500" />
+                  )}
+                </div>
+                <div>
+                  <h2 className="text-lg font-semibold text-gray-900">
+                    {user.full_name || "Researcher"}
+                  </h2>
+                  <div className="flex items-center gap-1 text-sm text-gray-400">
+                    <Mail className="w-3.5 h-3.5" />
+                    {user.email}
+                  </div>
+                  {user.location && (
+                    <p className="text-xs text-gray-500 mt-1">{user.location}</p>
+                  )}
+                  {user.field_of_interest && (
+                    <p className="text-xs text-gray-500">{user.field_of_interest}</p>
+                  )}
+                </div>
+              </div>
+              <Button
+                size="icon"
+                variant="ghost"
+                onClick={() => setEditMode(true)}
+                className="text-gray-500 hover:text-gray-900"
+              >
+                <Edit2 className="w-4 h-4" />
+              </Button>
+            </div>
+            {user.created_date && (
+              <p className="text-xs text-gray-400 flex items-center gap-1">
+                <Calendar className="w-3 h-3" />
+                Member since {format(new Date(user.created_date), "MMMM yyyy")}
+              </p>
+            )}
+          </>
         )}
       </div>
 
