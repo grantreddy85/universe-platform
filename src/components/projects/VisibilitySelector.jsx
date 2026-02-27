@@ -38,12 +38,17 @@ export default function VisibilitySelector({ value, onChange, plan = "trial" }) 
 
       <button
         type="button"
-        onClick={() => onChange("private")}
+        onClick={() => {
+          if (supportsPrivate) {
+            onChange("private");
+          }
+        }}
+        disabled={!supportsPrivate}
         className={`w-full flex items-start gap-3 p-3 rounded-lg border text-left transition-all ${
           value === "private"
             ? "border-gray-700 bg-gray-50"
             : "border-gray-200 hover:border-gray-300"
-        }`}
+        } ${!supportsPrivate ? "opacity-50 cursor-not-allowed" : ""}`}
       >
         <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5 ${
           value === "private" ? "bg-gray-200" : "bg-gray-100"
@@ -55,17 +60,25 @@ export default function VisibilitySelector({ value, onChange, plan = "trial" }) 
             Keep Private
           </p>
           <p className="text-[11px] text-gray-400 mt-0.5">
-            {subscribed
-              ? "Subscription active. Your data stays fully private."
-              : "Requires a paid subscription. Your vault & assets remain entirely private."}
+            {supportsPrivate
+              ? "Pro plan active. Your data stays fully private."
+              : "Requires Pro plan. Your vault & assets remain entirely private."}
           </p>
-          {!subscribed && value === "private" && (
-            <p className="text-[11px] text-amber-600 font-medium mt-1">⚠ Subscription required to keep projects private.</p>
+          {!supportsPrivate && (
+            <div className="flex items-start gap-1.5 mt-2">
+              <AlertCircle className="w-3.5 h-3.5 text-amber-600 flex-shrink-0 mt-0.5" />
+              <div>
+                <p className="text-[11px] text-amber-600 font-medium">Pro plan required</p>
+                <Link to={createPageUrl("Pricing")} className="text-[11px] text-blue-600 hover:underline">
+                  Upgrade to Pro
+                </Link>
+              </div>
+            </div>
           )}
         </div>
         <div className={`ml-auto flex-shrink-0 mt-1 w-4 h-4 rounded-full border-2 ${
           value === "private" ? "border-gray-700 bg-gray-700" : "border-gray-300"
-        } flex items-center justify-center`}>
+        } flex items-center justify-center ${!supportsPrivate ? "opacity-50" : ""}`}>
           {value === "private" && <div className="w-1.5 h-1.5 bg-white rounded-full" />}
         </div>
       </button>
