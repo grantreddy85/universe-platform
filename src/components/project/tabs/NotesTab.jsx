@@ -160,7 +160,29 @@ export default function NotesTab({ project }) {
   const isSaving = createMutation.isPending || updateMutation.isPending;
 
   return (
-    <div className="flex h-[calc(100vh-130px)]">
+    <div className="flex flex-col h-[calc(100vh-130px)]">
+      {/* Vault First Flow Banner */}
+      {showVaultBanner && (
+        <div className="flex items-start gap-3 px-5 py-3 bg-amber-50 border-b border-amber-200 text-sm">
+          <FolderOpen className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" />
+          <div className="flex-1 min-w-0">
+            <p className="text-amber-800 font-medium text-xs">Upload documents to your Vault first</p>
+            <p className="text-amber-700 text-xs mt-0.5">
+              The AI will have much better context for your notes if you upload papers, datasets, or reports to the Vault tab first.
+            </p>
+          </div>
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <button
+              onClick={dismissVaultBanner}
+              className="text-xs text-amber-600 hover:text-amber-800 underline"
+            >
+              Dismiss
+            </button>
+          </div>
+        </div>
+      )}
+
+      <div className="flex flex-1 min-h-0">
       {/* Notes List Panel */}
       <div
         className={`flex flex-col border-r border-gray-100 bg-white transition-all duration-300 ${
