@@ -91,8 +91,8 @@ export default function ProjectHeader({ project, onProjectUpdated }) {
           {project.description && (
             <p className="text-sm text-gray-400 mt-1 max-w-2xl">{project.description}</p>
           )}
-          </div>
-          <div className="flex items-center gap-2">
+        </div>
+        <div className="flex items-center gap-2">
           <Button
             variant="outline"
             size="sm"
@@ -112,23 +112,24 @@ export default function ProjectHeader({ project, onProjectUpdated }) {
             )}
           </Button>
           <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="text-gray-400 hover:text-gray-600">
-              <MoreHorizontal className="w-4 h-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => setEditOpen(true)}>
-              <Edit2 className="w-3.5 h-3.5 mr-2" />
-              Edit Description
-            </DropdownMenuItem>
-            <DropdownMenuItem className="text-red-600" onClick={() => setDeleteOpen(true)}>
-              <Trash2 className="w-3.5 h-3.5 mr-2" />
-              Delete Project
-            </DropdownMenuItem>
-          </DropdownMenuContent>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="text-gray-400 hover:text-gray-600">
+                <MoreHorizontal className="w-4 h-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => setEditOpen(true)}>
+                <Edit2 className="w-3.5 h-3.5 mr-2" />
+                Edit Description
+              </DropdownMenuItem>
+              <DropdownMenuItem className="text-red-600" onClick={() => setDeleteOpen(true)}>
+                <Trash2 className="w-3.5 h-3.5 mr-2" />
+                Delete Project
+              </DropdownMenuItem>
+            </DropdownMenuContent>
           </DropdownMenu>
-          </div>
+        </div>
+      </div>
 
       {/* Edit Description Dialog */}
       <Dialog open={editOpen} onOpenChange={setEditOpen}>
