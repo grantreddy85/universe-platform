@@ -189,7 +189,7 @@ export default function NotesTab({ project }) {
           isEditorOpen ? "w-64 flex-shrink-0" : "flex-1"
         }`}
       >
-        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
+        <div className="sticky top-0 z-10 flex items-center justify-between px-5 py-4 border-b border-gray-100 bg-white">
           <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Notes</span>
           <div className="flex items-center gap-1.5">
             <Button
