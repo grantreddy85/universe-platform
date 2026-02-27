@@ -74,7 +74,7 @@ export default function NewProjectDialog({ open, onOpenChange, onSubmit, isSubmi
             <VisibilitySelector
               value={form.visibility_setting}
               onChange={(v) => setForm({ ...form, visibility_setting: v })}
-              subscribed={subscribed}
+              plan={currentPlan}
             />
           </div>
           <DialogFooter className="pt-2">
