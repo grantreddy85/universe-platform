@@ -103,7 +103,6 @@ export default function Home() {
         </div>
       </div>
 
-      <EcosystemBanner projects={projects} subscriptionStatus={subscriptionStatus} />
       <CreditsStatusBar userEmail={userEmail} />
       <ContributionHealth userEmail={userEmail} />
 
