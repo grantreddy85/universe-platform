@@ -91,8 +91,27 @@ export default function ProjectHeader({ project, onProjectUpdated }) {
           {project.description && (
             <p className="text-sm text-gray-400 mt-1 max-w-2xl">{project.description}</p>
           )}
-        </div>
-        <DropdownMenu>
+          </div>
+          <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleToggleVisibility}
+            className="text-xs h-8 px-3 flex items-center gap-1.5"
+          >
+            {visibility === "private" ? (
+              <>
+                <Lock className="w-3.5 h-3.5" />
+                Private
+              </>
+            ) : (
+              <>
+                <Globe className="w-3.5 h-3.5" />
+                Public
+              </>
+            )}
+          </Button>
+          <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="text-gray-400 hover:text-gray-600">
               <MoreHorizontal className="w-4 h-4" />
