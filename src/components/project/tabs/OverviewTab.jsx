@@ -82,7 +82,8 @@ export default function OverviewTab({ project, onTabChange }) {
   const shouldNudgeWorkflow = hasCohortsOrHypotheses && workflows.length === 0;
 
   return (
-    <div className="p-6 lg:p-8 space-y-6">
+    <div className="p-6 lg:p-8 flex gap-6 items-start">
+    <div className="flex-1 min-w-0 space-y-6">
       {/* Research Progress Guidance */}
       <ResearchProgress
         counts={{ notes, hypotheses, workflows, labRequests, validations, assets, vaultDocs }}
