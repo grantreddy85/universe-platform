@@ -182,6 +182,9 @@ export default function Home() {
             </div>
           </div>
 
+          {/* Notifications */}
+          <NotificationsWidget userEmail={userEmail} />
+
           {/* Lab Activity */}
           <div>
             <div className="flex items-center justify-between mb-5">
