@@ -127,8 +127,8 @@ export default function ProjectHeader({ project, onProjectUpdated }) {
               Delete Project
             </DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
+          </DropdownMenu>
+          </div>
 
       {/* Edit Description Dialog */}
       <Dialog open={editOpen} onOpenChange={setEditOpen}>
