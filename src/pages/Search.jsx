@@ -570,8 +570,13 @@ export default function Search() {
                   className="bg-white border border-blue-400 rounded px-1.5 py-0.5 text-xs text-gray-900 outline-none w-24"
                 />
               ) : (
-                <span onDoubleClick={(e) => startRenaming(tab.id, tab.name, e)}>{tab.name}</span>
+                <span>{tab.name}</span>
               )}
+              <button
+                onClick={(e) => startRenaming(tab.id, tab.name, e)}
+                className="hover:bg-gray-200 rounded p-0.5 text-gray-400 hover:text-gray-600">
+                <Pencil className="w-3 h-3" />
+              </button>
               <button
               onClick={(e) => {
                 e.stopPropagation();
