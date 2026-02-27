@@ -1,14 +1,14 @@
 import React, { useState, useRef, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { X, Sparkles, Send, Loader2, Globe } from "lucide-react";
+import { X, Sparkles, Send, Loader2, Globe, Zap, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import ReactMarkdown from "react-markdown";
 
 const SUGGESTED_PROMPTS = [
   "What WorkflowHub workflows would suit this research?",
-  "What bioinformatics pipelines are recommended for this project?",
-  "Suggest workflows for statistical analysis of this data.",
+  "Generate an AI workflow for statistical analysis of mass spectrometry data.",
+  "Create an in-silico simulation workflow for this project.",
 ];
 
 export default function WorkflowAIPanel({ project, onClose, onOpenImporter }) {
