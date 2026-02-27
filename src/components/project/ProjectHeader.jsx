@@ -5,7 +5,7 @@ import { base44 } from "@/api/base44Client";
 import { useQueryClient, useQuery } from "@tanstack/react-query";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, MoreHorizontal, Trash2, Edit2, Globe, Lock, AlertCircle, Zap } from "lucide-react";
+import { ChevronLeft, MoreHorizontal, Trash2, Edit2, Globe, Lock, AlertCircle, Zap, Image as ImageIcon, X } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -35,8 +35,11 @@ export default function ProjectHeader({ project, onProjectUpdated }) {
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [visibilityOpen, setVisibilityOpen] = useState(false);
+  const [imageOpen, setImageOpen] = useState(false);
   const [editedDescription, setEditedDescription] = useState(project.description || "");
   const [visibility, setVisibility] = useState(project.visibility_setting || "private");
+  const [projectImage, setProjectImage] = useState(project.image_url || "");
+  const [uploading, setUploading] = useState(false);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -67,6 +70,30 @@ export default function ProjectHeader({ project, onProjectUpdated }) {
     await base44.entities.Project.delete(project.id);
     queryClient.invalidateQueries({ queryKey: ["projects"] });
     navigate(createPageUrl("Projects"));
+  };
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    
+    setUploading(true);
+    try {
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      await base44.entities.Project.update(project.id, { image_url: file_url });
+      setProjectImage(file_url);
+      queryClient.invalidateQueries({ queryKey: ["project", project.id] });
+      onProjectUpdated?.();
+      setImageOpen(false);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleRemoveImage = async () => {
+    await base44.entities.Project.update(project.id, { image_url: "" });
+    setProjectImage("");
+    queryClient.invalidateQueries({ queryKey: ["project", project.id] });
+    onProjectUpdated?.();
   };
 
   const handleToggleVisibility = async () => {
