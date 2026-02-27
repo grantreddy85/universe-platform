@@ -84,7 +84,7 @@ export default function OverviewTab({ project, onTabChange }) {
   return (
     <div className="p-6 lg:p-8 flex gap-6 items-start">
     {/* Project Intelligence — front and centre */}
-    <div className="w-96 flex-shrink-0 h-[760px]">
+    <div className="flex-1 min-w-0 h-[760px]">
       <ProjectIntelligence
         project={project}
         notes={notes}
