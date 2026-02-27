@@ -13,9 +13,6 @@ export default function ProviderDashboard() {
 
   useEffect(() => {
     base44.auth.me().then((userData) => {
-      if (userData?.role !== "service_provider") {
-        window.location.href = "/";
-      }
       setUser(userData);
     }).catch(() => {
       window.location.href = "/";
