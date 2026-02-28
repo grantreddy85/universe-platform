@@ -18,6 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { base44 } from "@/api/base44Client";
+import { Coins, DollarSign } from "lucide-react";
 
 const CATEGORIES = [
   { value: "biological_cellular", label: "Biological & Cellular" },
