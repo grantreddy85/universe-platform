@@ -170,6 +170,9 @@ export default function Labs() {
         })}
       </div>
 
+      {/* Become a Provider Banner */}
+      <BecomeProviderBanner userEmail={userEmail} />
+
       {/* Request Dialog */}
       {selectedService &&
       <LabRequestDialog
