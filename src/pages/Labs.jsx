@@ -41,6 +41,11 @@ export default function Labs() {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
   const [selectedService, setSelectedService] = useState(null);
+  const [userEmail, setUserEmail] = useState(null);
+
+  useEffect(() => {
+    base44.auth.me().then((u) => setUserEmail(u?.email)).catch(() => {});
+  }, []);
 
   const { data: services = [], isLoading } = useQuery({
     queryKey: ["lab_services"],
