@@ -137,6 +137,36 @@ export default function AuditTrail({ assetId }) {
     return event.previous_hash === events[i - 1].event_hash;
   }) : null;
 
+  const handleExport = () => {
+    const payload = {
+      export_version: "1.0",
+      asset_id: assetId,
+      exported_at: new Date().toISOString(),
+      chain_integrity: chainIntegrity,
+      event_count: events.length,
+      events: events.map(e => ({
+        id: e.id,
+        event_type: e.event_type,
+        description: e.description,
+        actor_email: e.actor_email,
+        actor_role: e.actor_role,
+        timestamp: e.created_date,
+        event_hash: e.event_hash,
+        previous_hash: e.previous_hash,
+        blockchain_tx_id: e.blockchain_tx_id || null,
+        blockchain_network: e.blockchain_network || null,
+        metadata: e.metadata || null,
+      })),
+    };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `audit-trail-${assetId}-${Date.now()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   if (isLoading) return <p className="text-xs text-gray-400 text-center py-6">Loading audit trail…</p>;
 
   return (
