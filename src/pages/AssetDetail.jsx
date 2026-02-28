@@ -717,6 +717,18 @@ Return JSON only.`,
               <ArrowLeft className="w-3.5 h-3.5 mr-2" />
               Back to Project Assets
             </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              className="w-full text-xs justify-start text-indigo-600 border-indigo-200 hover:bg-indigo-50"
+              onClick={handleGenerateAuditTrail}
+              disabled={generatingTrail}
+            >
+              {generatingTrail
+                ? <><Loader2 className="w-3.5 h-3.5 mr-2 animate-spin" />Generating…</>
+                : <><Shield className="w-3.5 h-3.5 mr-2" />Generate Audit Trail</>
+              }
+            </Button>
             {(asset.type === "publication" || asset.type === "validation_report") && (
               <Button
                 variant="outline"
