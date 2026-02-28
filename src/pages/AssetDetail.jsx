@@ -115,9 +115,20 @@ export default function AssetDetail() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["asset", assetId] }),
   });
 
+  const logAuditEvent = (event_type, description, metadata = {}) => {
+    base44.functions.invoke("logAuditEvent", {
+      asset_id: assetId,
+      project_id: projectId,
+      event_type,
+      description,
+      metadata,
+    });
+  };
+
   const handleSendToMarketplace = () => {
     updateMutation.mutate({ status: "published", "tokenisation.published_to_marketplace": true });
     setMarketplaceSubmitted(true);
+    logAuditEvent("published_to_marketplace", "Asset published to the IP Marketplace.");
   };
 
   const handleAutoPopulate = async () => {
