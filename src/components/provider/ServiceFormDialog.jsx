@@ -74,6 +74,8 @@ export default function ServiceFormDialog({
         currency: "USD",
         status: "available",
         image_url: "",
+        payment_preference: "cash",
+        equity_percentage: "",
       });
     }
   }, [initialService, open]);
