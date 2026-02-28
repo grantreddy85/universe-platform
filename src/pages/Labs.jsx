@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { FlaskConical, Microscope, Dna, Atom, TestTubes, Search, SlidersHorizontal } from "lucide-react";
@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import LabServiceCard from "@/components/labs/LabServiceCard";
 import LabRequestDialog from "@/components/labs/LabRequestDialog";
+import BecomeProviderBanner from "@/components/labs/BecomeProviderBanner";
 
 const CATEGORY_META = {
   biological_cellular: {

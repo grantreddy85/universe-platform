@@ -67,6 +67,16 @@ const steps = [
     textColor: "text-yellow-200",
     navigateTo: "Validations",
   },
+  {
+    icon: Beaker,
+    title: "Are you a lab or provider?",
+    subtitle: "Offer your services on UniVerse",
+    description:
+      "If you operate a lab or offer analytical services, you can list your equipment on UniVerse Labs and connect directly with researchers. Head to the Labs page and look for the \"Become a Provider\" section at the bottom.",
+    color: "from-teal-900 to-teal-800",
+    textColor: "text-teal-200",
+    navigateTo: "Labs",
+  },
 ];
 
 export default function OnboardingTour() {
