@@ -126,6 +126,52 @@ export default function AssetDetail() {
     });
   };
 
+  const handleGenerateAuditTrail = async () => {
+    setGeneratingTrail(true);
+    const events = [];
+
+    // asset_created
+    events.push({ event_type: "asset_created", description: `Asset "${asset.title}" created (${asset.type?.replace(/_/g, " ")}).`, metadata: { title: asset.title, type: asset.type } });
+
+    if (hypotheses.length > 0)
+      events.push({ event_type: "hypothesis_added", description: `${hypotheses.length} hypothesis${hypotheses.length > 1 ? "es" : ""} linked to this project.`, metadata: { count: hypotheses.length } });
+
+    if (cohorts.length > 0)
+      events.push({ event_type: "cohort_defined", description: `${cohorts.length} cohort${cohorts.length > 1 ? "s" : ""} defined in this project.`, metadata: { count: cohorts.length } });
+
+    if (workflows.length > 0)
+      events.push({ event_type: "workflow_run", description: `${workflows.length} workflow${workflows.length > 1 ? "s" : ""} run in this project.`, metadata: { count: workflows.length } });
+
+    if (validations.length > 0)
+      events.push({ event_type: "validation_submitted", description: `${validations.length} validation request${validations.length > 1 ? "s" : ""} submitted.`, metadata: { count: validations.length } });
+
+    if (asset.topic_clusters?.length > 0)
+      events.push({ event_type: "topic_clusters_updated", description: "Topic clusters assigned to asset.", metadata: { topic_clusters: asset.topic_clusters } });
+
+    if (asset.attribution?.length > 0)
+      events.push({ event_type: "attribution_updated", description: "Attribution breakdown set for asset.", metadata: { attribution: asset.attribution } });
+
+    if (asset.status === "validated" || asset.status === "tokenised" || asset.status === "published")
+      events.push({ event_type: "validation_approved", description: `Asset reached "${asset.status}" status.`, metadata: { status: asset.status } });
+
+    if (asset.tokenisation?.is_tokenised)
+      events.push({ event_type: "tokenised", description: "Asset tokenised.", metadata: asset.tokenisation });
+
+    if (asset.tokenisation?.published_to_marketplace)
+      events.push({ event_type: "published_to_marketplace", description: "Asset published to the IP Marketplace.", metadata: {} });
+
+    for (const ev of events) {
+      await base44.functions.invoke("logAuditEvent", {
+        asset_id: assetId,
+        project_id: projectId,
+        ...ev,
+      });
+    }
+
+    queryClient.invalidateQueries({ queryKey: ["audit-trail", assetId] });
+    setGeneratingTrail(false);
+  };
+
   const handleSendToMarketplace = () => {
     updateMutation.mutate({ status: "published", "tokenisation.published_to_marketplace": true });
     setMarketplaceSubmitted(true);
