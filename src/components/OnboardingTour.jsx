@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import React from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronRight, ChevronLeft, Search, FolderKanban, Archive, Users, FlaskConical, Coins, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
