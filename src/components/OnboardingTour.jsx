@@ -109,7 +109,7 @@ export default function OnboardingTour() {
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="p-0 overflow-hidden max-w-md border-0 shadow-2xl">
+      <DialogContent className="p-0 overflow-hidden max-w-md border-0 shadow-2xl [&+div]:bg-black/20">
         {/* Gradient Header */}
         <div className={`bg-gradient-to-br ${step.color} p-8 text-white relative`}>
           <button
