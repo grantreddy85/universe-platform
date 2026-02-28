@@ -15,6 +15,7 @@ import AttributionEditor from "@/components/asset/AttributionEditor";
 import TopicClustersEditor from "@/components/asset/TopicClustersEditor";
 import AttributionDisplay from "@/components/asset/AttributionDisplay";
 import TopicClustersDisplay from "@/components/asset/TopicClustersDisplay";
+import AuditTrail from "@/components/asset/AuditTrail";
 
 const typeIcons = {
   hypothesis: { icon: Lightbulb, color: "text-amber-500", bg: "bg-amber-50" },
