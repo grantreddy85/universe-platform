@@ -4,8 +4,9 @@ import { base44 } from "@/api/base44Client";
 import {
   Shield, Hash, ChevronDown, ChevronRight, Copy, CheckCircle2,
   Lightbulb, FlaskConical, BarChart3, ShieldCheck, Database, BookOpen,
-  Globe, FileText, Users, Clock, Link2, Upload, Pencil, Tag, Star
+  Globe, FileText, Users, Clock, Link2, Upload, Pencil, Tag, Star, Download
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
 
