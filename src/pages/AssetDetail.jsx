@@ -582,6 +582,9 @@ Return JSON only.`,
             )}
           </div>
 
+          {/* Audit Trail */}
+          <AuditTrail assetId={assetId} />
+
           {/* Infographic Section */}
           {showInfographic && (
             <InfographicModal
