@@ -190,6 +190,7 @@ export default function AdminDashboard() {
             <UserDetailPanel user={selectedUser} />
           ) : (
             <div className="space-y-3">
+              <ProviderApplicationsPanel />
               <MiniChart title="Project Status" data={projectStatusData} />
               <MiniChart title="Validation Pipeline" data={validationStatusData} />
               <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider px-1 pt-1">Recent Activity</p>
