@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { ChevronRight, ChevronLeft, Search, FolderKanban, Archive, Users, FlaskConical, Coins, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
