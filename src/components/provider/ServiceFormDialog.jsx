@@ -89,12 +89,15 @@ export default function ServiceFormDialog({
       const payload = {
         ...formData,
         turnaround_days: parseInt(formData.turnaround_days),
-        price_from: parseFloat(formData.price_from),
+        price_from: parseFloat(formData.price_from) || 0,
         capabilities: formData.capabilities
           .split(",")
           .map((c) => c.trim())
           .filter(Boolean),
         managed_by: userEmail,
+        ...(formData.payment_preference === "equity_share" && formData.equity_percentage
+          ? { equity_percentage: parseFloat(formData.equity_percentage) }
+          : { equity_percentage: null }),
       };
 
       if (initialService?.id) {
