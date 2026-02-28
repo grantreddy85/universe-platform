@@ -181,14 +181,22 @@ export default function AuditTrail({ assetId }) {
             </span>
           )}
         </div>
-        {chainIntegrity !== null && (
-          <div className={`flex items-center gap-1 text-[10px] font-medium px-2 py-1 rounded-full ${
-            chainIntegrity ? "bg-emerald-50 text-emerald-600" : "bg-red-50 text-red-500"
-          }`}>
-            {chainIntegrity ? <CheckCircle2 className="w-3 h-3" /> : <Shield className="w-3 h-3" />}
-            {chainIntegrity ? "Chain Intact" : "Chain Break Detected"}
-          </div>
-        )}
+        <div className="flex items-center gap-2">
+          {chainIntegrity !== null && (
+            <div className={`flex items-center gap-1 text-[10px] font-medium px-2 py-1 rounded-full ${
+              chainIntegrity ? "bg-emerald-50 text-emerald-600" : "bg-red-50 text-red-500"
+            }`}>
+              {chainIntegrity ? <CheckCircle2 className="w-3 h-3" /> : <Shield className="w-3 h-3" />}
+              {chainIntegrity ? "Chain Intact" : "Chain Break Detected"}
+            </div>
+          )}
+          {events.length > 0 && (
+            <Button variant="outline" size="sm" onClick={handleExport} className="h-7 text-xs gap-1.5">
+              <Download className="w-3 h-3" />
+              Export JSON
+            </Button>
+          )}
+        </div>
       </div>
 
       {events.length === 0 ? (
