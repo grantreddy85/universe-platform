@@ -380,7 +380,7 @@ Return JSON only.`,
                 </Button>
               ) : (
                 <div className="flex gap-1">
-                  <Button variant="ghost" size="sm" className="h-7 text-xs text-emerald-600" onClick={() => { updateMutation.mutate({ topic_clusters: pendingTopics }); setEditingTopics(false); }}>
+                  <Button variant="ghost" size="sm" className="h-7 text-xs text-emerald-600" onClick={() => { updateMutation.mutate({ topic_clusters: pendingTopics }); setEditingTopics(false); logAuditEvent("topic_clusters_updated", "Topic clusters updated.", { topic_clusters: pendingTopics }); }}>
                     <Save className="w-3 h-3 mr-1" /> Save
                   </Button>
                   <Button variant="ghost" size="sm" className="h-7 text-xs text-gray-400" onClick={() => setEditingTopics(false)}>
