@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import React from "react";
 import { Button } from "@/components/ui/button";
-import { ChevronRight, ChevronLeft, Search, FolderKanban, Archive, Users, FlaskConical, Coins, X } from "lucide-react";
+import { ChevronRight, ChevronLeft, Search, FolderKanban, Users, FlaskConical, Coins, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
+import * as DialogPrimitive from "@radix-ui/react-dialog";
 
 const ONBOARDING_KEY = "universe_onboarding_v1";
 
@@ -107,86 +107,92 @@ export default function OnboardingTour() {
   const isLast = currentStep === steps.length - 1;
   const isFirst = currentStep === 0;
 
+  if (!isOpen) return null;
+
   return (
-    <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="p-0 overflow-hidden max-w-md border-0 shadow-2xl [&+div]:bg-black/20">
-        {/* Gradient Header */}
-        <div className={`bg-gradient-to-br ${step.color} p-8 text-white relative`}>
-          <button
-            onClick={handleClose}
-            className="absolute top-4 right-4 text-white/50 hover:text-white transition-colors"
-          >
-            <X className="w-4 h-4" />
-          </button>
-
-          {Icon && (
-            <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center mb-4">
-              <Icon className={`w-6 h-6 ${step.textColor}`} />
-            </div>
-          )}
-
-          {!Icon && (
-            <div className="mb-4">
-              <img
-                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6994076dc777dd78309c97c9/6a7cc2cbe_UniVerseTDAJ-Icon2Dark.png"
-                alt="UniVerse"
-                className="h-12 w-10 object-contain"
-              />
-            </div>
-          )}
-
-          <p className={`text-xs font-medium uppercase tracking-widest mb-1 ${step.textColor}`}>
-            {step.subtitle}
-          </p>
-          <h2 className="text-2xl font-bold leading-tight">{step.title}</h2>
-        </div>
-
-        {/* Body */}
-        <div className="p-6 bg-white">
-          <p className="text-sm text-gray-600 leading-relaxed">{step.description}</p>
-
-          {/* Step dots */}
-          <div className="flex items-center gap-1.5 mt-6 mb-4">
-            {steps.map((_, idx) => (
-              <button
-                key={idx}
-                onClick={() => setCurrentStep(idx)}
-                className={`rounded-full transition-all ${
-                  idx === currentStep
-                    ? "w-5 h-2 bg-[#000021]"
-                    : "w-2 h-2 bg-gray-200 hover:bg-gray-300"
-                }`}
-              />
-            ))}
-          </div>
-
-          {/* Actions */}
-          <div className="flex items-center justify-between">
+    <DialogPrimitive.Root open={isOpen} onOpenChange={handleClose}>
+      <DialogPrimitive.Portal>
+        {/* Light overlay so background is visible */}
+        <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-black/25 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
+        <DialogPrimitive.Content className="fixed left-[50%] top-[50%] z-50 w-full max-w-md translate-x-[-50%] translate-y-[-50%] rounded-lg overflow-hidden shadow-2xl border-0 duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%]">
+          {/* Gradient Header */}
+          <div className={`bg-gradient-to-br ${step.color} p-8 text-white relative`}>
             <button
               onClick={handleClose}
-              className="text-xs text-gray-400 hover:text-gray-600 transition-colors"
+              className="absolute top-4 right-4 text-white/50 hover:text-white transition-colors"
             >
-              Skip tour
+              <X className="w-4 h-4" />
             </button>
-            <div className="flex gap-2">
-              {!isFirst && (
-                <Button variant="outline" size="sm" onClick={handleBack}>
-                  <ChevronLeft className="w-3.5 h-3.5 mr-1" />
-                  Back
-                </Button>
-              )}
-              <Button
-                size="sm"
-                className="bg-[#000021] hover:bg-[#000021]/90 text-[#00F2FF]"
-                onClick={handleNext}
+
+            {Icon && (
+              <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center mb-4">
+                <Icon className={`w-6 h-6 ${step.textColor}`} />
+              </div>
+            )}
+
+            {!Icon && (
+              <div className="mb-4">
+                <img
+                  src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6994076dc777dd78309c97c9/6a7cc2cbe_UniVerseTDAJ-Icon2Dark.png"
+                  alt="UniVerse"
+                  className="h-12 w-10 object-contain"
+                />
+              </div>
+            )}
+
+            <p className={`text-xs font-medium uppercase tracking-widest mb-1 ${step.textColor}`}>
+              {step.subtitle}
+            </p>
+            <h2 className="text-2xl font-bold leading-tight">{step.title}</h2>
+          </div>
+
+          {/* Body */}
+          <div className="p-6 bg-white">
+            <p className="text-sm text-gray-600 leading-relaxed">{step.description}</p>
+
+            {/* Step dots */}
+            <div className="flex items-center gap-1.5 mt-6 mb-4">
+              {steps.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setCurrentStep(idx)}
+                  className={`rounded-full transition-all ${
+                    idx === currentStep
+                      ? "w-5 h-2 bg-[#000021]"
+                      : "w-2 h-2 bg-gray-200 hover:bg-gray-300"
+                  }`}
+                />
+              ))}
+            </div>
+
+            {/* Actions */}
+            <div className="flex items-center justify-between">
+              <button
+                onClick={handleClose}
+                className="text-xs text-gray-400 hover:text-gray-600 transition-colors"
               >
-                {isLast ? "Get Started" : "Next"}
-                {!isLast && <ChevronRight className="w-3.5 h-3.5 ml-1" />}
-              </Button>
+                Skip tour
+              </button>
+              <div className="flex gap-2">
+                {!isFirst && (
+                  <Button variant="outline" size="sm" onClick={handleBack}>
+                    <ChevronLeft className="w-3.5 h-3.5 mr-1" />
+                    Back
+                  </Button>
+                )}
+                <Button
+                  size="sm"
+                  className="bg-[#000021] hover:bg-[#000021]/90 text-[#00F2FF]"
+                  onClick={handleNext}
+                >
+                  {isLast ? "Get Started" : "Next"}
+                  {!isLast && <ChevronRight className="w-3.5 h-3.5 ml-1" />}
+                </Button>
+              </div>
             </div>
           </div>
-        </div>
-      </DialogContent>
-    </Dialog>
+        </DialogPrimitive.Content>
+      </DialogPrimitive.Portal>
+    </DialogPrimitive.Root>
   );
 }
