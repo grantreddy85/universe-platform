@@ -224,6 +224,58 @@ export default function ServiceFormDialog({
             </div>
           </div>
 
+          {/* Payment Preference */}
+          <div>
+            <Label>Payment Preference</Label>
+            <div className="grid grid-cols-2 gap-3 mt-1.5">
+              <button
+                type="button"
+                onClick={() => setFormData({ ...formData, payment_preference: "cash" })}
+                className={`flex items-center gap-2 p-3 rounded-lg border text-sm transition-all ${
+                  formData.payment_preference === "cash"
+                    ? "border-blue-500 bg-blue-50 text-blue-700"
+                    : "border-gray-200 text-gray-600 hover:border-gray-300"
+                }`}
+              >
+                <DollarSign className="w-4 h-4" />
+                Cash Fee
+              </button>
+              <button
+                type="button"
+                onClick={() => setFormData({ ...formData, payment_preference: "equity_share" })}
+                className={`flex items-center gap-2 p-3 rounded-lg border text-sm transition-all ${
+                  formData.payment_preference === "equity_share"
+                    ? "border-violet-500 bg-violet-50 text-violet-700"
+                    : "border-gray-200 text-gray-600 hover:border-gray-300"
+                }`}
+              >
+                <Coins className="w-4 h-4" />
+                Equity Share
+              </button>
+            </div>
+          </div>
+
+          {formData.payment_preference === "equity_share" && (
+            <div>
+              <Label htmlFor="equity">Equity % Requested</Label>
+              <p className="text-xs text-gray-400 mb-1">The % stake in the resulting research asset in lieu of a cash fee.</p>
+              <div className="relative">
+                <Input
+                  id="equity"
+                  type="number"
+                  min="1"
+                  max="99"
+                  step="0.5"
+                  value={formData.equity_percentage}
+                  onChange={(e) => setFormData({ ...formData, equity_percentage: e.target.value })}
+                  placeholder="e.g. 10"
+                  className="pr-8"
+                />
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">%</span>
+              </div>
+            </div>
+          )}
+
           <div className="grid grid-cols-2 gap-4">
             <div>
               <Label htmlFor="status">Status</Label>
