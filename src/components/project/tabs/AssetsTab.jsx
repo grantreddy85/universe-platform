@@ -125,6 +125,15 @@ Return JSON only.`,
         });
       }
 
+      // Log asset_created audit event
+      await base44.functions.invoke("logAuditEvent", {
+        asset_id: asset.id,
+        project_id: project.id,
+        event_type: "asset_created",
+        description: `Asset "${data.title}" created (${data.type.replace(/_/g, " ")}).`,
+        metadata: { title: data.title, type: data.type },
+      });
+
       return asset;
     },
     onSuccess: () => {

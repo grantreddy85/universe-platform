@@ -66,6 +66,7 @@ export default function AssetDetail() {
   const [editingTopics, setEditingTopics] = useState(false);
   const [pendingTopics, setPendingTopics] = useState(null);
   const [autoPopulating, setAutoPopulating] = useState(false);
+  const [generatingTrail, setGeneratingTrail] = useState(false);
 
   const { data: asset, isLoading: assetLoading } = useQuery({
     queryKey: ["asset", assetId],
