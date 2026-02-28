@@ -11,6 +11,7 @@ import AdminModeToggle from "@/components/admin/AdminModeToggle";
 import UserDirectoryPanel from "@/components/admin/UserDirectoryPanel";
 import UserDetailPanel from "@/components/admin/UserDetailPanel";
 import PlatformIntelligenceRAG from "@/components/admin/PlatformIntelligenceRAG";
+import ProviderApplicationsPanel from "@/components/admin/ProviderApplicationsPanel";
 
 const STATUS_COLORS = {
   pending: "#f59e0b", in_review: "#3b82f6", running: "#8b5cf6",
