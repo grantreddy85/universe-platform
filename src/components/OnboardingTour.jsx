@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { ChevronRight, ChevronLeft, Search, FolderKanban, Users, FlaskConical, Coins, X } from "lucide-react";
+import { ChevronRight, ChevronLeft, Search, FolderKanban, Users, FlaskConical, Coins, X, Beaker } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
