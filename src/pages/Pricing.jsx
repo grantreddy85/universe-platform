@@ -332,23 +332,6 @@ export default function Pricing() {
         </p>
       </div>
 
-      {/* Credit Costs */}
-      <div className="bg-white rounded-2xl border border-gray-100 p-8 mb-8">
-        <h2 className="text-sm font-semibold text-gray-700 mb-1">Credit Usage</h2>
-        <p className="text-xs text-gray-400 mb-6">AI-powered actions consume credits. Here's what each costs:</p>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {CREDIT_COSTS.map((c) => (
-            <div key={c.action} className="flex items-center gap-3 p-4 rounded-xl bg-gray-50 border border-gray-100">
-              <span className="text-2xl">{c.icon}</span>
-              <div>
-                <p className="text-xs font-medium text-gray-700">{c.action}</p>
-                <p className="text-[10px] text-amber-600 font-semibold mt-0.5">{c.cost} credits</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
       {/* Credit Packs */}
       <div id="credit-packs" className="bg-white rounded-2xl border border-gray-100 p-8">
         <h2 className="text-sm font-semibold text-gray-700 mb-1">Buy Credit Packs</h2>

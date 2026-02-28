@@ -56,6 +56,7 @@ import Pricing from './pages/Pricing';
 import Profile from './pages/Profile';
 import ProjectDetail from './pages/ProjectDetail';
 import Projects from './pages/Projects';
+import ProviderDashboard from './pages/ProviderDashboard';
 import Search from './pages/Search';
 import Tokenisation from './pages/Tokenisation';
 import Tokenomics from './pages/Tokenomics';
@@ -63,7 +64,6 @@ import TopicLibrary from './pages/TopicLibrary';
 import ValidatedAssets from './pages/ValidatedAssets';
 import Validations from './pages/Validations';
 import Workspace from './pages/Workspace';
-import ProviderDashboard from './pages/ProviderDashboard';
 import __Layout from './Layout.jsx';
 
 
@@ -77,6 +77,7 @@ export const PAGES = {
     "Profile": Profile,
     "ProjectDetail": ProjectDetail,
     "Projects": Projects,
+    "ProviderDashboard": ProviderDashboard,
     "Search": Search,
     "Tokenisation": Tokenisation,
     "Tokenomics": Tokenomics,
@@ -84,7 +85,6 @@ export const PAGES = {
     "ValidatedAssets": ValidatedAssets,
     "Validations": Validations,
     "Workspace": Workspace,
-    "ProviderDashboard": ProviderDashboard,
 }
 
 export const pagesConfig = {
